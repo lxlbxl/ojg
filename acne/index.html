@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Acne Assessment - Personalized Clear Skin Plan | Forest & Sage</title>
+  <meta name="description"
+    content="Get your FREE personalized acne recovery plan in 60 seconds. Science-backed method used by 10,000+ people. Discover your root cause today.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/webhook-manager.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            'forest': {
+              50: '#f2f8f5',
+              100: '#dcece3',
+              800: '#166534',
+              900: '#0f3922',
+            },
+            'sage': {
+              100: '#E6EBE6',
+              200: '#CDD6CD',
+              500: '#8DA38D',
+            },
+            'terracotta': {
+              500: '#C77D63',
+              600: '#A85D45',
+            },
+            'cream': '#FDFCF8',
+            'sand': '#F4F1EA',
+          },
+          backgroundImage: {
+            'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+          },
+          boxShadow: {
+            'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+
+    body {
+      background-color: #FDFCF8;
+      color: #0f3922;
+      overflow-x: hidden;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .blob {
+      position: absolute;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    .typing-animation::after {
+      content: '|';
+      animation: blink 1s infinite;
+      color: #C77D63;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: revealUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased relative" x-data="landingPageApp()">
+  <!-- Ambient Background -->
+  <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+  <div class="blob bg-sage-200 w-[500px] h-[500px] rounded-full top-[-100px] right-[-100px]"></div>
+  <div class="blob bg-terracotta-500/20 w-[400px] h-[400px] rounded-full bottom-[-50px] left-[-50px]"></div>
+
+  <!-- Header -->
+  <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
+    <div class="max-w-6xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg">
+            <span class="text-sand font-serif italic text-xl">A</span>
+          </div>
+          <span class="text-xl font-serif font-bold tracking-tight text-forest-900">Forest & Sage</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <span class="hidden md:block text-sm font-medium text-forest-800/70 uppercase tracking-widest">Clear Skin
+            Protocol</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col justify-center pt-24 pb-16 px-6 relative">
+    <div class="max-w-4xl mx-auto text-center reveal-up">
+      <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-4 py-2 rounded-full mb-8">
+        <span class="w-2 h-2 rounded-full bg-terracotta-500 animate-pulse"></span>
+        <span class="text-xs font-bold text-forest-800 uppercase tracking-widest">Root Cause Acne Discovery</span>
+      </div>
+
+      <h1 class="text-4xl md:text-7xl font-serif font-medium leading-[1.1] text-forest-900 mb-8">
+        Reveal Your <br>
+        <span class="italic text-terracotta-600 typing-animation" x-show="showTyping">Clearest Skin</span>
+      </h1>
+
+      <p class="text-xl md:text-2xl text-forest-800/70 font-light leading-relaxed max-w-2xl mx-auto mb-12">
+        Embarrassed by breakouts? Discover what's actually causing your acne and get your personalized recovery plan in
+        under 60 seconds.
+      </p>
+
+      <div class="relative inline-block group mb-12">
+        <div
+          class="absolute -inset-1 bg-gradient-to-r from-terracotta-500 to-forest-800 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000">
+        </div>
+        <button @click="startQuiz()"
+          class="relative bg-forest-900 text-sand text-xl px-12 py-5 rounded-full font-bold hover:bg-forest-800 transition-all flex items-center gap-3 shadow-xl">
+          Start Free Assessment
+          <i class="fas fa-arrow-right text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-stethoscope text-xl"></i>
+          </div>
+          <span class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest">Dermatologist Backed</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-magic text-xl"></i>
+          </div>
+          <span class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest">Personalized Strategy</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-users text-xl"></i>
+          </div>
+          <span class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest">10,000+ Successes</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-clock text-xl"></i>
+          </div>
+          <span class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest">Results in 30 Days</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Section -->
+  <section class="py-24 px-6 bg-sand/30">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal-up">
+        <h2 class="text-3xl md:text-5xl font-serif text-forest-900 mb-4">Why Our System is Different</h2>
+        <p class="text-forest-800/60 font-medium">We don't just treat symptoms. We address the biological root.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft hover:-translate-y-2 transition-transform duration-500">
+          <div
+            class="w-12 h-12 bg-forest-50 rounded-xl flex items-center justify-center text-forest-800 mb-6 font-bold">01
+          </div>
+          <h3 class="text-xl font-serif font-bold text-forest-900 mb-4">Root Cause Focus</h3>
+          <p class="text-forest-800/70 text-sm leading-relaxed">Most products strip your skin. We help you identify if
+            your acne is hormonal, bacterial, or lifestyle-driven.</p>
+        </div>
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft hover:-translate-y-2 transition-transform duration-500">
+          <div
+            class="w-12 h-12 bg-terracotta-50 rounded-xl flex items-center justify-center text-terracotta-600 mb-6 font-bold">
+            02</div>
+          <h3 class="text-xl font-serif font-bold text-forest-900 mb-4">Custom Protocol</h3>
+          <p class="text-forest-800/70 text-sm leading-relaxed">No generic prescriptions. Your plan is tailored to your
+            specific skin type, triggers, and stress levels.</p>
+        </div>
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft hover:-translate-y-2 transition-transform duration-500">
+          <div class="w-12 h-12 bg-sage-50 rounded-xl flex items-center justify-center text-sage-600 mb-6 font-bold">03
+          </div>
+          <h3 class="text-xl font-serif font-bold text-forest-900 mb-4">Holistic Support</h3>
+          <p class="text-forest-800/70 text-sm leading-relaxed">Combine expert-led nutrition with premium treatments for
+            a transformation that lasts for life.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-forest-900 py-12 px-6 text-center">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">
+          <span class="text-sand font-serif italic text-sm">A</span>
+        </div>
+        <span class="text-lg font-serif font-bold tracking-tight text-sand">Forest & Sage</span>
+      </div>
+      <p class="text-sand/40 text-xs">© 2025 Forest & Sage Wellness. Medically Supervised Skincare.</p>
+    </div>
+  </footer>
+
+  <script>
+    function landingPageApp() {
+      return {
+        showTyping: false,
+        init() {
+          setTimeout(() => { this.showTyping = true; }, 500);
+          if (window.WebhookManager) {
+            window.WebhookManager.trackEvent('acne_landing_view', { timestamp: new Date().toISOString() });
+          }
+        },
+        startQuiz() {
+          if (window.WebhookManager) {
+            window.WebhookManager.trackEvent('acne_assessment_started', { page: 'index' });
+          }
+          window.location.href = 'assessment.html';
+        }
+      };
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weight Assessment - Discover Your Weight Loss Type</title>
+    <meta name="description"
+        content="Complete our comprehensive weight assessment to discover your unique weight loss type and get personalized natural treatment recommendations.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'forest': {
+                            50: '#f2f8f5',
+                            100: '#dcece3',
+                            800: '#166534',
+                            900: '#0f3922',
+                        },
+                        'sage': {
+                            100: '#E6EBE6',
+                            200: '#CDD6CD',
+                            500: '#8DA38D',
+                        },
+                        'terracotta': {
+                            500: '#C77D63',
+                            600: '#A85D45',
+                        },
+                        'cream': '#FDFCF8',
+                        'sand': '#F4F1EA',
+                    },
+                    backgroundImage: {
+                        'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFCF8;
+            color: #0f3922;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <script src="../js/webhook-manager.js"></script>
+</head>
+
+<body class="antialiased relative overflow-x-hidden">
+
+    <!-- Texture & Blobs -->
+    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+    <div class="blob bg-sage-200 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="blob bg-terracotta-500 w-72 h-72 rounded-full bottom-20 right-0 translate-x-1/3 opacity-20"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg">
+                        <span class="text-sand font-serif italic text-xl">W</span>
+                    </div>
+                    <span class="text-lg font-serif font-bold tracking-tight text-forest-900">Weight Assessment</span>
+                </div>
+                <div>
+                    <span
+                        class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-forest-800 uppercase">
+                        Step 1 of 2
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-3xl mx-auto px-6 pt-28 pb-20" x-data="weightAssessment()">
+
+        <!-- Progress Bar -->
+        <div class="mb-10">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-500">Progress</span>
+                <span class="text-sm font-medium text-forest-800"
+                    x-text="`${currentQuestion + 1} of ${totalQuestions}`"></span>
+            </div>
+            <div class="w-full bg-sage-100 rounded-full h-2">
+                <div class="bg-forest-800 h-2 rounded-full transition-all duration-500"
+                    :style="`width: ${((currentQuestion + 1) / totalQuestions) * 100}%`"></div>
+            </div>
+        </div>
+
+        <!-- Assessment Form -->
+        <div class="glass-panel rounded-[2rem] shadow-xl p-8 md:p-12 border-t border-white/80">
+            <!-- Question Display -->
+            <div x-show="!showResults && !showContactForm">
+                <div class="mb-10 text-center">
+                    <h2 class="text-2xl md:text-3xl font-serif font-medium text-forest-900 mb-3"
+                        x-text="questions[currentQuestion].question"></h2>
+                    <p class="text-gray-500" x-text="questions[currentQuestion].description"></p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="space-y-4 mb-10">
+                    <template x-for="(option, index) in questions[currentQuestion].options" :key="index">
+                        <label
+                            class="flex items-center p-5 border-2 rounded-2xl cursor-pointer transition-all duration-200 group"
+                            :class="getSelectedAnswer() === option.value ? 'border-forest-800 bg-forest-50' : 'border-sage-200 bg-white hover:border-sage-500'"
+                            @click="selectAnswer(option.value)">
+                            <input type="radio" :name="`question_${currentQuestion}`" :value="option.value"
+                                :checked="getSelectedAnswer() === option.value" class="sr-only">
+                            <div class="flex-1">
+                                <div class="font-medium text-forest-900" x-text="option.text"></div>
+                                <div class="text-sm text-gray-400 mt-1" x-text="option.description"
+                                    x-show="option.description">
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <div class="w-6 h-6 border-2 rounded-full flex items-center justify-center transition-colors"
+                                    :class="getSelectedAnswer() === option.value ? 'border-forest-800 bg-forest-800' : 'border-sage-300 group-hover:border-sage-500'">
+                                    <div class="w-2 h-2 bg-white rounded-full"
+                                        x-show="getSelectedAnswer() === option.value">
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </template>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center">
+                    <button type="button" @click="previousQuestion()" x-show="currentQuestion > 0"
+                        class="px-6 py-3 border border-sage-300 text-forest-800 rounded-full hover:bg-sage-100 transition-colors font-medium">
+                        ← Previous
+                    </button>
+                    <div x-show="currentQuestion === 0"></div>
+
+                    <button type="button" @click="nextQuestion()" x-show="currentQuestion < totalQuestions - 1"
+                        :disabled="!getSelectedAnswer()"
+                        :class="getSelectedAnswer() ? 'bg-forest-900 hover:bg-forest-800 text-sand' : 'bg-sage-200 text-sage-400 cursor-not-allowed'"
+                        class="px-8 py-3 rounded-full transition-colors font-medium">
+                        Next →
+                    </button>
+
+                    <button type="button" @click="submitAssessment()" x-show="currentQuestion === totalQuestions - 1"
+                        :disabled="!answers[currentQuestion] || isSubmitting"
+                        :class="answers[currentQuestion] && !isSubmitting ? 'bg-forest-900 hover:bg-forest-800 text-sand' : 'bg-sage-200 text-sage-400 cursor-not-allowed'"
+                        class="px-8 py-3 rounded-full transition-colors font-medium">
+                        <span x-show="!isSubmitting">See My Results →</span>
+                        <span x-show="isSubmitting">Analyzing...</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div x-show="isSubmitting" class="text-center py-16">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-forest-800 mx-auto mb-6"></div>
+                <h3 class="text-xl font-serif font-medium text-forest-900 mb-2">Analyzing Your Responses...</h3>
+                <p class="text-gray-500">We're determining your unique weight profile.</p>
+            </div>
+        </div>
+
+        <!-- Contact Information Form -->
+        <div x-show="showContactForm" id="contactFormSection"
+            class="glass-panel rounded-[2rem] shadow-xl p-8 md:p-12 mt-8 border-t border-white/80">
+            <div class="text-center mb-8">
+                <h3 class="text-2xl md:text-3xl font-serif font-medium text-forest-900 mb-3">Your Analysis is Ready!
+                </h3>
+                <p class="text-gray-500">Enter your details to unlock your personalized weight loss profile and
+                    recommendations.</p>
+            </div>
+
+            <form @submit.prevent="submitContactInfo()" class="space-y-5">
+                <div class="grid md:grid-cols-2 gap-5">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Full
+                            Name</label>
+                        <input type="text" x-model="contactInfo.name" required
+                            class="w-full px-4 py-3 bg-white border border-sage-200 rounded-xl focus:ring-2 focus:ring-forest-500 focus:border-forest-500 transition-all outline-none"
+                            placeholder="Jane Doe">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Email
+                            Address</label>
+                        <input type="email" x-model="contactInfo.email" required
+                            class="w-full px-4 py-3 bg-white border border-sage-200 rounded-xl focus:ring-2 focus:ring-forest-500 focus:border-forest-500 transition-all outline-none"
+                            placeholder="jane@email.com">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Phone
+                        Number</label>
+                    <input type="tel" x-model="contactInfo.phone" @input="contactError = ''" required
+                        :class="contactError ? 'border-red-400 focus:ring-red-400' : 'border-sage-200 focus:ring-forest-500'"
+                        class="w-full px-4 py-3 bg-white border rounded-xl focus:ring-2 transition-all outline-none"
+                        placeholder="e.g., 08012345678">
+                    <div x-show="contactError" class="mt-2 text-sm text-red-500" x-text="contactError"></div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Age Range</label>
+                    <select x-model="contactInfo.ageRange"
+                        class="w-full px-4 py-3 bg-white border border-sage-200 rounded-xl focus:ring-2 focus:ring-forest-500 focus:border-forest-500 transition-all outline-none">
+                        <option value="">Select age range</option>
+                        <option value="18-25">18-25 years</option>
+                        <option value="26-35">26-35 years</option>
+                        <option value="36-45">36-45 years</option>
+                        <option value="46-55">46-55 years</option>
+                        <option value="56+">56+ years</option>
+                    </select>
+                </div>
+
+                <button type="submit" :disabled="isSubmittingContact"
+                    :class="isSubmittingContact ? 'bg-sage-300 text-sage-500 cursor-not-allowed' : 'bg-forest-900 hover:bg-forest-800 text-sand'"
+                    class="w-full py-4 rounded-xl font-medium text-lg transition-colors mt-4">
+                    <span x-show="!isSubmittingContact">Get My Personalized Results →</span>
+                    <span x-show="isSubmittingContact">Processing...</span>
+                </button>
+
+                <p class="text-xs text-gray-400 text-center pt-2">
+                    We respect your privacy. Your information is 100% secure.
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-forest-900 py-8 text-center">
+        <p class="text-forest-200/60 text-sm">© 2025 Weight Loss Solutions. All rights reserved.</p>
+    </footer>
+
+    <!-- Assessment Logic -->
+    <script>
+        function weightAssessment() {
+            return {
+                currentQuestion: 0,
+                totalQuestions: 10,
+                answers: {},
+                isSubmitting: false,
+                showContactForm: false,
+                showResults: false,
+                isSubmittingContact: false,
+                contactInfo: { name: '', email: '', phone: '', ageRange: '' },
+                contactError: '',
+                assessmentData: null,
+
+                questions: [
+                    { question: "What's your primary weight loss goal?", description: "What matters most to you", options: [{ value: "lose_weight", text: "Lose weight", description: "Reduce overall body weight" }, { value: "belly_fat", text: "Target belly fat", description: "Focus on abdominal area" }, { value: "tone_body", text: "Tone and sculpt", description: "Shape and define muscles" }, { value: "boost_metabolism", text: "Boost metabolism", description: "Increase energy and fat burning" }, { value: "healthy_lifestyle", text: "Adopt healthy lifestyle", description: "Long-term wellness habits" }] },
+                    { question: "How much weight do you want to lose?", description: "Your target weight loss amount", options: [{ value: "5_10kg", text: "5-10 kg" }, { value: "10_20kg", text: "10-20 kg" }, { value: "20_30kg", text: "20-30 kg" }, { value: "30plus_kg", text: "30+ kg" }, { value: "maintain", text: "Maintain current weight" }] },
+                    { question: "How long have you struggled with weight?", description: "Your weight history timeline", options: [{ value: "less_6months", text: "Less than 6 months" }, { value: "6months_2years", text: "6 months to 2 years" }, { value: "2_5years", text: "2 to 5 years" }, { value: "5_10years", text: "5 to 10 years" }, { value: "lifetime", text: "Most of my life" }] },
+                    { question: "What's your biggest weight loss challenge?", description: "Your main obstacle", options: [{ value: "cravings", text: "Food cravings and hunger" }, { value: "emotional_eating", text: "Emotional eating" }, { value: "slow_metabolism", text: "Slow metabolism" }, { value: "lack_time", text: "Lack of time" }, { value: "lack_motivation", text: "Lack of motivation" }] },
+                    { question: "What's your current activity level?", description: "Your daily physical activity", options: [{ value: "sedentary", text: "Sedentary", description: "Little to no exercise" }, { value: "light", text: "Light activity" }, { value: "moderate", text: "Moderate activity" }, { value: "active", text: "Active" }, { value: "very_active", text: "Very active" }] },
+                    { question: "How would you describe your eating habits?", description: "Your typical diet", options: [{ value: "unhealthy", text: "Mostly unhealthy" }, { value: "mixed", text: "Mixed" }, { value: "healthy_attempts", text: "Try to eat healthy" }, { value: "mostly_healthy", text: "Mostly healthy" }, { value: "very_healthy", text: "Very healthy" }] },
+                    { question: "Have you tried weight loss methods before?", description: "Previous attempts", options: [{ value: "none", text: "No methods tried" }, { value: "diets_only", text: "Diets only" }, { value: "exercise_only", text: "Exercise only" }, { value: "diet_exercise", text: "Diet and exercise" }, { value: "multiple", text: "Multiple methods" }] },
+                    { question: "How does your weight affect your daily life?", description: "Impact on confidence and activities", options: [{ value: "minimal", text: "Minimal impact" }, { value: "moderate", text: "Moderate impact" }, { value: "significant", text: "Significant impact" }, { value: "severe", text: "Severe impact" }] },
+                    { question: "What's your current stress level?", description: "Stress can impact weight", options: [{ value: "low", text: "Low stress" }, { value: "moderate", text: "Moderate stress" }, { value: "high", text: "High stress" }, { value: "very_high", text: "Very high stress" }, { value: "chronic", text: "Chronic stress" }] },
+                    { question: "What's your timeline for achieving your goals?", description: "When you'd like to see results", options: [{ value: "1_month", text: "Within 1 month" }, { value: "3_months", text: "Within 3 months" }, { value: "6_months", text: "Within 6 months" }, { value: "1_year", text: "Within 1 year" }, { value: "no_timeline", text: "No specific timeline" }] }
+                ],
+
+                nextQuestion() { if (this.currentQuestion < this.totalQuestions - 1 && this.getSelectedAnswer()) this.currentQuestion++; },
+                previousQuestion() { if (this.currentQuestion > 0) this.currentQuestion--; },
+                selectAnswer(value) {
+                    this.answers[this.currentQuestion] = value;
+                    if (this.currentQuestion < this.totalQuestions - 1) setTimeout(() => this.nextQuestion(), 600);
+                    else setTimeout(() => this.submitAssessment(), 600);
+                },
+                getSelectedAnswer() { return this.answers[this.currentQuestion] || null; },
+
+                async submitAssessment() {
+                    this.isSubmitting = true;
+                    try {
+                        const weightType = this.calculateWeightType();
+                        this.assessmentData = { answers: this.answers, weightType: weightType, completedAt: new Date().toISOString() };
+                        this.showContactForm = true;
+                        setTimeout(() => document.getElementById('contactFormSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+                    } catch (error) { console.error('Assessment submission error:', error); alert('Error. Please try again.'); }
+                    finally { this.isSubmitting = false; }
+                },
+
+                async submitContactInfo() {
+                    this.isSubmittingContact = true;
+                    this.contactError = '';
+                    try {
+                        const fullData = { ...this.assessmentData, contactInfo: this.contactInfo };
+                        if (window.WebhookManager) await window.WebhookManager.submitAssessment(fullData);
+                        localStorage.setItem('weightAssessmentData', JSON.stringify(fullData));
+                        window.location.href = 'results.html';
+                    } catch (error) {
+                        console.error('Contact submission error:', error);
+                        this.contactError = error.message?.includes('WhatsApp') ? error.message : 'Error. Please check phone number and try again.';
+                    } finally { this.isSubmittingContact = false; }
+                },
+
+                calculateWeightType() {
+                    const answers = this.answers;
+                    let scores = { hormonal: 0, emotional: 0, metabolic: 0, lifestyle: 0 };
+                    if (['2_5years', '5_10years', 'lifetime'].includes(answers[2])) scores.hormonal += 2;
+                    if (answers[3] === 'slow_metabolism') scores.hormonal += 2;
+                    if (['chronic', 'very_high'].includes(answers[8])) scores.hormonal += 1;
+                    if (answers[3] === 'emotional_eating') scores.emotional += 3;
+                    if (['high', 'very_high', 'chronic'].includes(answers[8])) scores.emotional += 2;
+                    if (['significant', 'severe'].includes(answers[7])) scores.emotional += 2;
+                    if (answers[3] === 'slow_metabolism') scores.metabolic += 3;
+                    if (['sedentary', 'light'].includes(answers[4])) scores.metabolic += 2;
+                    if (['unhealthy', 'mixed'].includes(answers[5])) scores.metabolic += 1;
+                    if (['sedentary', 'light'].includes(answers[4])) scores.lifestyle += 2;
+                    if (['unhealthy', 'mixed'].includes(answers[5])) scores.lifestyle += 2;
+                    if (['diets_only', 'exercise_only', 'multiple'].includes(answers[6])) scores.lifestyle += 1;
+                    const maxScore = Math.max(...Object.values(scores));
+                    const primaryType = Object.keys(scores).find(key => scores[key] === maxScore);
+                    return { primary: primaryType, scores: scores, confidence: maxScore >= 4 ? 'high' : maxScore >= 2 ? 'medium' : 'low' };
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.WebhookManager) {
+                window.WebhookManager.trackConversion('assessment_page_view', { page: 'weight-funnel-assessment', product: 'weight-loss-treatment', source: 'landing_page' });
+            }
+        });
+    </script>
+</body>
+
+</html>

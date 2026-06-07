@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VitalTrim Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/webhook-manager.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-emerald-900 text-white min-h-screen">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1964367777749954');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1964367777749954&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <!-- Hero -->
+      <section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-lime-400 to-amber-300 p-6 text-center text-white">
+        <div>
+          <h1 class="text-4xl font-extrabold mb-4">Your Body Deserves a Fresh Start</h1>
+          <p class="mb-6 text-lg max-w-xl mx-auto">Take our 60-second quiz to receive a personalized weight loss plan tailored just for YOU. No fluff, just real transformation.</p>
+          <button @click="startQuiz()" class="px-8 py-3 bg-white text-lime-600 font-bold rounded shadow hover:bg-gray-100">Start Quiz</button>
+        </div>
+      </section>
+
+      <!-- Quiz Modal -->
+      <div class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center p-6" x-show="showQuiz" x-transition>
+        <div class="bg-gray-800 text-white rounded-xl w-full max-w-lg p-6 space-y-6" @click.outside="reset()">
+          <template x-if="step < questions.length">
+            <div>
+              <h2 class="text-xl font-semibold mb-4" x-text="questions[step].q"></h2>
+              <template x-if="questions[step].type === 'input'">
+                <input type="text" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:border-lime-400 focus:ring-2 focus:ring-lime-400/20" x-model="answers[questions[step].name]" :placeholder="questions[step].placeholder"/>
+              </template>
+              <template x-if="questions[step].type === 'radio'">
+                <div class="space-y-2">
+                  <template x-for="option in questions[step].options" :key="option">
+                    <label class="block bg-gray-700 text-white p-3 rounded cursor-pointer hover:bg-gray-600">
+                      <input type="radio" class="mr-2" :name="questions[step].name" :value="option" x-model="answers[questions[step].name]">
+                      <span x-text="option"></span>
+                    </label>
+                  </template>
+                </div>
+              </template>
+              <button @click="next()" class="mt-6 w-full bg-lime-500 text-white font-bold py-3 rounded hover:bg-lime-600">Next</button>
+            </div>
+          </template>
+
+          <!-- Loading -->
+          <template x-if="step === 'loading'">
+            <div class="text-center">
+              <svg class="mx-auto w-12 h-12 animate-spin text-lime-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+              </svg>
+              <p class="mt-4">Analyzing your profile...</p>
+            </div>
+          </template>
+
+          <!-- Result -->
+          <template x-if="step === 'result'">
+            <div class="text-center">
+              <h2 class="text-2xl font-bold text-lime-400 mb-4">Plan Ready!</h2>
+              <pre class="text-left bg-gray-700 text-white p-4 rounded text-sm overflow-x-auto max-h-64"><code x-text="JSON.stringify(response, null, 2)"></code></pre>
+              <button class="mt-6 px-6 py-2 bg-lime-500 text-white rounded font-bold hover:bg-lime-600" @click="reset()">Close</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <script>
+        function quizApp() {
+          return {
+            showQuiz: false,
+            step: 0,
+            response: null,
+            answers: {},
+            questions: [
+              { name: 'goal', q: 'What is your main weight loss goal?', type: 'radio', options: ['Lose 10-20 lbs', 'Lose 20-50 lbs', 'Lose 50+ lbs', 'Tone & lose fat'] },
+              { name: 'exercise', q: 'How often do you exercise?', type: 'radio', options: ['Never', '1-2x/week', '3-4x/week', '5+ times'] },
+              { name: 'challenge', q: 'Biggest struggle with weight loss?', type: 'radio', options: ['Sticking to a diet', 'Lack of time', 'Motivation', 'Emotional eating'] },
+              { name: 'diet', q: 'How would you describe your current diet?', type: 'radio', options: ['Balanced', 'Unhealthy', 'Strict (keto/vegan)', 'Eat anything'] },
+              { name: 'name', q: 'What’s your name?', type: 'input', placeholder: 'Adeola' },
+              { name: 'email', q: 'Your email address?', type: 'input', placeholder: 'you@example.com' },
+              { name: 'phone', q: 'Phone number', type: 'input', placeholder: '+234...' },
+            ],
+
+            startQuiz() {
+              this.showQuiz = true;
+            },
+
+            next() {
+              const current = this.questions[this.step];
+              if (!this.answers[current.name]) {
+                alert('Please provide an answer to continue.');
+                return;
+              }
+              this.step++;
+              if (this.step === this.questions.length) this.submit();
+            },
+
+            async submit() {
+              this.step = 'loading';
+              try {
+                const response = await WebhookManager.submitForm('weightLeads', JSON.stringify({ ...this.answers, submittedAt: new Date().toISOString() }), {
+                  headers: { 'Content-Type': 'application/json' }
+                });
+                this.response = response.success ? response.data : { error: response.error || 'Submission failed' };
+              } catch (err) {
+                this.response = { error: 'Submission failed. Please try again later.' };
+              }
+              this.step = 'result';
+            },
+
+            reset() {
+              this.showQuiz = false;
+              this.step = 0;
+              this.answers = {};
+              this.response = null;
+            }
+          }
+        }
+      </script>
+    </div>
+</body>
+</html>

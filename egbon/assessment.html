@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Men's Vitality Assessment - Discover Your Performance Type</title>
+    <meta name="description" content="Complete our comprehensive men's vitality assessment to discover your unique performance type and get personalized natural solutions.">
+    <link rel="canonical" href="https://ojg.ng/egbon-funnel/assessment.html">
+    <meta property="og:title" content="Men's Vitality Assessment - Egbon Instant Herbal">
+    <meta property="og:description" content="Discover your performance type and get personalized natural solutions.">
+    <meta property="og:image" content="https://ojg.ng/egbon-bottle.png">
+    <meta property="og:url" content="https://ojg.ng/egbon-funnel/assessment.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Men's Vitality Assessment - Egbon Instant Herbal">
+    <meta name="twitter:description" content="Discover your performance type and get personalized natural solutions.">
+    <meta name="twitter:image" content="https://ojg.ng/egbon-bottle.png">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        accent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Webhook Manager -->
+    <script src="../js/webhook-manager.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900 shadow-lg border-b border-accent-600">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <img src="https://ojg.ng/egbon-logo.png" alt="Egbon Logo" class="h-12 w-auto">
+                    <span class="text-xl font-bold text-white">Vitality Assessment</span>
+                </div>
+                <div class="text-sm text-gray-300">
+                    <span class="bg-accent-600 text-white px-3 py-1 rounded-full font-medium">Step 1 of 2</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-8" x-data="vitalityAssessment()">
+        <!-- Progress Bar -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-2">
+                <span class="text-sm font-medium text-gray-400">Progress</span>
+                <span class="text-sm font-medium text-gray-400" x-text="`${currentQuestion + 1} of ${totalQuestions}`"></span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-3">
+                <div class="bg-accent-600 h-3 rounded-full transition-all duration-300" 
+                     :style="`width: ${((currentQuestion + 1) / totalQuestions) * 100}%`"></div>
+            </div>
+        </div>
+
+        <!-- Assessment Form -->
+        <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+            <!-- Question Display -->
+            <div x-show="!showResults">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-4" x-text="questions[currentQuestion].question"></h2>
+                    <p class="text-gray-400" x-text="questions[currentQuestion].description"></p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="space-y-4 mb-8">
+                    <template x-for="(option, index) in questions[currentQuestion].options" :key="index">
+                        <label class="flex items-center p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 hover:bg-gray-700"
+                               :class="getSelectedAnswer() === option.value ? 'border-accent-600 bg-gray-700' : 'border-gray-600'"
+                               @click="selectAnswer(option.value)">
+                            <input type="radio" 
+                                   :name="`question_${currentQuestion}`"
+                                   :value="option.value"
+                                   :checked="getSelectedAnswer() === option.value"
+                                   class="sr-only">
+                            <div class="flex-1">
+                                <div class="font-medium text-white" x-text="option.text"></div>
+                                <div class="text-sm text-gray-400" x-text="option.description" x-show="option.description"></div>
+                            </div>
+                            <div class="ml-4">
+                                <div class="w-6 h-6 border-2 rounded-full flex items-center justify-center"
+                                     :class="getSelectedAnswer() === option.value ? 'border-accent-600 bg-accent-600' : 'border-gray-500'">
+                                    <div class="w-2 h-2 bg-white rounded-full" 
+                                         x-show="getSelectedAnswer() === option.value"></div>
+                                </div>
+                            </div>
+                        </label>
+                    </template>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between">
+                    <button type="button" 
+                            @click="previousQuestion()"
+                            x-show="currentQuestion > 0"
+                            class="px-6 py-3 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-700 transition-colors">
+                        ← Previous
+                    </button>
+                    
+                    <div x-show="currentQuestion === 0"></div>
+                    
+                    <button type="button" 
+                            @click="nextQuestion()"
+                            x-show="currentQuestion < totalQuestions - 1"
+                            :disabled="!getSelectedAnswer()"
+                            :class="getSelectedAnswer() ? 'bg-accent-600 hover:bg-accent-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'"
+                            class="px-6 py-3 rounded-lg transition-colors">
+                        Next →
+                    </button>
+                    
+                    <button type="button" 
+                            @click="submitAssessment()"
+                            x-show="currentQuestion === totalQuestions - 1"
+                            :disabled="!answers[currentQuestion] || isSubmitting"
+                            :class="answers[currentQuestion] && !isSubmitting ? 'bg-accent-600 hover:bg-accent-700 text-white' : 'bg-gray-600 text-gray-400 cursor-not-allowed'"
+                            class="px-8 py-3 rounded-lg transition-colors font-medium">
+                        <span x-show="!isSubmitting">Get My Results →</span>
+                        <span x-show="isSubmitting">Analyzing...</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div x-show="isSubmitting" class="text-center py-12">
+                <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-accent-600 mx-auto mb-4"></div>
+                <h3 class="text-xl font-semibold text-white mb-2">Analyzing Your Responses...</h3>
+                <p class="text-gray-400">We're determining your performance type and preparing personalized recommendations.</p>
+            </div>
+        </div>
+
+        <!-- Contact Information Form (shown after assessment) -->
+        <div x-show="showContactForm" id="contactFormSection" class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600 mt-8">
+            <h3 class="text-2xl font-bold text-white mb-4">Get Your Personalized Results</h3>
+            <p class="text-gray-400 mb-6">Enter your details to receive your comprehensive performance type analysis and personalized recommendations.</p>
+            
+            <form @submit.prevent="submitContactInfo()" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
+                        <input type="text" 
+                               x-model="contactInfo.name"
+                               required
+                               class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
+                               placeholder="Enter your full name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
+                        <input type="email" 
+                               x-model="contactInfo.email"
+                               required
+                               class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
+                               placeholder="Enter your email">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
+                    <input type="tel" 
+                           x-model="contactInfo.phone"
+                           @input="contactError = ''"
+                           required
+                           :class="contactError ? 'w-full px-4 py-3 bg-gray-700 border border-red-500 text-white rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500' : 'w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600'"
+                           placeholder="e.g., 08012345678">
+                    <div x-show="contactError" class="mt-2 text-sm text-red-400" x-text="contactError"></div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Age Range</label>
+                    <select x-model="contactInfo.ageRange" 
+                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600">
+                        <option value="">Select age range</option>
+                        <option value="25-35">25-35 years</option>
+                        <option value="36-45">36-45 years</option>
+                        <option value="46-55">46-55 years</option>
+                        <option value="56+">56+ years</option>
+                    </select>
+                </div>
+                
+                <button type="submit" 
+                        :disabled="isSubmittingContact"
+                        :class="isSubmittingContact ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-accent-600 hover:bg-accent-700 text-white'"
+                        class="w-full py-4 rounded-lg font-medium text-lg transition-colors">
+                    <span x-show="!isSubmittingContact">Get My Personalized Results →</span>
+                    <span x-show="isSubmittingContact">Processing...</span>
+                </button>
+                
+                <p class="text-xs text-gray-500 text-center">
+                    We respect your privacy. Your information will only be used to provide your vitality assessment results.
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <!-- Assessment Logic -->
+    <script>
+        function vitalityAssessment() {
+            return {
+                currentQuestion: 0,
+                totalQuestions: 10,
+                answers: {},
+                isSubmitting: false,
+                showContactForm: false,
+                showResults: false,
+                isSubmittingContact: false,
+                contactInfo: {
+                    name: '',
+                    email: '',
+                    phone: '',
+                    ageRange: ''
+                },
+                contactError: '',
+                
+                questions: [
+                    {
+                        question: "How would you describe your current libido/sexual desire?",
+                        description: "Think about the past 3 months",
+                        options: [
+                            { value: "high", text: "High - Strong and consistent desire", description: "Regular interest and drive" },
+                            { value: "moderate", text: "Moderate - Occasional interest", description: "Sometimes interested, sometimes not" },
+                            { value: "low", text: "Low - Rarely interested", description: "Minimal desire most of the time" },
+                            { value: "very_low", text: "Very Low - Almost no interest", description: "Significant decrease in desire" }
+                        ]
+                    },
+                    {
+                        question: "How confident do you feel about your performance?",
+                        description: "Your overall confidence in intimate situations",
+                        options: [
+                            { value: "very_confident", text: "Very confident", description: "No concerns or worries" },
+                            { value: "confident", text: "Generally confident", description: "Mostly comfortable" },
+                            { value: "somewhat_anxious", text: "Somewhat anxious", description: "Occasional worries" },
+                            { value: "very_anxious", text: "Very anxious", description: "Frequent performance anxiety" }
+                        ]
+                    },
+                    {
+                        question: "How are your energy levels throughout the day?",
+                        description: "Your typical daily energy and stamina",
+                        options: [
+                            { value: "high", text: "High energy all day" },
+                            { value: "moderate", text: "Good energy with occasional dips", description: "Generally energetic" },
+                            { value: "low", text: "Often tired and fatigued", description: "Struggling with energy" },
+                            { value: "very_low", text: "Constantly exhausted", description: "Severe fatigue issues" }
+                        ]
+                    },
+                    {
+                        question: "How is your physical stamina and endurance?",
+                        description: "Both in daily activities and intimate moments",
+                        options: [
+                            { value: "excellent", text: "Excellent stamina" },
+                            { value: "good", text: "Good - Can maintain activity", description: "Generally satisfactory" },
+                            { value: "poor", text: "Poor - Tire quickly", description: "Limited endurance" },
+                            { value: "very_poor", text: "Very poor - Minimal stamina", description: "Significant limitations" }
+                        ]
+                    },
+                    {
+                        question: "How do you handle stress in your daily life?",
+                        description: "Your stress levels and coping ability",
+                        options: [
+                            { value: "well", text: "Handle stress well" },
+                            { value: "moderate", text: "Sometimes overwhelmed", description: "Manageable most of the time" },
+                            { value: "poorly", text: "Often stressed and anxious", description: "Frequently feeling overwhelmed" },
+                            { value: "chronic", text: "Chronic stress/burnout", description: "Constantly under pressure" }
+                        ]
+                    },
+                    {
+                        question: "How is your sleep quality?",
+                        description: "Quality and consistency of your sleep",
+                        options: [
+                            { value: "excellent", text: "Sleep well most nights", description: "7-8 hours, wake refreshed" },
+                            { value: "good", text: "Generally good sleep", description: "Occasional issues" },
+                            { value: "poor", text: "Frequent sleep problems", description: "Often wake up tired" },
+                            { value: "very_poor", text: "Severe insomnia", description: "Major sleep disruption" }
+                        ]
+                    },
+                    {
+                        question: "Have you noticed changes in your muscle mass or strength?",
+                        description: "Physical changes in the past year",
+                        options: [
+                            { value: "increased", text: "Increased or maintained" },
+                            { value: "stable", text: "Stable - No major changes" },
+                            { value: "decreased", text: "Noticeable decrease", description: "Lost muscle tone" },
+                            { value: "significant_loss", text: "Significant loss", description: "Major reduction in strength" }
+                        ]
+                    },
+                    {
+                        question: "How is your mood and mental clarity?",
+                        description: "Your emotional state and focus",
+                        options: [
+                            { value: "excellent", text: "Positive and focused" },
+                            { value: "good", text: "Generally good mood", description: "Occasional low moments" },
+                            { value: "poor", text: "Frequent mood swings", description: "Irritability and brain fog" },
+                            { value: "very_poor", text: "Depression and confusion", description: "Significant mental health concerns" }
+                        ]
+                    },
+                    {
+                        question: "How often do you exercise or engage in physical activity?",
+                        description: "Your current activity level",
+                        options: [
+                            { value: "daily", text: "Daily or almost daily" },
+                            { value: "regular", text: "3-4 times per week", description: "Regular exercise routine" },
+                            { value: "occasional", text: "1-2 times per week", description: "Sporadic activity" },
+                            { value: "sedentary", text: "Rarely or never", description: "Mostly sedentary lifestyle" }
+                        ]
+                    },
+                    {
+                        question: "What's your primary concern about your vitality?",
+                        description: "What bothers you most",
+                        options: [
+                            { value: "performance", text: "Sexual performance and confidence" },
+                            { value: "energy", text: "Energy and stamina", description: "Feeling tired and weak" },
+                            { value: "libido", text: "Low desire and interest", description: "Lack of sexual drive" },
+                            { value: "overall", text: "Overall vitality and wellness", description: "General decline in health" }
+                        ]
+                    }
+                ],
+
+                nextQuestion() {
+                    if (this.currentQuestion < this.totalQuestions - 1 && this.getSelectedAnswer()) {
+                        this.currentQuestion++;
+                    }
+                },
+
+                previousQuestion() {
+                    if (this.currentQuestion > 0) {
+                        this.currentQuestion--;
+                    }
+                },
+
+                selectAnswer(value) {
+                    this.answers[this.currentQuestion] = value;
+                    
+                    if (this.currentQuestion < this.totalQuestions - 1) {
+                        setTimeout(() => {
+                            this.nextQuestion();
+                        }, 800);
+                    } else {
+                        setTimeout(() => {
+                            this.submitAssessment();
+                        }, 800);
+                    }
+                },
+
+                getSelectedAnswer() {
+                    return this.answers[this.currentQuestion] || null;
+                },
+
+                async submitAssessment() {
+                    this.isSubmitting = true;
+                    
+                    try {
+                        const performanceType = this.calculatePerformanceType();
+                        
+                        this.assessmentData = {
+                            answers: this.answers,
+                            performanceType: performanceType,
+                            completedAt: new Date().toISOString()
+                        };
+                        
+                        this.showContactForm = true;
+                        
+                        setTimeout(() => {
+                            this.scrollToContactForm();
+                        }, 300);
+                        
+                    } catch (error) {
+                        console.error('Assessment submission error:', error);
+                        alert('There was an error processing your assessment. Please try again.');
+                    } finally {
+                        this.isSubmitting = false;
+                    }
+                },
+
+                async submitContactInfo() {
+                    this.isSubmittingContact = true;
+                    this.contactError = '';
+                    
+                    try {
+                        const fullData = {
+                            ...this.assessmentData,
+                            contactInfo: this.contactInfo
+                        };
+                        
+                        if (window.WebhookManager) {
+                            await window.WebhookManager.submitAssessment(fullData);
+                        }
+                        
+                        localStorage.setItem('egbonAssessmentData', JSON.stringify(fullData));
+                        
+                        window.location.href = 'results.html';
+                        
+                    } catch (error) {
+                        console.error('Contact submission error:', error);
+                        
+                        let errorMessage = '';
+                        
+                        if (error.message && error.message.includes('WhatsApp')) {
+                            errorMessage = error.message;
+                        } else if (error.response && error.response.error) {
+                            errorMessage = error.response.error;
+                        } else if (typeof error === 'string' && error.includes('WhatsApp')) {
+                            errorMessage = error;
+                        }
+                        
+                        this.contactError = errorMessage || 'There was an error submitting your information. Please check your phone number and try again.';
+                    } finally {
+                        this.isSubmittingContact = false;
+                    }
+                },
+
+                scrollToContactForm() {
+                    const contactFormSection = document.getElementById('contactFormSection');
+                    if (!contactFormSection) return;
+
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                    try {
+                        const rect = contactFormSection.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const targetPosition = rect.top + scrollTop - 20;
+
+                        if ('scrollBehavior' in document.documentElement.style) {
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            window.scrollTo(0, targetPosition);
+                        }
+                    } catch (error) {
+                        const rect = contactFormSection.getBoundingClientRect();
+                        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        const targetPosition = rect.top + scrollTop - 20;
+                        window.scrollTo(0, targetPosition);
+                    }
+                },
+
+                calculatePerformanceType() {
+                    const answers = this.answers;
+                    let scores = {
+                        hormonal: 0,
+                        stress: 0,
+                        lifestyle: 0,
+                        age: 0
+                    };
+
+                    // Hormonal indicators
+                    if (answers[0] === 'low' || answers[0] === 'very_low') scores.hormonal += 2;
+                    if (answers[1] === 'somewhat_anxious' || answers[1] === 'very_anxious') scores.hormonal += 1;
+                    if (answers[6] === 'decreased' || answers[6] === 'significant_loss') scores.hormonal += 2;
+                    if (answers[3] === 'poor' || answers[3] === 'very_poor') scores.hormonal += 1;
+
+                    // Stress-related indicators
+                    if (answers[4] === 'poorly' || answers[4] === 'chronic') scores.stress += 3;
+                    if (answers[5] === 'poor' || answers[5] === 'very_poor') scores.stress += 2;
+                    if (answers[7] === 'poor' || answers[7] === 'very_poor') scores.stress += 2;
+                    if (answers[2] === 'low' || answers[2] === 'very_low') scores.stress += 1;
+
+                    // Lifestyle indicators
+                    if (answers[8] === 'occasional' || answers[8] === 'sedentary') scores.lifestyle += 2;
+                    if (answers[2] === 'low' || answers[2] === 'very_low') scores.lifestyle += 1;
+                    if (answers[5] === 'poor' || answers[5] === 'very_poor') scores.lifestyle += 1;
+                    if (answers[3] === 'poor' || answers[3] === 'very_poor') scores.lifestyle += 1;
+
+                    // Age-related indicators
+                    if (this.contactInfo.ageRange === '46-55' || this.contactInfo.ageRange === '56+') {
+                        scores.age += 2;
+                    }
+                    if (answers[6] === 'decreased' || answers[6] === 'significant_loss') scores.age += 1;
+                    if (answers[0] === 'low' || answers[0] === 'very_low') scores.age += 1;
+
+                    const maxScore = Math.max(...Object.values(scores));
+                    const primaryType = Object.keys(scores).find(key => scores[key] === maxScore);
+
+                    return {
+                        primary: primaryType,
+                        scores: scores,
+                        confidence: maxScore >= 3 ? 'high' : maxScore >= 2 ? 'medium' : 'low'
+                    };
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.WebhookManager) {
+                window.WebhookManager.trackConversion('assessment_page_view', {
+                    page: 'egbon-funnel-assessment',
+                    product: 'egbon-instant-herbal',
+                    source: 'landing_page'
+                });
+            }
+        });
+    </script>
+</body>
+</html>

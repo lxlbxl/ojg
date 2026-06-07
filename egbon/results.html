@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Performance Type Results - Personalized Solutions</title>
+    <meta name="description" content="Discover your personalized performance type results and get targeted natural solutions that work for your specific needs.">
+    <link rel="canonical" href="https://ojg.ng/egbon-funnel/results.html">
+    <meta property="og:title" content="Your Results - Egbon Instant Herbal">
+    <meta property="og:description" content="See your personalized performance type and natural solutions that fit your needs.">
+    <meta property="og:image" content="https://ojg.ng/egbon-bottle.png">
+    <meta property="og:url" content="https://ojg.ng/egbon-funnel/results.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Your Results - Egbon Instant Herbal">
+    <meta name="twitter:description" content="See your personalized performance type and natural solutions that fit your needs.">
+    <meta name="twitter:image" content="https://ojg.ng/egbon-bottle.png">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        accent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Webhook Manager -->
+    <script src="../js/webhook-manager.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900 shadow-lg border-b border-accent-600">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <img src="https://ojg.ng/egbon-logo.png" alt="Egbon Logo" class="h-12 w-auto">
+                    <span class="text-xl font-bold text-white">Your Results</span>
+                </div>
+                <div class="text-sm text-gray-300">
+                    <span class="bg-accent-600 text-white px-3 py-1 rounded-full font-medium">Step 2 of 2</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8" x-data="performanceResults()">
+        <!-- Loading State -->
+        <div x-show="isLoading" class="text-center py-16">
+            <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-accent-600 mx-auto mb-4"></div>
+            <h2 class="text-2xl font-semibold text-white mb-2">Analyzing Your Results...</h2>
+            <p class="text-gray-400">Please wait while we prepare your personalized performance analysis.</p>
+        </div>
+
+        <!-- Results Content -->
+        <div x-show="!isLoading && assessmentData">
+            <!-- Congratulations Section -->
+            <section class="text-center mb-12">
+                <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                    <div class="w-20 h-20 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-4xl">🎉</span>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Congratulations, <span x-text="assessmentData.contactInfo.name.split(' ')[0]"></span>!
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-6">
+                        You've completed your vitality assessment. Here are your personalized results.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Performance Type Results -->
+            <section class="mb-12">
+                <div class="bg-gradient-to-r from-accent-600 to-accent-700 rounded-2xl p-8 text-white mb-8">
+                    <h2 class="text-3xl font-bold mb-4">Your Performance Type</h2>
+                    <div class="bg-white bg-opacity-20 rounded-xl p-6">
+                        <h3 class="text-2xl font-bold mb-2" x-text="performanceTypeInfo.name"></h3>
+                        <p class="text-accent-100 text-lg" x-text="performanceTypeInfo.description"></p>
+                        <div class="mt-4">
+                            <span class="bg-white bg-opacity-30 px-3 py-1 rounded-full text-sm font-medium">
+                                Confidence: <span x-text="assessmentData.performanceType.confidence"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Type Details -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Common Symptoms -->
+                    <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+                        <h4 class="text-xl font-bold text-white mb-4">Common Signs for Your Type</h4>
+                        <ul class="space-y-3">
+                            <template x-for="symptom in performanceTypeInfo.symptoms" :key="symptom">
+                                <li class="flex items-start">
+                                    <span class="text-accent-500 mr-3 mt-1">•</span>
+                                    <span class="text-gray-300" x-text="symptom"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <!-- Root Causes -->
+                    <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
+                        <h4 class="text-xl font-bold text-white mb-4">Likely Root Causes</h4>
+                        <ul class="space-y-3">
+                            <template x-for="cause in performanceTypeInfo.causes" :key="cause">
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-3 mt-1">•</span>
+                                    <span class="text-gray-300" x-text="cause"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Recommendations -->
+            <section class="mb-12">
+                <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                    <h2 class="text-2xl font-bold text-white mb-6">Immediate Action Steps for Your Type</h2>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <template x-for="(recommendation, index) in performanceTypeInfo.quickTips" :key="index">
+                            <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 border border-accent-700">
+                                <div class="w-12 h-12 bg-accent-600 rounded-full flex items-center justify-center mb-4">
+                                    <span class="text-white font-bold" x-text="index + 1"></span>
+                                </div>
+                                <h4 class="font-semibold text-white mb-2" x-text="recommendation.title"></h4>
+                                <p class="text-gray-300 text-sm" x-text="recommendation.description"></p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Problem Section -->
+            <section class="mb-12">
+                <div class="bg-red-900 bg-opacity-30 border border-red-700 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-red-400 mb-4">But Here's the Problem...</h2>
+                    <p class="text-red-200 text-lg mb-6">
+                        While these quick tips can help, they're just the beginning. Most men with <span x-text="performanceTypeInfo.name"></span> 
+                        struggle because they don't have a complete, natural solution that addresses ALL the root causes.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h3 class="font-bold text-red-400 mb-3">Without a proper solution, you might experience:</h3>
+                            <ul class="space-y-2 text-red-200">
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>Symptoms that keep coming back</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>Wasted money on pills with side effects</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>Frustration from trial and error</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-red-500 mr-2">✗</span>
+                                    <span>Years of struggling without real progress</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="font-bold text-red-400 mb-3">You need a natural solution that includes:</h3>
+                            <ul class="space-y-2 text-red-200">
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>100% natural herbal ingredients</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>No harmful side effects</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Fast-acting and proven formula</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-green-500 mr-2">✓</span>
+                                    <span>Addresses root causes, not just symptoms</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solution Introduction -->
+            <section class="mb-12">
+                <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <img src="https://ojg.ng/egbon-bottle.png" alt="Egbon Instant Herbal" class="w-full max-w-sm mx-auto" loading="lazy" width="360" height="360">
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-bold text-white mb-4">
+                                Introducing Egbon Instant Herbal
+                            </h2>
+                            <p class="text-xl text-gray-300 mb-6">
+                                A powerful blend of traditional African herbs scientifically formulated specifically for men with <span x-text="performanceTypeInfo.name"></span>
+                            </p>
+                            
+                            <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 mb-6">
+                                <h3 class="text-xl font-bold text-accent-400 mb-4">What Makes Egbon Different?</h3>
+                                <div class="grid gap-4 text-left">
+                                    <div class="flex items-start">
+                                        <span class="text-accent-500 mr-3 mt-1">🌿</span>
+                                        <span class="text-gray-300">100% natural herbal formula</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-accent-500 mr-3 mt-1">⚡</span>
+                                        <span class="text-gray-300">Fast-acting results you can feel</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-accent-500 mr-3 mt-1">🛡️</span>
+                                        <span class="text-gray-300">No harmful side effects</span>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-accent-500 mr-3 mt-1">✅</span>
+                                        <span class="text-gray-300">Clinically tested and proven</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button @click="viewSolution()" 
+                                    class="w-full bg-accent-600 hover:bg-accent-700 text-white font-bold text-xl px-8 py-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                                See How Egbon Can Transform Your Performance →
+                            </button>
+                            
+                            <p class="text-sm text-gray-400 mt-4 text-center">
+                                ⏰ Special pricing for assessment participants
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Urgency Section -->
+            <section class="mb-12">
+                <div class="bg-yellow-900 bg-opacity-30 border border-yellow-700 rounded-2xl p-8">
+                    <h2 class="text-2xl font-bold text-yellow-400 mb-4">⚠️ Don't Wait - Your Performance Won't Fix Itself</h2>
+                    <p class="text-yellow-200 text-lg mb-4">
+                        Every day you delay getting the right natural solution, your symptoms can worsen and become harder to reverse.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 text-center">
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <h4 class="font-bold text-yellow-400 mb-2">Week 1-2</h4>
+                            <p class="text-yellow-200 text-sm">Notice increased energy and desire</p>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <h4 class="font-bold text-yellow-400 mb-2">Week 3-4</h4>
+                            <p class="text-yellow-200 text-sm">Significant improvements in performance</p>
+                        </div>
+                        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                            <h4 class="font-bold text-yellow-400 mb-2">Month 2+</h4>
+                            <p class="text-yellow-200 text-sm">Long-term vitality and confidence restored</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA -->
+            <section class="text-center">
+                <div class="bg-gray-800 rounded-2xl p-8 border border-accent-600">
+                    <h2 class="text-3xl font-bold text-white mb-4">Ready to Reclaim Your Masculine Power?</h2>
+                    <p class="text-xl text-gray-300 mb-6">
+                        Get Egbon Instant Herbal - the natural solution designed specifically for <span x-text="performanceTypeInfo.name"></span>
+                    </p>
+                    
+                    <button @click="viewSolution()" 
+                            class="bg-accent-600 hover:bg-accent-700 text-white font-bold text-xl px-12 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mb-4">
+                        Get Your Natural Solution Now →
+                    </button>
+                    
+                    <div class="flex justify-center items-center space-x-6 text-sm text-gray-400 mt-4">
+                        <span class="flex items-center">
+                            <span class="text-green-400 mr-2">✓</span>
+                            100% Natural
+                        </span>
+                        <span class="flex items-center">
+                            <span class="text-green-400 mr-2">✓</span>
+                            Fast Results
+                        </span>
+                        <span class="flex items-center">
+                            <span class="text-green-400 mr-2">✓</span>
+                            Money-Back Guarantee
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- No Data State -->
+        <div x-show="!isLoading && !assessmentData" class="text-center py-16">
+            <h2 class="text-2xl font-semibold text-white mb-4">No Assessment Data Found</h2>
+            <p class="text-gray-400 mb-6">It looks like you haven't completed the assessment yet.</p>
+            <a href="assessment.html" 
+               class="inline-block bg-accent-600 hover:bg-accent-700 text-white font-bold px-8 py-3 rounded-lg transition-colors">
+                Take Assessment →
+            </a>
+        </div>
+    </main>
+
+    <!-- Results Logic -->
+    <script>
+        function performanceResults() {
+            return {
+                isLoading: true,
+                assessmentData: null,
+                performanceTypeInfo: {},
+                
+                init() {
+                    this.loadAssessmentData();
+                },
+                
+                loadAssessmentData() {
+                    setTimeout(() => {
+                        const data = localStorage.getItem('egbonAssessmentData');
+                        if (data) {
+                            this.assessmentData = JSON.parse(data);
+                            this.performanceTypeInfo = this.getPerformanceTypeInfo(this.assessmentData.performanceType.primary);
+                            
+                            if (window.WebhookManager) {
+                                window.WebhookManager.trackConversion('results_page_view', {
+                                    page: 'egbon-funnel-results',
+                                    product: 'egbon-instant-herbal',
+                                    performanceType: this.assessmentData.performanceType.primary,
+                                    confidence: this.assessmentData.performanceType.confidence
+                                });
+                            }
+                        }
+                        this.isLoading = false;
+                    }, 2000);
+                },
+                
+                getPerformanceTypeInfo(type) {
+                    const typeInfo = {
+                        hormonal: {
+                            name: "Hormonal Imbalance Type",
+                            description: "Your performance issues are primarily driven by hormonal imbalances, particularly low testosterone levels affecting your libido and vitality.",
+                            symptoms: [
+                                "Low libido and sexual desire",
+                                "Reduced muscle mass and strength",
+                                "Increased body fat, especially around midsection",
+                                "Fatigue and low energy levels",
+                                "Mood swings and irritability",
+                                "Difficulty maintaining performance"
+                            ],
+                            causes: [
+                                "Declining testosterone production",
+                                "Hormonal imbalances from aging",
+                                "Poor diet lacking essential nutrients",
+                                "Lack of physical activity",
+                                "Chronic stress affecting hormone production"
+                            ],
+                            quickTips: [
+                                {
+                                    title: "Boost Testosterone Naturally",
+                                    description: "Focus on zinc-rich foods, healthy fats, and strength training to support natural testosterone production."
+                                },
+                                {
+                                    title: "Optimize Sleep",
+                                    description: "Get 7-8 hours of quality sleep as testosterone is primarily produced during deep sleep."
+                                },
+                                {
+                                    title: "Reduce Stress",
+                                    description: "High cortisol from stress suppresses testosterone. Practice stress management daily."
+                                }
+                            ]
+                        },
+                        stress: {
+                            name: "Stress-Related Performance Type",
+                            description: "Your performance challenges are primarily caused by chronic stress and elevated cortisol levels that disrupt your body's natural balance.",
+                            symptoms: [
+                                "Performance anxiety and worry",
+                                "Chronic fatigue despite rest",
+                                "Difficulty sleeping or staying asleep",
+                                "Mood swings and irritability",
+                                "Reduced libido during stressful periods",
+                                "Mental fog and poor concentration"
+                            ],
+                            causes: [
+                                "Chronic elevation of stress hormones",
+                                "Work-related pressure and burnout",
+                                "Poor stress management habits",
+                                "Lack of quality sleep",
+                                "Anxiety and mental health concerns"
+                            ],
+                            quickTips: [
+                                {
+                                    title: "Stress Management",
+                                    description: "Practice daily meditation, deep breathing, or yoga to lower cortisol levels."
+                                },
+                                {
+                                    title: "Prioritize Sleep",
+                                    description: "Establish a consistent sleep schedule and create a relaxing bedtime routine."
+                                },
+                                {
+                                    title: "Physical Activity",
+                                    description: "Regular exercise helps reduce stress hormones and boost mood-enhancing endorphins."
+                                }
+                            ]
+                        },
+                        lifestyle: {
+                            name: "Lifestyle-Related Performance Type",
+                            description: "Your vitality issues stem primarily from lifestyle factors including diet, exercise, and daily habits that affect your overall health.",
+                            symptoms: [
+                                "Low energy and constant fatigue",
+                                "Poor stamina and endurance",
+                                "Weight gain and reduced fitness",
+                                "Inconsistent performance",
+                                "General decline in vitality",
+                                "Lack of motivation and drive"
+                            ],
+                            causes: [
+                                "Sedentary lifestyle with minimal exercise",
+                                "Poor diet lacking essential nutrients",
+                                "Inadequate sleep and rest",
+                                "Excessive alcohol or smoking",
+                                "Lack of healthy daily routines"
+                            ],
+                            quickTips: [
+                                {
+                                    title: "Start Moving",
+                                    description: "Begin with 30 minutes of daily activity - walking, jogging, or strength training."
+                                },
+                                {
+                                    title: "Improve Your Diet",
+                                    description: "Focus on whole foods, lean proteins, healthy fats, and plenty of vegetables."
+                                },
+                                {
+                                    title: "Build Healthy Habits",
+                                    description: "Create consistent routines for sleep, meals, and exercise to support vitality."
+                                }
+                            ]
+                        },
+                        age: {
+                            name: "Age-Related Performance Type",
+                            description: "Your performance changes are primarily related to natural aging processes affecting hormone levels, energy, and overall vitality.",
+                            symptoms: [
+                                "Gradual decline in libido over time",
+                                "Reduced stamina and endurance",
+                                "Loss of muscle mass and strength",
+                                "Slower recovery from physical activity",
+                                "Decreased energy levels",
+                                "Changes in body composition"
+                            ],
+                            causes: [
+                                "Natural decline in testosterone with age",
+                                "Reduced metabolic rate",
+                                "Decreased muscle mass (sarcopenia)",
+                                "Accumulated lifestyle factors",
+                                "Age-related hormonal changes"
+                            ],
+                            quickTips: [
+                                {
+                                    title: "Strength Training",
+                                    description: "Build and maintain muscle mass with regular resistance training to boost testosterone."
+                                },
+                                {
+                                    title: "Nutrient Support",
+                                    description: "Ensure adequate intake of vitamins D, zinc, and magnesium crucial for hormone production."
+                                },
+                                {
+                                    title: "Stay Active",
+                                    description: "Maintain an active lifestyle with varied physical activities to preserve vitality."
+                                }
+                            ]
+                        }
+                    };
+                    
+                    return typeInfo[type] || typeInfo.hormonal;
+                },
+                
+                viewSolution() {
+                    if (window.WebhookManager) {
+                        window.WebhookManager.trackSalesVisit({
+                            performanceType: this.assessmentData.performanceType.primary,
+                            product: 'egbon-instant-herbal',
+                            source: 'results_page',
+                            confidence: this.assessmentData.performanceType.confidence
+                        });
+                    }
+                    
+                    window.location.href = 'sales.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30-Day Acne Starter Protocol | Forest & Sage</title>
+    <meta name="description"
+        content="Begin your skin journey with our 30-day essential protocol. The foundational reset for metabolic skin health.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: {
+                        'forest': { 50: '#f2f8f5', 100: '#dcece3', 800: '#166534', 900: '#0f3922' },
+                        'sage': { 100: '#E6EBE6', 200: '#CDD6CD', 500: '#8DA38D' },
+                        'terracotta': { 500: '#C77D63', 600: '#A85D45' },
+                        'cream': '#FDFCF8', 'sand': '#F4F1EA',
+                    },
+                    backgroundImage: { 'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')" },
+                    boxShadow: { 'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)', 'glow': '0 0 20px rgba(199, 125, 99, 0.3)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFCF8;
+            color: #0f3922;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <script src="../js/webhook-manager.js"></script>
+    <script src="../js/flutterwave-integration.js"></script>
+</head>
+
+<body class="antialiased relative" x-data="downsellPageApp()">
+    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+
+    <main class="max-w-4xl mx-auto px-6 py-20 relative z-10">
+        <div class="blob bg-terracotta-100 w-full h-96 top-0 left-0 -translate-y-1/2 rounded-full opacity-30"></div>
+
+        <div class="text-center mb-16">
+            <div
+                class="inline-block px-4 py-2 bg-sage-100 rounded-full text-[10px] font-bold text-forest-800 uppercase tracking-widest mb-6">
+                Foundational Entry</div>
+            <h1 class="text-4xl md:text-5xl font-serif text-forest-900 mb-6">30-Day Starter Protocol</h1>
+            <p class="text-lg text-forest-800/60 max-w-xl mx-auto font-light">The essential first step for those who
+                want to experience the Forest & Sage difference before committing to a full transformation.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-12 items-start">
+            <div class="space-y-8">
+                <div class="glass-panel p-8 rounded-[2.5rem] border-l-4 border-l-sage-500">
+                    <h3 class="text-xl font-serif text-forest-900 mb-4">Included in Starter:</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-sage-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-forest-900">30-Day Skincare Roadmap</h4>
+                                <p class="text-xs text-forest-800/60">Identify triggers and implement a barrier-safe
+                                    routine.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-sage-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-forest-900">Essential Herbal Detox Guide</h4>
+                                <p class="text-xs text-forest-800/60">Top 3 botanical concentrates for initial blood
+                                    purification.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-check-circle text-sage-500 mt-1"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-forest-900">1-on-1 WhatsApp Access</h4>
+                                <p class="text-xs text-forest-800/60">Direct line to our skin specialists for 30 days.
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-forest-900 text-sand p-8 rounded-[2.5rem] shadow-soft">
+                    <div class="text-xs font-bold text-sand/40 uppercase tracking-widest mb-4">Pricing Strategy</div>
+                    <div class="flex items-end gap-3 mb-2">
+                        <span class="text-3xl font-serif" x-text="'₦' + price30Day.toLocaleString()"></span>
+                        <span class="text-sm line-through text-sand/40 mb-1">₦25,000</span>
+                    </div>
+                    <p class="text-[10px] text-terracotta-400 font-bold uppercase tracking-widest mb-6">76% Discount for
+                        New Starters</p>
+                    <button @click="scrollToOrder()"
+                        class="w-full bg-sand text-forest-900 py-4 rounded-full font-bold text-sm hover:bg-white transition-all">Claim
+                        Starter Offer</button>
+                </div>
+            </div>
+
+            <div id="order-section" class="glass-panel p-8 rounded-[2.5rem] shadow-xl border-t-8 border-terracotta-500">
+                <h3 class="text-xl font-serif text-forest-900 mb-8 text-center">Secure Your Entry</h3>
+
+                <form @submit.prevent="handlePayment()" class="space-y-6">
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-forest-900/40 uppercase ml-1">Full Name</label>
+                            <input type="text" x-model="customer.name" required
+                                class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-forest-900/40 uppercase ml-1">WhatsApp
+                                Phone</label>
+                            <input type="tel" x-model="customer.phone" required
+                                class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[10px] font-bold text-forest-900/40 uppercase ml-1">Email Address</label>
+                            <input type="email" x-model="customer.email" required
+                                class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-terracotta-50 rounded-2xl border border-terracotta-100 flex gap-3 cursor-pointer"
+                        @click="orderBump = !orderBump">
+                        <div class="w-5 h-5 rounded border border-terracotta-500 mt-1 flex-shrink-0 flex items-center justify-center transition-colors"
+                            :class="orderBump ? 'bg-terracotta-500' : 'bg-white'">
+                            <i class="fas fa-check text-[10px] text-white" x-show="orderBump"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-bold text-forest-900">Add Priority Processing (+₦2,000)</h4>
+                            <p class="text-[10px] text-forest-800/60 leading-tight">Skip the queue and get your protocol
+                                generated in 60 mins.</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" :disabled="isProcessing"
+                        class="w-full bg-terracotta-500 text-white py-5 rounded-full font-bold text-lg hover:bg-terracotta-600 shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-3">
+                        <span x-show="!isProcessing" class="flex items-center gap-3">Get Starter Plan <i
+                                class="fas fa-sparkles text-sm"></i></span>
+                        <span x-show="isProcessing">Processing...</span>
+                    </button>
+
+                    <div class="text-center">
+                        <p class="text-[10px] text-forest-800/40 font-bold uppercase tracking-widest">🔒 Secure Checkout
+                            Powered by Flutterwave</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-20 text-center">
+            <p class="text-sm text-forest-800/40 font-medium">Changed your mind? <a href="90-day-plan.html"
+                    class="text-forest-900 underline font-bold">Upgrade to the Full 90-Day Protocol</a></p>
+        </div>
+    </main>
+
+    <footer class="bg-forest-900 py-12 px-6 text-center text-sand/20 text-[10px] font-bold tracking-[0.2em] uppercase">
+        Step into Forest & Sage • Foundations of Skin Health
+    </footer>
+
+    <script>
+        function downsellPageApp() {
+            return {
+                price30Day: 15000, orderBump: false, isProcessing: false,
+                customer: { name: '', phone: '', email: '' },
+
+                get totalPrice() { return this.price30Day + (this.orderBump ? 2000 : 0); },
+
+                init() {
+                    const data = JSON.parse(localStorage.getItem('acneAssessmentData') || '{}');
+                    this.customer.name = data.contactInfo?.name || '';
+                    this.customer.phone = data.contactInfo?.phone || '';
+                    this.customer.email = data.contactInfo?.email || '';
+                    this.fetchPricing();
+                },
+
+                async fetchPricing() {
+                    try {
+                        const res = await fetch('../backend/api/get-pricing.php?category=acne');
+                        const data = await res.json();
+                        if (data.success && data.pricing['30-day']) this.price30Day = parseInt(data.pricing['30-day']);
+                    } catch (e) { console.warn('Pricing fetch failed.'); }
+                },
+
+                scrollToOrder() { document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' }); },
+
+                async handlePayment() {
+                    this.isProcessing = true;
+                    try {
+                        const paymentData = {
+                            plan: '30-day',
+                            amount: this.totalPrice,
+                            title: 'Acne 30-Day Starter',
+                            description: this.orderBump ? 'Starter Protocol + Priority Processing' : '30-Day Starter Protocol',
+                            customer: this.customer,
+                            category: 'acne',
+                            meta: { order_bump: this.orderBump }
+                        };
+                        await window.FlutterwaveIntegration.processPayment(paymentData);
+                    } catch (e) { alert('Error: ' + e.message); }
+                    finally { this.isProcessing = false; }
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>60-Second Weight Loss Plan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/webhook-manager.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .glass {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-emerald-900 text-white min-h-screen">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1964367777749954');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1964367777749954&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <div class="max-w-4xl mx-auto px-4 py-8 text-center">
+      <h1 class="text-4xl sm:text-5xl font-bold mb-4 drop-shadow-xl">Get Your FREE Personalized <span class="text-green-400">Weight Loss Plan</span></h1>
+      <p class="text-lg mb-6">Discover the best plan for your body type in just 60 seconds. No fluff. Just science-backed results.</p>
+      <button @click="showQuiz = true" class="px-6 py-3 bg-gradient-to-r from-green-400 to-yellow-400 hover:from-yellow-400 hover:to-green-400 text-black font-semibold rounded-full shadow-lg transition-all duration-300">Start My Quiz</button>
+
+      <!-- Quiz Modal -->
+      <div x-show="showQuiz" x-data="quizForm()" class="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center px-4">
+        <div class="bg-gray-800 text-white rounded-2xl shadow-2xl glass max-w-lg w-full p-6 transition-all duration-500 relative">
+
+          <template x-if="step <= questions.length">
+            <div x-transition>
+              <h2 class="text-xl font-semibold mb-4" x-text="questions[step - 1].q"></h2>
+              <div class="grid gap-3">
+                <template x-for="option in questions[step - 1].options" :key="option">
+                  <button @click="answer(option)" class="w-full py-3 rounded-xl bg-gradient-to-r from-green-300 to-green-500 text-white font-semibold hover:scale-105 transition-transform duration-300">
+                    <span x-text="option"></span>
+                  </button>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <template x-if="step === questions.length + 1">
+            <form @submit.prevent="submit()" x-transition class="space-y-4">
+              <h2 class="text-xl font-semibold mb-2">Almost there! Enter your details:</h2>
+              <input required x-model="form.name" type="text" placeholder="Your Name" class="w-full px-4 py-3 rounded-xl border">
+              <input required x-model="form.email" type="email" placeholder="Your Email" class="w-full px-4 py-3 rounded-xl border">
+              <input required x-model="form.phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-3 rounded-xl border">
+              <input required x-ref="photo" type="file" class="w-full px-4 py-2 border rounded-xl">
+
+              <button type="submit" class="w-full bg-black text-white py-3 rounded-xl hover:bg-green-700 transition-all duration-300">
+                <span x-show="!loading">Submit</span>
+                <span x-show="loading">Submitting...</span>
+              </button>
+              <p x-show="response" class="mt-4 text-center text-green-600" x-text="response"></p>
+            </form>
+          </template>
+
+          <button @click="showQuiz = false" class="absolute top-4 right-4 text-white hover:text-red-600">✖</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    async function submitForm(data, setLoading, setResponse) {
+      setLoading(true);
+      try {
+        const formData = new FormData();
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+
+        const response = await WebhookManager.submitForm('weightLeads', formData);
+        setResponse(response.success ? 'Success! Check your email.' : response.error || 'Submission failed');
+      } catch (err) {
+        setResponse("Submission failed. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    function quizForm() {
+      return {
+        step: 1,
+        form: { name: '', email: '', phone: '' },
+        photo: null,
+        loading: false,
+        response: '',
+        answers: [],
+        questions: [
+          { q: "What is your primary weight loss goal?", options: ["Lose fat", "Build muscle", "Improve fitness"] },
+          { q: "What’s your body type?", options: ["Ectomorph", "Mesomorph", "Endomorph"] },
+          { q: "What’s your age range?", options: ["Under 25", "25-35", "36-50", "50+"] },
+          { q: "How active are you?", options: ["Not active", "Light", "Moderate", "Very active"] }
+        ],
+        answer(option) {
+          this.answers.push(option);
+          this.step++;
+        },
+        async submit() {
+          const data = {
+            ...this.form,
+            answers: this.answers.join(', ')
+          };
+          const file = this.$refs.photo.files[0];
+          if (file) data.photo = file;
+          await submitForm(data, val => this.loading = val, val => this.response = val);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

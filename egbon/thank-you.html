@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Order Confirmed | Egbon Instant Herbal</title>
+    <meta name="description" content="Thank you for your order! Your Egbon Instant Herbal is on its way.">
+    <link rel="canonical" href="https://ojg.ng/egbon-funnel/thank-you.html">
+    <meta property="og:title" content="Thank You - Egbon Instant Herbal Order Confirmed">
+    <meta property="og:description" content="Your payment was successful. Egbon Instant Herbal is on the way.">
+    <meta property="og:image" content="https://ojg.ng/egbon-bottle.png">
+    <meta property="og:url" content="https://ojg.ng/egbon-funnel/thank-you.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Thank You - Egbon Instant Herbal Order Confirmed">
+    <meta name="twitter:description" content="Your payment was successful. Egbon Instant Herbal is on the way.">
+    <meta name="twitter:image" content="https://ojg.ng/egbon-bottle.png">
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e'
+                        },
+                        accent: {
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900 shadow-lg border-b border-accent-600">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-center">
+                <img src="https://ojg.ng/egbon-logo.png" alt="Egbon Logo" class="h-12 w-auto">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-4 py-12">
+        <!-- Success Message -->
+        <section class="text-center mb-12">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-12 border border-green-600">
+                <div class="w-24 h-24 bg-green-600 bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-6xl">✅</span>
+                </div>
+                
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Thank You, <span id="customerNameHeading">Customer</span>!
+                </h1>
+                
+                <p class="text-xl text-gray-300 mb-8" id="thankYouSubtitle">
+                    Your payment has been successfully processed. Get ready to reclaim your masculine power!
+                </p>
+                
+                <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 mb-8 border border-accent-700">
+                    <h2 class="text-2xl font-bold text-accent-400 mb-4">What Happens Next?</h2>
+                    <div class="grid md:grid-cols-3 gap-6 text-left">
+                        <div>
+                            <div class="flex items-center mb-3">
+                                <span class="text-3xl mr-3">📧</span>
+                                <h3 class="font-semibold text-white">Step 1</h3>
+                            </div>
+                            <p class="text-gray-300 text-sm">Check your email for order confirmation and receipt</p>
+                        </div>
+                        <div>
+                            <div class="flex items-center mb-3">
+                                <span class="text-3xl mr-3">📦</span>
+                                <h3 class="font-semibold text-white">Step 2</h3>
+                            </div>
+                            <p class="text-gray-300 text-sm">Our team will contact you within 24 hours to confirm delivery details</p>
+                        </div>
+                        <div>
+                            <div class="flex items-center mb-3">
+                                <span class="text-3xl mr-3">🚚</span>
+                                <h3 class="font-semibold text-white">Step 3</h3>
+                            </div>
+                            <p class="text-gray-300 text-sm">Receive your Egbon Instant Herbal within 2-5 business days</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="orderSummarySection" class="mb-12" style="display:none;">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">Order Summary</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-900 rounded-xl p-6 border border-gray-700">
+                        <ul class="space-y-2 text-gray-300">
+                            <li><strong class="text-white">Name:</strong> <span id="orderName"></span></li>
+                            <li><strong class="text-white">Email:</strong> <span id="orderEmail"></span></li>
+                            <li><strong class="text-white">Phone:</strong> <span id="orderPhone"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-900 rounded-xl p-6 border border-gray-700">
+                        <ul class="space-y-2 text-gray-300">
+                            <li><strong class="text-white">Plan:</strong> <span id="orderPlan"></span></li>
+                            <li><strong class="text-white">Amount:</strong> <span id="orderAmount"></span></li>
+                            <li><strong class="text-white">Transaction ID:</strong> <span id="orderTransactionId"></span></li>
+                            <li><strong class="text-white">Reference:</strong> <span id="orderTxRef"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-400 mt-6 text-center" id="orderNotice"></p>
+            </div>
+        </section>
+
+        <!-- Product Usage Guide -->
+        <section class="mb-12">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                    How to Get the Best Results with Egbon
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 border border-accent-700">
+                        <h3 class="text-xl font-bold text-accent-400 mb-4">✅ Do's</h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <span>Take consistently as directed on the bottle</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <span>Stay hydrated - drink plenty of water</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <span>Maintain a balanced diet with fruits and vegetables</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <span>Get adequate sleep (7-8 hours)</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-3 mt-1">•</span>
+                                <span>Exercise regularly for best results</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-900 bg-opacity-20 rounded-xl p-6 border border-red-700">
+                        <h3 class="text-xl font-bold text-red-400 mb-4">❌ Don'ts</h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-red-400 mr-3 mt-1">•</span>
+                                <span>Don't exceed the recommended dosage</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-400 mr-3 mt-1">•</span>
+                                <span>Don't skip doses - consistency is key</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-400 mr-3 mt-1">•</span>
+                                <span>Don't mix with alcohol excessively</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-400 mr-3 mt-1">•</span>
+                                <span>Don't expect overnight results - give it time</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-400 mr-3 mt-1">•</span>
+                                <span>Don't share your supplement with others</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expected Timeline -->
+        <section class="mb-12">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                <h2 class="text-3xl font-bold text-white mb-6 text-center">
+                    Your Transformation Timeline
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start">
+                        <div class="w-16 h-16 bg-accent-600 rounded-full flex items-center justify-center mr-6 flex-shrink-0">
+                            <span class="text-white font-bold text-xl">1</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Week 1-2: Initial Changes</h3>
+                            <p class="text-gray-300">You'll start noticing increased energy levels and improved mood. Some men report feeling more alert and focused.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-16 h-16 bg-accent-600 rounded-full flex items-center justify-center mr-6 flex-shrink-0">
+                            <span class="text-white font-bold text-xl">2</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Week 3-4: Noticeable Improvements</h3>
+                            <p class="text-gray-300">Enhanced libido and desire become apparent. You'll feel more confident and experience better stamina and performance.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <div class="w-16 h-16 bg-accent-600 rounded-full flex items-center justify-center mr-6 flex-shrink-0">
+                            <span class="text-white font-bold text-xl">3</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">Month 2+: Peak Performance</h3>
+                            <p class="text-gray-300">Full benefits realized. Sustained energy, optimal performance, and complete confidence in your masculine vitality.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Support Section -->
+        <section class="mb-12">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600 text-center">
+                <h2 class="text-3xl font-bold text-white mb-4">Need Help?</h2>
+                <p class="text-gray-300 mb-6">
+                    Our customer support team is here to assist you with any questions or concerns.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 border border-accent-700">
+                        <span class="text-4xl mb-3 block">📧</span>
+                        <h3 class="font-bold text-white mb-2">Email Support</h3>
+                        <p class="text-gray-300 text-sm mb-3">Get help via email</p>
+                        <a href="mailto:support@ojg.ng" class="text-accent-400 hover:text-accent-300">support@ojg.ng</a>
+                    </div>
+                    
+                    <div class="bg-accent-600 bg-opacity-20 rounded-xl p-6 border border-accent-700">
+                        <span class="text-4xl mb-3 block">💬</span>
+                        <h3 class="font-bold text-white mb-2">WhatsApp Support</h3>
+                        <p class="text-gray-300 text-sm mb-3">Chat with us directly</p>
+                        <a href="https://wa.me/2348012345678" class="text-accent-400 hover:text-accent-300">Message Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof Reminder -->
+        <section class="text-center">
+            <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    You've Made a Great Decision!
+                </h2>
+                <p class="text-gray-300 mb-6">
+                    Join thousands of satisfied men who have transformed their lives with Egbon Instant Herbal.
+                </p>
+                
+                <div class="flex justify-center items-center space-x-8 text-center">
+                    <div>
+                        <div class="text-4xl font-bold text-accent-500 mb-2">5,000+</div>
+                        <div class="text-gray-400 text-sm">Happy Customers</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-accent-500 mb-2">4.9/5</div>
+                        <div class="text-gray-400 text-sm">Average Rating</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold text-accent-500 mb-2">98%</div>
+                        <div class="text-gray-400 text-sm">Satisfaction Rate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16 border-t border-gray-800">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-gray-400">
+                © 2024 OJG - Egbon Instant Herbal. Helping men reclaim their vitality naturally.
+            </p>
+        </div>
+    </footer>
+    <script>
+        (function(){
+            var params = new URLSearchParams(window.location.search);
+            var name = params.get('name') || '';
+            var email = params.get('email') || '';
+            var phone = params.get('phone') || '';
+            var plan = params.get('plan') || '';
+            var amount = params.get('amount') || '';
+            var txId = params.get('transaction_id') || '';
+            var txRef = params.get('tx_ref') || '';
+            var status = params.get('status') || '';
+            var firstName = name ? name.split(' ')[0] : '';
+            var headingEl = document.getElementById('customerNameHeading');
+            if (headingEl) {
+                headingEl.textContent = firstName || 'Customer';
+            }
+            var showSummary = status === 'success' || (txId && txRef);
+            if (showSummary) {
+                var fmt = function(v){
+                    var n = Number(v);
+                    if (isNaN(n)) return v;
+                    try { return new Intl.NumberFormat('en-NG',{style:'currency',currency:'NGN',minimumFractionDigits:0}).format(n); } catch(e){ return v; }
+                };
+                var set = function(id,val){ var el=document.getElementById(id); if(el){ el.textContent = val || ''; } };
+                set('orderName', name);
+                set('orderEmail', email);
+                set('orderPhone', phone);
+                set('orderPlan', plan);
+                set('orderAmount', fmt(amount));
+                set('orderTransactionId', txId);
+                set('orderTxRef', txRef);
+                var noticeEl = document.getElementById('orderNotice');
+                if (noticeEl) {
+                    var contact = email || phone;
+                    noticeEl.textContent = contact ? ('A confirmation has been sent to ' + contact + '.') : 'A confirmation has been sent to your contact.';
+                }
+                var sec = document.getElementById('orderSummarySection');
+                if (sec) { sec.style.display = ''; }
+            }
+        })();
+    </script>
+</body>
+</html>

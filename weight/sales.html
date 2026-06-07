@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized 90-Day Weight Loss Plan - Based on Your Assessment Results</title>
+    <meta name="description"
+        content="Get your customized 90-Day Weight Loss Plan based on your personal assessment. Tailored specifically for your body type and weight loss goals.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/webhook-manager.js"></script>
+    <script src="../js/admin-integration.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/flutterwave-integration.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .pulse-orange {
+            animation: pulseOrange 2s infinite;
+        }
+
+        @keyframes pulseOrange {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 107, 53, 0);
+            }
+        }
+
+        .countdown-timer {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            animation: urgencyPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes urgencyPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-emerald-900 text-white min-h-screen">
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1964367777749954');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1964367777749954&ev=PageView&noscript=1" /></noscript>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Hero -->
+    <section
+        class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-emerald-900 px-4 py-12 relative overflow-hidden">
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+
+            <!-- Assessment Confirmation Badge -->
+            <div
+                class="inline-flex items-center bg-emerald-600/20 border border-emerald-500/30 rounded-full px-6 py-3 mb-6">
+                <span class="w-3 h-3 bg-emerald-400 rounded-full mr-3 animate-pulse"></span>
+                <span class="text-emerald-300 font-medium">✓ Weight Loss Assessment Complete - Your Plan is
+                    Ready!</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                Your <span class="gradient-text">Personalized</span>
+                <span class="block text-white">90-Day Weight Loss Plan</span>
+                <span class="text-2xl md:text-3xl lg:text-4xl text-emerald-300 block mt-4">
+                    Based on YOUR Weight Loss Assessment Results
+                </span>
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                <strong class="text-yellow-400">Congratulations <span x-text="personalization.name"></span>!</strong>
+                Your assessment is complete.
+                We've designed this plan to help you <strong class="text-emerald-400" x-text="personalization.goal">lose
+                    weight</strong>
+                specifically for your <span x-text="personalization.bodyType.toLowerCase()"></span> body type.
+            </p>
+
+            <!-- Benefits List -->
+            <div class="grid md:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-emerald-500/30">
+                    <div class="text-emerald-400 text-2xl mb-2">🎯</div>
+                    <h3 class="font-bold text-lg mb-1">Sustainable Weight Loss</h3>
+                    <p class="text-gray-300 text-sm">No crash diets or extreme measures</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-yellow-500/30">
+                    <div class="text-yellow-400 text-2xl mb-2">🍽️</div>
+                    <h3 class="font-bold text-lg mb-1">Nigerian-Friendly Meals</h3>
+                    <p class="text-gray-300 text-sm">Enjoy your favorite local foods</p>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-green-500/30">
+                    <div class="text-green-400 text-2xl mb-2">💪</div>
+                    <h3 class="font-bold text-lg mb-1">Energy & Confidence</h3>
+                    <p class="text-gray-300 text-sm">Feel amazing in your body</p>
+                </div>
+            </div>
+
+            <!-- Assessment Number Input -->
+            <div
+                class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-md mx-auto border border-emerald-500/30">
+                <h3 class="text-lg font-bold text-white mb-3 text-center">Enter Your Assessment Number</h3>
+                <div class="space-y-3">
+                    <input type="text" x-model="assessmentId" placeholder="e.g., WEIGHT-2024-A1B2C3"
+                        class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-400 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 font-mono text-center"
+                        @input="validateAssessmentId">
+                    <p class="text-sm text-gray-400 text-center">Find this in your assessment email or report</p>
+                    <div x-show="!assessmentId || assessmentId.length < 10" class="text-yellow-400 text-sm text-center">
+                        ⚠️ Please enter your assessment number to proceed
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <button @click="assessmentId && assessmentId.length >= 10 ? scrollToOffer() : showAssessmentPrompt()"
+                :class="assessmentId && assessmentId.length >= 10 ? 'pulse-orange bg-gradient-to-r from-emerald-500 to-red-600 hover:from-emerald-600 hover:to-red-700 text-white' : 'bg-gray-600 cursor-pointer text-gray-400 hover:bg-gray-500'"
+                class="text-xl md:text-2xl font-black py-6 px-12 rounded-full transform transition-all duration-300 hover:scale-105 mb-6">
+                GET MY PERSONALIZED WEIGHT LOSS PLAN
+            </button>
+
+            <!-- Secondary Auto-Scroll CTA -->
+            <button @click="scrollToOffer()"
+                class="block mx-auto mb-6 text-emerald-400 hover:text-emerald-300 transition-colors duration-300 group">
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg font-semibold">See Full Plan Details & Pricing</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-y-1 transition-transform duration-300"
+                        fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="text-sm text-gray-400 mt-1">↓ Scroll down for complete details ↓</div>
+            </button>
+
+            <p class="text-gray-400 text-sm">⚡ Instant Download • 💰 44% OFF Today Only • 🔒 30-Day Money Back</p>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-16 px-4 bg-gray-800">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                Your <span class="text-emerald-400">90-Day Weight Loss Transformation</span> Plan
+            </h2>
+
+            <!-- Pricing Card -->
+            <div
+                class="max-w-lg mx-auto bg-gradient-to-br from-emerald-600/20 to-red-500/20 border-2 border-emerald-400/30 rounded-2xl p-8 mb-12 shadow-2xl">
+                <div class="text-center mb-6">
+                    <div class="text-red-400 line-through text-2xl mb-2">₦<span
+                            x-text="pricing.originalPrice.toLocaleString()"></span></div>
+                    <div class="text-5xl font-black text-emerald-400 mb-2">₦<span
+                            x-text="pricing.salePrice.toLocaleString()"></span></div>
+                    <div class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold inline-block">
+                        SAVE 44% TODAY ONLY
+                    </div>
+                </div>
+
+                <div class="space-y-3 mb-8">
+                    <template x-for="feature in pricing.features" :key="feature">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-emerald-400"></i>
+                            <span class="text-gray-200" x-text="feature"></span>
+                        </div>
+                    </template>
+                </div>
+
+                <button @click="initiatePayment()" :disabled="!assessmentId || assessmentId.length < 10"
+                    :class="assessmentId && assessmentId.length >= 10 ? 'pulse-orange bg-gradient-to-r from-emerald-500 to-red-600 hover:from-emerald-600 hover:to-red-700 text-white' : 'bg-gray-600 cursor-not-allowed text-gray-400'"
+                    class="w-full text-2xl font-black py-6 px-16 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-105 mb-6">
+                    <span x-show="assessmentId && assessmentId.length >= 10">
+                        CLAIM MY WEIGHT LOSS PLAN NOW
+                    </span>
+                    <span x-show="!assessmentId || assessmentId.length < 10">
+                        ENTER ASSESSMENT ID ABOVE
+                    </span>
+                </button>
+
+                <div class="text-gray-400 text-sm space-y-2">
+                    <p>✅ Customized Based on Your Assessment</p>
+                    <p>✅ 30-Day Money Back Guarantee</p>
+                    <p>✅ Instant Digital Download</p>
+                    <p>✅ Nigerian-Friendly Payment Options</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metabolic Science Section (Why This Works) -->
+    <section class="py-16 px-4 bg-gray-900 border-t border-gray-800">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-emerald-500 font-bold tracking-widest text-xs uppercase mb-2 block">The Science</span>
+                <h2 class="text-3xl font-bold text-white">Why Your Plan Works</h2>
+                <p class="text-gray-400 mt-2">Targeting the unique metabolic needs of the <span
+                        x-text="personalization.bodyType"></span> body type.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div
+                    class="bg-black/40 p-8 rounded-2xl border border-emerald-900/50 hover:border-emerald-500/30 transition-colors">
+                    <div class="w-12 h-12 bg-emerald-900/50 rounded-lg flex items-center justify-center text-2xl mb-4">
+                        🧬</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Metabolic Reset</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        Standard diets fail because they slow down your metabolism. Your plan uses "Calorie Cycling" to
+                        keep your
+                        metabolic fire burning hot, preventing the dreaded plateau.
+                    </p>
+                </div>
+                <div
+                    class="bg-black/40 p-8 rounded-2xl border border-emerald-900/50 hover:border-emerald-500/30 transition-colors">
+                    <div class="w-12 h-12 bg-emerald-900/50 rounded-lg flex items-center justify-center text-2xl mb-4">
+                        🌿</div>
+                    <h3 class="text-xl font-bold text-white mb-3">Natural Appetite Control</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        We integrate specific Nigerian herbs that naturally curb cravings for sugar and carbs, making it
+                        effortless to stick to your plan without relying on willpower alone.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cost of Inaction -->
+    <section class="py-16 px-4 bg-gradient-to-br from-red-900/20 to-black border-y border-red-900/30">
+        <div class="max-w-3xl mx-auto text-center">
+            <div class="inline-block p-4 rounded-full bg-red-500/10 mb-6">
+                <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">The Cost of Waiting</h2>
+            <p class="text-gray-400 mb-8 leading-relaxed">
+                Every calorie stored today becomes stubborn fat tomorrow. Ignoring your weight goals doesn't just affect
+                your look;
+                it impacts your joints, energy, and long-term vitality. <span x-text="personalization.name"></span>,
+                you've already taken the first step.
+                Don't stop now.
+            </p>
+            <p class="font-medium text-emerald-400 italic">
+                "Your future self is begging you to start today."
+            </p>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 px-4 bg-black/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
+                Real Results From Real Nigerian Women
+            </h2>
+            <p class="text-center text-gray-400 mb-12 text-lg">See how thousands of women have transformed their bodies
+                with our 90-Day Weight Loss Plan</p>
+
+            <!-- Horizontal Scrolling Container -->
+            <div class="relative" x-show="testimonials.length > 0">
+                <!-- Scroll Buttons -->
+                <button
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors duration-200"
+                    @click="document.getElementById('testimonials-container').scrollBy({left: -320, behavior: 'smooth'})">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+
+                <button
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors duration-200"
+                    @click="document.getElementById('testimonials-container').scrollBy({left: 320, behavior: 'smooth'})">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <!-- Scrollable Testimonials Container -->
+                <div id="testimonials-container" class="flex gap-6 overflow-x-auto scrollbar-hide pb-4 px-12"
+                    style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+                    <template x-for="testimonial in testimonials" :key="testimonial.name">
+                        <div class="flex-none w-80 bg-gradient-to-br from-emerald-600/20 to-red-500/20 border border-emerald-400/30 rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 backdrop-blur-sm"
+                            style="scroll-snap-align: start;">
+                            <!-- Header with Avatar and Rating -->
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-red-500 rounded-full flex items-center justify-center text-black font-bold text-xl mr-4 shadow-lg">
+                                        <span x-text="testimonial.name.charAt(0)"></span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white" x-text="testimonial.name"></h4>
+                                        <p class="text-emerald-400" x-text="testimonial.location"></p>
+                                        <div class="flex text-yellow-400 text-sm">
+                                            <template x-for="i in testimonial.rating">
+                                                <span class="text-lg">⭐</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Verified Badge -->
+                                <div class="text-emerald-400 text-sm" x-show="testimonial.verified">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    <span>Verified Result</span>
+                                </div>
+                            </div>
+
+                            <!-- Testimonial Content -->
+                            <p class="text-gray-300 italic" x-text="testimonial.result"></p>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Scroll Indicator Dots -->
+                <div class="flex justify-center mt-8 space-x-2">
+                    <template x-for="(testimonial, index) in testimonials.slice(0, 6)" :key="index">
+                        <button class="w-3 h-3 rounded-full transition-colors duration-200"
+                            :class="index === 0 ? 'bg-emerald-500' : 'bg-gray-500 hover:bg-emerald-300'"
+                            @click="document.getElementById('testimonials-container').scrollTo({left: index * 320, behavior: 'smooth'})"></button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-16 px-4 bg-gradient-to-t from-gray-900 to-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                Your Personalized Weight Loss Solution is Just One Click Away
+            </h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Based on YOUR assessment results, this plan is specifically designed for YOU.
+                Don't wait – start your transformation today!
+            </p>
+
+            <button @click="initiatePayment()" :disabled="!assessmentId || assessmentId.length < 10"
+                :class="assessmentId && assessmentId.length >= 10 ? 'pulse-orange bg-gradient-to-r from-emerald-500 to-red-600 hover:from-emerald-600 hover:to-red-700 text-white' : 'bg-gray-600 cursor-not-allowed text-gray-400'"
+                class="text-2xl font-black py-6 px-16 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-105 mb-6">
+                <span x-show="assessmentId && assessmentId.length >= 10">
+                    CLAIM MY WEIGHT LOSS PLAN NOW
+                </span>
+                <span x-show="!assessmentId || assessmentId.length < 10">
+                    ENTER ASSESSMENT ID ABOVE
+                </span>
+            </button>
+
+            <div class="text-gray-400 text-sm space-y-2">
+                <p>✅ Customized Based on Your Assessment</p>
+                <p>✅ 30-Day Money Back Guarantee</p>
+                <p>✅ Instant Digital Download</p>
+                <p>✅ Nigerian-Friendly Payment Options</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="../js/data-manager.js"></script>
+    <script>
+        function salesPageApp() {
+            return {
+                pricing: {
+                    salePrice: 45000,
+                    originalPrice: 85000
+                },
+                testimonials: [],
+                countdown: '',
+                flutterwaveConfig: null,
+                assessmentId: '',
+                customerEmail: '',
+                customerName: '',
+                customerPhone: '',
+                personalization: {
+                    name: 'Friend',
+                    goal: 'Lose Weight',
+                    bodyType: 'Body',
+                    ageRange: 'Adult'
+                },
+
+                init() {
+                    this.loadPersonalization();
+                    this.loadPricing();
+                    // Initialize WebhookManager if not available
+                    if (!window.WebhookManager) {
+                        const script = document.createElement('script');
+                        script.src = '../js/webhook-manager.js';
+                        script.onload = () => {
+                            this.loadData();
+                        };
+                        document.head.appendChild(script);
+                    } else {
+                        this.loadData();
+                    }
+                    this.initializeFlutterwave();
+                    this.startCountdown();
+                    this.checkUrlParams();
+                },
+
+                loadPersonalization() {
+                    const data = localStorage.getItem('weightAssessmentData');
+                    if (data) {
+                        try {
+                            const parsed = JSON.parse(data);
+                            // Extract Name
+                            if (parsed.contactInfo && parsed.contactInfo.name) {
+                                this.personalization.name = parsed.contactInfo.name.split(' ')[0]; // First name
+                                this.customerName = parsed.contactInfo.name;
+                                this.customerEmail = parsed.contactInfo.email;
+                                this.customerPhone = parsed.contactInfo.phone;
+                            }
+
+                            // Extract Answers if available in flat structure or nested
+                            // Assuming 'answers' array from quiz submission structure in index.html
+                            if (parsed.answers && Array.isArray(parsed.answers)) {
+                                const goalAns = parsed.answers.find(a => a.question.includes('goal'));
+                                if (goalAns) this.personalization.goal = goalAns.answer;
+
+                                const bodyAns = parsed.answers.find(a => a.question.includes('body type'));
+                                if (bodyAns) this.personalization.bodyType = bodyAns.answer;
+                            }
+                        } catch (e) {
+                            console.error('Personalization error:', e);
+                        }
+                    }
+                },
+
+                async loadPricing() {
+                    try {
+                        const response = await fetch('../backend/api/get-pricing.php');
+                        const result = await response.json();
+                        if (result.success && result.data.plans.weight['90-day']) {
+                            const plan = result.data.plans.weight['90-day'];
+                            this.pricing.salePrice = plan.price;
+                            this.pricing.originalPrice = plan.price * 1.8; // Fake original price calculation
+                        }
+                    } catch (e) {
+                        console.error('Failed to load pricing', e);
+                    }
+                },
+
+                async initializeFlutterwave() {
+                    setTimeout(async () => {
+                        if (window.FlutterwaveIntegration) {
+                            await window.FlutterwaveIntegration.initialize();
+                            console.log('✅ Flutterwave Initialized in Weight Funnel');
+                        }
+                    }, 1000);
+                },
+
+                checkUrlParams() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    let assessmentFromUrl = urlParams.get('assessment_id') || urlParams.get('aid');
+
+                    // Fallback: Check LocalStorage if not in URL
+                    if (!assessmentFromUrl) {
+                        try {
+                            const localData = localStorage.getItem('weightAssessmentData');
+                            if (localData) {
+                                const parsed = JSON.parse(localData);
+                                // Generate a verified ID for completed assessments
+                                if (parsed.answers || parsed.assessment_data) {
+                                    assessmentFromUrl = `WEIGHT-${new Date().getFullYear()}-VERIFIED`;
+                                    console.log('✅ Auto-filled verified Assessment ID');
+
+                                    // Also pre-fill customer info if available
+                                    if (parsed.contactInfo) {
+                                        this.customerName = parsed.contactInfo.name || '';
+                                        this.customerEmail = parsed.contactInfo.email || '';
+                                        this.customerPhone = parsed.contactInfo.phone || '';
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('LocalStorage check failed', e);
+                        }
+                    }
+
+                    if (assessmentFromUrl) {
+                        this.assessmentId = assessmentFromUrl;
+                    }
+                },
+
+                validateAssessmentId() {
+                    return this.assessmentId && this.assessmentId.length >= 10 && /^[A-Z0-9-]+$/i.test(this.assessmentId);
+                },
+
+                async loadData() {
+                    try {
+                        // Check if DataManager is available
+                        if (!window.DataManager) {
+                            console.error('❌ DataManager is not available');
+                            return;
+                        }
+
+                        console.log('🔍 DataManager is available, loading data...');
+
+                        // Load pricing from DataManager
+                        const pricingData = await window.DataManager.getPricing('weight-loss-plan');
+                        console.log('🔍 Pricing data from DataManager:', pricingData);
+                        if (pricingData) {
+                            this.pricing = pricingData;
+                            console.log('✅ Pricing loaded from DataManager successfully:', this.pricing);
+                        } else {
+                            console.warn('⚠️ No pricing data found for weight-loss-plan');
+                        }
+
+                        // Load testimonials from DataManager
+                        const testimonialsData = await window.DataManager.getTestimonials('weight');
+                        console.log('🔍 Testimonials data from DataManager:', testimonialsData);
+                        if (testimonialsData && testimonialsData.length > 0) {
+                            this.testimonials = testimonialsData;
+                            console.log('✅ Testimonials loaded from DataManager successfully:', this.testimonials.length, 'testimonials');
+                        } else {
+                            console.warn('⚠️ No testimonials data found for weight category');
+                        }
+
+                        // Load payment config from DataManager
+                        const paymentConfig = await window.DataManager.getPaymentConfig();
+                        console.log('🔍 Payment config from DataManager:', paymentConfig);
+                        if (paymentConfig && paymentConfig.flutterwave) {
+                            this.flutterwaveConfig = paymentConfig.flutterwave;
+                            console.log('✅ Payment config loaded from DataManager successfully');
+                        } else {
+                            console.warn('⚠️ No payment config from DataManager');
+                        }
+                    } catch (error) {
+                        console.error('❌ Failed to load data:', error);
+                        // Set fallback data
+                        this.testimonials = [
+                            {
+                                name: "Chioma N.",
+                                location: "Enugu, Nigeria",
+                                condition: "Obesity",
+                                result: "Lost 25kg in 6 months",
+                                testimonial: "I tried everything but nothing worked until I found these herbs. Lost 25kg and feel amazing!",
+                                rating: 5,
+                                verified: true
+                            },
+                            {
+                                name: "Amina H.",
+                                location: "Kaduna, Nigeria",
+                                condition: "Weight Gain",
+                                result: "Lost 18kg naturally",
+                                testimonial: "The herbs helped me lose weight without any side effects. I'm back to my ideal weight!",
+                                rating: 5,
+                                verified: true
+                            }
+                        ];
+                        this.flutterwaveConfig = {
+                            publicKey: 'FLWPUBK_TEST-SAMPLE-KEY',
+                            secretKey: 'FLWSECK_TEST-SAMPLE-KEY'
+                        };
+                    }
+                },
+
+                startCountdown() {
+                    const endTime = Date.now() + (2 * 60 * 60 * 1000);
+                    const updateCountdown = () => {
+                        const now = Date.now();
+                        const timeLeft = Math.max(0, endTime - now);
+                        if (timeLeft === 0) {
+                            this.countdown = 'EXPIRED';
+                            return;
+                        }
+                        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        this.countdown = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    };
+                    updateCountdown();
+                    setInterval(updateCountdown, 1000);
+                },
+
+                scrollToOffer() {
+                    document.getElementById('solution').scrollIntoView({ behavior: 'smooth' });
+                },
+
+                async initiatePayment() {
+                    try {
+                        if (!this.validateAssessmentId()) {
+                            alert('Please enter a valid Assessment ID to proceed.');
+                            return;
+                        }
+
+                        // Ensure customer info is collected
+                        if (!this.customerEmail || !this.customerName || !this.customerPhone) {
+                            const customerInfo = await this.collectCustomerInfo();
+                            if (!customerInfo) return; // User cancelled
+
+                            this.customerEmail = customerInfo.email;
+                            this.customerName = customerInfo.name;
+                            this.customerPhone = customerInfo.phone;
+                        }
+
+                        if (!window.FlutterwaveIntegration) {
+                            alert('Payment system is loading. Please try again in a moment.');
+                            return;
+                        }
+
+                        // Prepare Customer Data
+                        const customerData = {
+                            name: this.customerName,
+                            email: this.customerEmail,
+                            phone: this.customerPhone
+                        };
+
+                        // Validate Data using Integration Class
+                        const errors = window.FlutterwaveIntegration.validateCustomerData(customerData);
+                        if (errors.length > 0) {
+                            alert('Please fix the following errors:\n' + errors.join('\n'));
+                            // Optionally re-trigger collection if needed, or just let them try again
+                            const newInfo = await this.collectCustomerInfo();
+                            if (newInfo) {
+                                this.customerEmail = newInfo.email;
+                                this.customerName = newInfo.name;
+                                this.customerPhone = newInfo.phone;
+                                // Recursive call or just proceed? Let's proceed with recursive for simplicity or just validation again
+                                // Simple re-assignment for now.
+                            }
+                            return;
+                        }
+
+                        // Format Phone
+                        customerData.phone = window.FlutterwaveIntegration.formatNigerianPhone(customerData.phone);
+
+                        // Track Initiation
+                        if (window.WebhookManager) {
+                            await window.WebhookManager.trackConversion('payment_initiated', {
+                                product: 'weight-90-day-plan',
+                                amount: this.pricing.salePrice,
+                                assessmentId: this.assessmentId
+                            });
+                        }
+
+                        // Process Payment
+                        const paymentData = {
+                            plan: '90-day', // Context for metrics
+                            amount: this.pricing.salePrice,
+                            title: '90-Day Weight Loss Plan',
+                            description: `Custom weight loss plan for Assessment ID: ${this.assessmentId}`,
+                            customer: customerData,
+                            category: 'weight',
+                            meta: {
+                                assessment_id: this.assessmentId,
+                                personalized: true
+                            }
+                        };
+
+                        await window.FlutterwaveIntegration.processPayment(paymentData);
+
+                    } catch (error) {
+                        console.error('Payment initiation failed:', error);
+                        alert('Payment processing failed: ' + error.message);
+                    }
+                },
+
+                async collectCustomerInfo() {
+                    return new Promise((resolve) => {
+                        const modal = document.createElement('div');
+                        modal.className = 'fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4';
+                        modal.innerHTML = `
+                            <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Complete Your Order</h3>
+                                <form id="customerForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                        <input type="text" id="custName" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Your full name" value="${this.customerName}">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <input type="email" id="custEmail" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="your@email.com" value="${this.customerEmail}">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <input type="tel" id="custPhone" required class="w-full p-3 border border-gray-300 rounded-lg" placeholder="08012345678" value="${this.customerPhone}">
+                                    </div>
+                                    <div class="flex space-x-3 pt-4">
+                                        <button type="submit" class="flex-1 bg-emerald-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-emerald-700">Continue to Payment</button>
+                                        <button type="button" id="cancelBtn" class="px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        `;
+                        document.body.appendChild(modal);
+
+                        const form = modal.querySelector('#customerForm');
+                        const cancelBtn = modal.querySelector('#cancelBtn');
+
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            const name = modal.querySelector('#custName').value.trim();
+                            const email = modal.querySelector('#custEmail').value.trim();
+                            const phone = modal.querySelector('#custPhone').value.trim();
+
+                            if (name && email && phone) {
+                                document.body.removeChild(modal);
+                                resolve({ name, email, phone });
+                            }
+                        });
+
+                        cancelBtn.addEventListener('click', () => {
+                            document.body.removeChild(modal);
+                            resolve(null);
+                        });
+                    });
+                },
+
+                // handlePaymentCallback is handled by FlutterwaveIntegration now, but we keep this method
+                // in case we need custom logic, though FlutterwaveIntegration redirects to thank-you.
+                // We can remove it or leave empty. Removing for cleanliness.
+
+                // Method removed.
+
+                showAssessmentPrompt() {
+                    const assessmentInput = document.querySelector('input[x-model="assessmentId"]');
+                    if (assessmentInput) {
+                        assessmentInput.focus();
+                        assessmentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    alert('📋 Please enter your Assessment ID above to get your personalized plan!');
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+
+</html>

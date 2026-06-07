@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Acne Analysis Results | Forest & Sage</title>
+    <meta name="description" content="Review your personalized acne diagnosis and recommended recovery protocol.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: {
+                        'forest': { 50: '#f2f8f5', 100: '#dcece3', 800: '#166534', 900: '#0f3922' },
+                        'sage': { 100: '#E6EBE6', 200: '#CDD6CD', 500: '#8DA38D' },
+                        'terracotta': { 500: '#C77D63', 600: '#A85D45' },
+                        'cream': '#FDFCF8', 'sand': '#F4F1EA',
+                    },
+                    backgroundImage: { 'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')" },
+                    boxShadow: { 'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFCF8;
+            color: #0f3922;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <script src="../js/webhook-manager.js"></script>
+</head>
+
+<body class="antialiased relative" x-data="resultsData()">
+
+    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+    <div class="blob bg-sage-200 w-full h-96 rounded-full top-0 left-0 -translate-y-1/2 opacity-20"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg"><span
+                        class="text-sand font-serif italic text-xl">A</span></div>
+                <span class="text-xl font-serif font-bold text-forest-900">Forest & Sage</span>
+            </div>
+            <div class="hidden md:block text-[10px] font-bold text-forest-800/40 uppercase tracking-widest"
+                id="currentDate"></div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 pt-32 pb-20">
+        <!-- Diagnosis Header -->
+        <div class="text-center mb-16 reveal-up">
+            <div
+                class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-4 py-2 rounded-full mb-6">
+                <span class="w-2 h-2 rounded-full bg-forest-800 animate-pulse"></span>
+                <span class="text-[10px] font-bold text-forest-800 uppercase tracking-widest">Medical Analysis
+                    Complete</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-serif font-medium text-forest-900 mb-6">Your Skin Analysis</h1>
+            <p class="text-xl text-forest-800/60 font-light max-w-2xl mx-auto">We've identified the specific biological
+                drivers behind your breakouts.</p>
+        </div>
+
+        <div x-show="loading" class="text-center py-20">
+            <div
+                class="w-12 h-12 border-4 border-forest-100 border-t-forest-800 rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <p class="text- forest-800/60 font-medium">Preparing your protocol...</p>
+        </div>
+
+        <div x-show="!loading" class="space-y-12">
+            <!-- Diagnosis Card -->
+            <div class="glass-panel rounded-[2.5rem] p-8 md:p-12 shadow-soft border-t-4 border-t-forest-800">
+                <div class="flex flex-col md:flex-row items-center gap-8 mb-12">
+                    <div class="w-24 h-24 bg-forest-50 rounded-[2rem] flex items-center justify-center text-5xl shadow-inner"
+                        x-text="acneType.icon"></div>
+                    <div class="text-center md:text-left">
+                        <h2 class="text-sm font-bold text-terracotta-600 uppercase tracking-widest mb-2">Primary
+                            Diagnosis</h2>
+                        <h3 class="text-3xl md:text-4xl font-serif font-medium text-forest-900 mb-4"
+                            x-text="acneType.title"></h3>
+                        <p class="text-lg text-forest-800/70 font-light leading-relaxed" x-text="acneType.description">
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-sand/30 p-6 rounded-3xl border border-sage-100">
+                        <h4
+                            class="text-xs font-bold text-forest-900/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                            Key Identifying Traits
+                        </h4>
+                        <ul class="space-y-3">
+                            <template x-for="trait in acneType.traits" :key="trait">
+                                <li class="flex items-center gap-3 text-sm font-medium text-forest-800/80">
+                                    <div class="w-1.5 h-1.5 bg-terracotta-500 rounded-full"></div>
+                                    <span x-text="trait"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <div class="bg-sand/30 p-6 rounded-3xl border border-sage-100">
+                        <h4 class="text-xs font-bold text-forest-900/40 uppercase tracking-widest mb-4">Condition
+                            Severity</h4>
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-sm font-bold text-forest-900" x-text="severity.level"></span>
+                            <span class="text-[10px] text-forest-800/40 uppercase tracking-widest">Scientific
+                                Score</span>
+                        </div>
+                        <div class="w-full bg-forest-100 rounded-full h-2 mb-4 overflow-hidden">
+                            <div class="bg-forest-800 h-2 rounded-full transition-all duration-1000"
+                                :style="`width: ${severity.percentage}%`"></div>
+                        </div>
+                        <p class="text-xs text-forest-800/60 leading-relaxed" x-text="severity.description"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="text-center space-y-8 py-12">
+                <h3 class="text-2xl font-serif text-forest-900">Why Standard Products Failed You</h3>
+                <p class="text-forest-800/60 max-w-2xl mx-auto italic">"Generic skincare treats the symptoms on the
+                    surface. To clear <span x-text="acneType.title.toLowerCase()"></span> permanently, we must reset
+                    your internal biology."</p>
+
+                <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                    <div class="glass-panel p-8 rounded-[2rem] text-left border-l-4 border-l-sage-500">
+                        <div class="text-2xl mb-4">🌿</div>
+                        <h4 class="font-bold text-forest-900 mb-2">Herbal Detox</h4>
+                        <p class="text-sm text-forest-800/70">Purge blood toxins and balance hormones naturally using
+                            ancient botanical concentrates.</p>
+                    </div>
+                    <div class="glass-panel p-8 rounded-[2rem] text-left border-l-4 border-l-terracotta-500">
+                        <div class="text-2xl mb-4">🥑</div>
+                        <h4 class="font-bold text-forest-900 mb-2">Metabolic Fuel</h4>
+                        <p class="text-sm text-forest-800/70">Starve the bacteria and inflammation by adjusting your
+                            cellular nutrition environment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Locked Protocol Reveal -->
+            <div class="relative rounded-[3rem] overflow-hidden group shadow-2xl">
+                <!-- Inner Content (Blurred) -->
+                <div class="absolute inset-0 bg-forest-900/5 backdrop-blur-md z-10 flex items-center justify-center">
+                    <div
+                        class="bg-white/80 p-12 rounded-[2.5rem] shadow-xl text-center max-w-lg mx-6 transform transition-transform group-hover:scale-105 duration-700">
+                        <div class="w-16 h-16 bg-forest-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-lock-open text-sand text-xl"></i>
+                        </div>
+                        <h3 class="text-3xl font-serif text-forest-900 mb-4">Protocol is Ready</h3>
+                        <p class="text-forest-800/70 mb-8">We've generated a 90-day recovery system specifically for
+                            your <span x-text="acneType.title.toLowerCase()"></span>.</p>
+
+                        <button @click="viewProducts()"
+                            class="w-full bg-forest-900 text-sand py-5 rounded-full font-bold text-lg hover:shadow-glow transition-all active:scale-95 flex items-center justify-center gap-3">
+                            See My 90-Day Plan <i class="fas fa-arrow-right text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fake Background for Depth -->
+                <div class="p-12 space-y-8 pointer-events-none">
+                    <div class="h-8 bg-forest-100 rounded w-1/3"></div>
+                    <div class="h-4 bg-forest-50 rounded w-full"></div>
+                    <div class="h-4 bg-forest-50 rounded w-2/3"></div>
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="h-32 bg-forest-50 rounded-2xl"></div>
+                        <div class="h-32 bg-forest-50 rounded-2xl"></div>
+                        <div class="h-32 bg-forest-50 rounded-2xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-forest-900 py-12 px-6 text-center text-sand/40 text-xs">
+        © 2025 Forest & Sage Wellness. Results verified by clinical analysis.
+    </footer>
+
+    <script>
+        function resultsData() {
+            return {
+                loading: true, acneType: {}, severity: {}, recommendations: {}, timeline: [],
+                init() {
+                    this.loadResults();
+                    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                },
+                loadResults() {
+                    const raw = localStorage.getItem('acneResults');
+                    if (raw) {
+                        const data = JSON.parse(raw);
+                        this.acneType = data.acneType;
+                        this.severity = data.severity;
+                    } else {
+                        // Fallback
+                        this.acneType = { icon: '⚖️', title: 'Hormonal Baseline', description: 'Breakouts linked to biological cycle fluctuations.', traits: ['Jawline focus', 'Cystic depth'] };
+                        this.severity = { level: 'Analyzing', percentage: 70, description: 'Based on your latest report.' };
+                    }
+                    this.loading = false;
+                },
+                viewProducts() {
+                    if (window.WebhookManager) window.WebhookManager.trackConversion('acne_view_sales_page', { type: this.acneType.title });
+                    window.location.href = '90-day-plan.html';
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

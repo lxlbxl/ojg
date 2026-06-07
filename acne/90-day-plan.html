@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90-Day Complete Acne Recovery Protocol | Forest & Sage</title>
+    <meta name="description"
+        content="Get your personalized 90-day acne recovery plan. Scientific herbal solutions & metabolic nutrition for lasting clear skin.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: {
+                        'forest': { 50: '#f2f8f5', 100: '#dcece3', 800: '#166534', 900: '#0f3922' },
+                        'sage': { 100: '#E6EBE6', 200: '#CDD6CD', 500: '#8DA38D' },
+                        'terracotta': { 500: '#C77D63', 600: '#A85D45' },
+                        'cream': '#FDFCF8', 'sand': '#F4F1EA',
+                    },
+                    backgroundImage: { 'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')" },
+                    boxShadow: { 'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)', 'glow': '0 0 20px rgba(199, 125, 99, 0.3)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FDFCF8;
+            color: #0f3922;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        .order-bump-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+
+    <script src="../js/webhook-manager.js"></script>
+    <script src="../js/flutterwave-integration.js"></script>
+</head>
+
+<body class="antialiased relative" x-data="salesPageApp()">
+    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+
+    <!-- Hero Section -->
+    <header class="relative pt-16 pb-12 px-6 overflow-hidden">
+        <div class="blob bg-sage-200 w-full h-[500px] top-0 left-0 -translate-y-1/2 rounded-full"></div>
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <h4 class="text-[10px] font-bold text-forest-800 uppercase tracking-[0.3em] mb-4">Personalized Recovery Plan
+            </h4>
+            <h1 class="text-4xl md:text-6xl font-serif font-medium text-forest-900 leading-tight mb-6">
+                Your <span class="italic text-terracotta-600" x-text="userName"></span> 90-Day <br>
+                <span x-text="acneType"></span> Protocol
+            </h1>
+            <p class="text-xl text-forest-800/60 font-light max-w-2xl mx-auto mb-8">
+                The comprehensive internal & external reset designed specifically for your unique skin biology.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-24">
+        <div class="grid lg:grid-cols-2 gap-12">
+            <!-- Content Side -->
+            <div class="space-y-12">
+                <!-- Value Stack -->
+                <section class="space-y-6">
+                    <h3 class="text-2xl font-serif text-forest-900 border-b border-sage-100 pb-4">The Complete
+                        Transformation Stack</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-4 items-start p-4 hover:bg-forest-50/50 rounded-2xl transition-colors">
+                            <div
+                                class="w-10 h-10 bg-forest-900 rounded-lg flex items-center justify-center text-sand flex-shrink-0">
+                                <i class="fas fa-flask"></i></div>
+                            <div>
+                                <h4 class="font-bold text-forest-900">Custom Skincare Protocol (Value: ₦25,000)</h4>
+                                <p class="text-sm text-forest-800/60">A multi-phase external routine designed to heal
+                                    the skin barrier and target active breakouts.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start p-4 hover:bg-forest-50/50 rounded-2xl transition-colors">
+                            <div
+                                class="w-10 h-10 bg-terracotta-500 rounded-lg flex items-center justify-center text-sand flex-shrink-0">
+                                <i class="fas fa-leaf"></i></div>
+                            <div>
+                                <h4 class="font-bold text-forest-900">Internal Herbal Ignite (Value: ₦15,000)</h4>
+                                <p class="text-sm text-forest-800/60">Blood-purifying herbal extracts to address the
+                                    internal root cause of inflammation.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start p-4 hover:bg-forest-50/50 rounded-2xl transition-colors">
+                            <div
+                                class="w-10 h-10 bg-sage-500 rounded-lg flex items-center justify-center text-sand flex-shrink-0">
+                                <i class="fas fa-utensils"></i></div>
+                            <div>
+                                <h4 class="font-bold text-forest-900">Metabolic Nutrition Guide (Value: ₦18,000)</h4>
+                                <p class="text-sm text-forest-800/60">A specific meal strategy to starve acne bacteria
+                                    and reduce biological triggers.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start p-4 hover:bg-forest-50/50 rounded-2xl transition-colors">
+                            <div
+                                class="w-10 h-10 bg-forest-800 rounded-lg flex items-center justify-center text-sand flex-shrink-0">
+                                <i class="fas fa-headset"></i></div>
+                            <div>
+                                <h4 class="font-bold text-forest-900">Unlimited Specialist Support (Value: ₦50,000)</h4>
+                                <p class="text-sm text-forest-800/60">Direct WhatsApp access to our acne recovery
+                                    specialists for 90 days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Comparison -->
+                <section class="glass-panel rounded-[2rem] p-8 bg-forest-900 text-sand overflow-hidden relative">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
+                    <h3 class="text-2xl font-serif mb-6 relative z-10">Why 90 Days?</h3>
+                    <p class="text-sand/70 text-sm leading-relaxed mb-8">
+                        Skin cells take 28-40 days to renew. To permanently rewire your biological triggers and clear
+                        deep-seated inflammation, a minimum 3-month cycle is scientifically required.
+                    </p>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="p-4 bg-white/5 rounded-2xl border border-white/10">
+                            <div class="text-xs text-sand/40 uppercase mb-2">30 Day Starter</div>
+                            <div class="text-xl font-bold">₦15,000</div>
+                            <div class="text-[10px] text-terracotta-400 mt-2">Short term relief</div>
+                        </div>
+                        <div class="p-4 bg-white/10 rounded-2xl border border-white/20 ring-2 ring-terracotta-500">
+                            <div class="text-xs text-sand/40 uppercase mb-2">90 Day Complete</div>
+                            <div class="text-xl font-bold">₦45,000</div>
+                            <div class="text-[10px] text-sage-400 mt-2">Permanent Reset</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Guarantee -->
+                <div class="flex gap-4 items-center bg-sand p-6 rounded-2xl border border-sage-100">
+                    <div
+                        class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-soft flex-shrink-0">
+                        <i class="fas fa-shield-alt text-forest-800"></i></div>
+                    <p class="text-sm text-forest-800/80 italic">"If you don't see a visible reduction in active
+                        breakouts within 30 days, we'll refund your entire investment—no questions asked."</p>
+                </div>
+            </div>
+
+            <!-- Order Side -->
+            <div class="relative">
+                <div class="sticky top-24">
+                    <div class="glass-panel p-8 md:p-10 rounded-[2.5rem] shadow-soft border-t-8 border-forest-900">
+                        <div class="text-center mb-8">
+                            <div class="text-xs font-bold text-forest-800/40 uppercase tracking-widest mb-2">Order
+                                Reservation</div>
+                            <div class="text-4xl font-serif text-forest-900 mb-2"
+                                x-text="'₦' + totalPrice.toLocaleString()"></div>
+                            <div class="text-xs text-terracotta-600 font-bold uppercase tracking-widest">Special Launch
+                                Price (35% OFF)</div>
+                        </div>
+
+                        <form @submit.prevent="handlePayment()" class="space-y-6">
+                            <div class="space-y-4">
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">Full
+                                        Name</label>
+                                    <input type="text" x-model="customer.name" required
+                                        class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">WhatsApp
+                                        Number</label>
+                                    <input type="tel" x-model="customer.phone" required
+                                        class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">Email</label>
+                                    <input type="email" x-model="customer.email" required
+                                        class="w-full bg-sand/30 px-6 py-4 rounded-xl border border-sage-100 outline-none focus:ring-2 focus:ring-forest-800/20">
+                                </div>
+                            </div>
+
+                            <!-- Order Bump -->
+                            <div class="p-6 bg-terracotta-50 rounded-2xl border border-terracotta-100 relative group cursor-pointer"
+                                @click="orderBump = !orderBump">
+                                <div class="flex items-start gap-4">
+                                    <div class="pt-1">
+                                        <div class="w-5 h-5 rounded border border-terracotta-500 flex items-center justify-center transition-colors"
+                                            :class="orderBump ? 'bg-terracotta-500' : 'bg-white'">
+                                            <i class="fas fa-check text-[10px] text-white" x-show="orderBump"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <span
+                                                class="text-xs font-bold text-terracotta-600 uppercase tracking-wider">Priority
+                                                Treatment</span>
+                                            <span
+                                                class="bg-terracotta-500 text-[8px] text-white px-2 py-0.5 rounded-full order-bump-pulse">ONE
+                                                TIME OFFER</span>
+                                        </div>
+                                        <h4 class="font-bold text-forest-900 text-sm">Add Priority Processing & Full
+                                            Insurance (+₦2,000)</h4>
+                                        <p class="text-[10px] text-forest-800/60 mt-1">Get your order processed within 2
+                                            hours and fully insured against any transit damage.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" :disabled="isProcessing"
+                                class="w-full bg-forest-900 text-sand py-5 rounded-full font-bold text-lg hover:bg-forest-800 shadow-xl transition-all disabled:opacity-70 flex items-center justify-center gap-3">
+                                <span x-show="!isProcessing" class="flex items-center gap-3">Complete My Order <i
+                                        class="fas fa-chevron-right text-xs"></i></span>
+                                <span x-show="isProcessing">Securing Payment...</span>
+                            </button>
+
+                            <div class="flex justify-center items-center gap-6 mt-6 grayscale opacity-40">
+                                <i class="fas fa-lock text-xs"></i>
+                                <div class="h-4 w-px bg-sage-200"></div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest">SSL Encrypted
+                                    Checkout</span>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <p class="text-xs text-forest-800/40 font-medium">Not ready for 90 days? <a
+                                href="30-day-plan.html" class="text-terracotta-600 underline">Get the 30-Day Starter
+                                instead</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-forest-900 py-12 px-6 text-center text-sand/20 text-[10px] font-bold tracking-[0.2em] uppercase">
+        Forest & Sage Wellness • Scientific Clear Skin Protocol
+    </footer>
+
+    <script>
+        function salesPageApp() {
+            return {
+                userName: 'Your', acneType: 'Recovery',
+                price90Day: 45000, orderBump: false, isProcessing: false,
+                customer: { name: '', phone: '', email: '' },
+
+                get totalPrice() { return this.price90Day + (this.orderBump ? 2000 : 0); },
+
+                init() {
+                    const data = JSON.parse(localStorage.getItem('acneAssessmentData') || '{}');
+                    if (data.contactInfo?.name) this.userName = data.contactInfo.name + "'s";
+                    if (data.acneType?.primary) this.acneType = data.acneType.primary.charAt(0).toUpperCase() + data.acneType.primary.slice(1);
+                    this.customer.name = data.contactInfo?.name || '';
+                    this.customer.phone = data.contactInfo?.phone || '';
+                    this.customer.email = data.contactInfo?.email || '';
+                    this.fetchPricing();
+                },
+
+                async fetchPricing() {
+                    try {
+                        const res = await fetch('../backend/api/get-pricing.php?category=acne');
+                        const data = await res.json();
+                        if (data.success && data.pricing['90-day']) this.price90Day = parseInt(data.pricing['90-day']);
+                    } catch (e) { console.warn('Pricing fetch failed, using defaults.'); }
+                },
+
+                async handlePayment() {
+                    this.isProcessing = true;
+                    try {
+                        const paymentData = {
+                            plan: '90-day',
+                            amount: this.totalPrice,
+                            title: 'Acne 90-Day Complete',
+                            description: this.orderBump ? 'Recovery Protocol + Priority Processing' : '90-Day Recovery Protocol',
+                            customer: this.customer,
+                            category: 'acne',
+                            meta: { order_bump: this.orderBump, acne_type: this.acneType }
+                        };
+                        await window.FlutterwaveIntegration.processPayment(paymentData);
+                    } catch (e) { alert('Payment Error: ' + e.message); }
+                    finally { this.isProcessing = false; }
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

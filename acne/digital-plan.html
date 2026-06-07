@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acne Free Digital Routine - ₦5,000</title>
+    <meta name="description" content="Expert Digital Skincare Routine to clear acne properly.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        body {
+            scroll-behavior: smooth;
+        }
+
+        .glass {
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #d4fc79, #96e6a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-grad {
+            background: linear-gradient(to right, #9acd32, #f5d020);
+            color: black;
+        }
+
+        .btn-grad:hover {
+            background: linear-gradient(to right, #8bbf28, #e6c41d);
+        }
+    </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fefce8',
+                            100: '#fef3c7',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="../js/webhook-manager.js"></script>
+    <script src="../js/flutterwave-integration.js"></script>
+</head>
+
+<body class="bg-black text-white font-sans min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-900/50 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-r from-[#9acd32] to-[#f5d020] rounded-full flex items-center justify-center">
+                        <span class="text-black font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-xl font-bold text-white gradient-text">Acne Digital Routine</span>
+                </div>
+                <div class="text-sm text-gray-300">
+                    <span
+                        class="bg-orange-900/50 text-orange-200 border border-orange-800 px-3 py-1 rounded-full font-medium">Digital
+                        Only</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-8" x-data="digitalPage()">
+        <!-- Hero Section -->
+        <section class="text-center mb-12">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-orange-900/30 border border-orange-800 rounded-xl p-4 mb-6 inline-block">
+                    <p class="text-orange-300 font-medium">
+                        Immediate Access • Learn The Right Products To Use
+                    </p>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+                    Clear Your Skin With Our Proven <br>
+                    <span class="gradient-text">Herbal & Nutrition Protocol</span>
+                </h1>
+
+                <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                    Get the exact step-by-step guidance used by over 5,000+ women to heal their acne naturally. Access
+                    our meal plans, herbal recommendations, and skincare guide instantly.
+                </p>
+
+                <!-- Price & Offer -->
+                <div class="glass rounded-2xl shadow-xl p-8 mb-8">
+                    <div class="text-center mb-6">
+                        <div class="text-gray-500 text-lg line-through mb-2">Value: ₦15,000</div>
+                        <div class="text-5xl font-bold text-white mb-2">₦5,000</div>
+                        <div class="text-orange-400 font-semibold">One-Time Payment - Lifetime Access</div>
+                    </div>
+
+                    <button @click="scrollToOrder()"
+                        class="w-full btn-grad font-bold text-xl py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mb-4">
+                        Get The Guide - ₦5,000 →
+                    </button>
+
+                    <div class="flex justify-center items-center space-x-6 text-sm text-gray-300">
+                        <span class="flex items-center"><span class="text-emerald-400 mr-2">✓</span>Instant
+                            Delivery</span>
+                        <span class="flex items-center"><span class="text-emerald-400 mr-2">✓</span>Product Guide</span>
+                        <span class="flex items-center"><span class="text-emerald-400 mr-2">✓</span>Dos & Don'ts</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What You Get -->
+        <section class="mb-12">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-white mb-8">
+                    What's Inside The Digital Guide
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="glass rounded-xl p-6 shadow-lg border border-gray-700">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-[#9acd32] to-[#f5d020] rounded-full flex items-center justify-center mb-4">
+                            <span class="text-2xl">🧴</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Herbal & Skincare Guide</h3>
+                        <p class="text-gray-300 mb-4">
+                            Stop guessing. Get our curated list of recommended herbal teas and skincare products that
+                            actually work for your specific acne type.
+                        </p>
+                    </div>
+
+                    <div class="glass rounded-xl p-6 shadow-lg border border-gray-700">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-[#9acd32] to-[#f5d020] rounded-full flex items-center justify-center mb-4">
+                            <span class="text-2xl">📝</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Daily Routine</h3>
+                        <p class="text-gray-300 mb-4">Step-by-step Morning and Evening routine. Know exactly what to
+                            apply and when.</p>
+                    </div>
+
+                    <div class="glass rounded-xl p-6 shadow-lg border border-gray-700">
+                        <div
+                            class="w-16 h-16 bg-gradient-to-r from-[#9acd32] to-[#f5d020] rounded-full flex items-center justify-center mb-4">
+                            <span class="text-2xl">🚫</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Acne Triggers Guide</h3>
+                        <p class="text-gray-300 mb-4">Learn which foods and habits are secretly causing your breakouts.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Order Form -->
+        <section id="order-section" class="mb-12">
+            <div class="max-w-3xl mx-auto">
+                <div class="glass rounded-2xl shadow-xl p-8">
+                    <h2 class="text-3xl font-bold text-center text-white mb-6">
+                        Get Your Digital Skincare Guide
+                    </h2>
+
+                    <div class="text-center mb-8">
+                        <div class="text-4xl font-bold text-primary-500 mb-2">₦5,000</div>
+                        <div class="text-gray-400 line-through">Regular Price: ₦15,000</div>
+                    </div>
+
+                    <form @submit.prevent="processPayment()" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
+                                <input type="text" x-model="customerData.name" required
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-primary-500"
+                                    placeholder="Enter your full name">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
+                                <input type="email" x-model="customerData.email" required
+                                    class="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-primary-500"
+                                    placeholder="Enter your email">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
+                            <input type="tel" x-model="customerData.phone" required
+                                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-primary-500"
+                                placeholder="e.g., 08012345678">
+                        </div>
+
+                        <button type="submit" :disabled="isProcessing"
+                            :class="isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'btn-grad'"
+                            class="w-full font-bold text-xl py-4 rounded-full transition-all duration-300 shadow-lg">
+                            <span x-show="!isProcessing">Complete Purchase - ₦5,000 →</span>
+                            <span x-show="isProcessing">Processing...</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function digitalPage() {
+            return {
+                isProcessing: false,
+                customerData: {
+                    name: '',
+                    email: '',
+                    phone: ''
+                },
+
+                init() {
+                    this.prefillCustomerData();
+                    this.trackPageView();
+                },
+
+                prefillCustomerData() {
+                    const assessmentData = localStorage.getItem('acneAssessmentData');
+                    if (assessmentData) {
+                        const data = JSON.parse(assessmentData);
+                        if (data.contactInfo) {
+                            this.customerData.name = data.contactInfo.name || '';
+                            this.customerData.email = data.contactInfo.email || '';
+                            this.customerData.phone = data.contactInfo.phone || '';
+                        }
+                    }
+                },
+
+                trackPageView() {
+                    if (window.WebhookManager) {
+                        window.WebhookManager.trackSalesVisit({
+                            page: 'digital-plan',
+                            plan: 'digital',
+                            price: 5000,
+                            source: 'downsell',
+                            category: 'acne'
+                        });
+                    }
+                },
+
+                scrollToOrder() {
+                    document.getElementById('order-section').scrollIntoView({ behavior: 'smooth' });
+                },
+
+                async processPayment() {
+                    this.isProcessing = true;
+                    try {
+                        if (!window.FlutterwaveIntegration) throw new Error('Payment system not loaded');
+
+                        const errors = window.FlutterwaveIntegration.validateCustomerData(this.customerData);
+                        if (errors.length > 0) {
+                            alert('Please fix errors:\n' + errors.join('\n'));
+                            return;
+                        }
+
+                        this.customerData.phone = window.FlutterwaveIntegration.formatNigerianPhone(this.customerData.phone);
+
+                        const paymentData = {
+                            plan: 'digital',
+                            amount: 5000,
+                            title: 'Acne Free Digital Routine',
+                            description: 'Expert Digital Skincare Routine',
+                            customer: this.customerData,
+                            category: 'acne'
+                        };
+
+                        await window.FlutterwaveIntegration.processPayment(paymentData);
+
+                    } catch (error) {
+                        console.error('Payment error:', error);
+                        alert('Payment failed: ' + error.message);
+                    } finally {
+                        this.isProcessing = false;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

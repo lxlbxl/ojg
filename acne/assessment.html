@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acne Assessment - Discover Your Root Cause | Forest & Sage</title>
+    <meta name="description"
+        content="Identify your specific acne type and get a personalized recovery protocol based on your unique skin biology.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Playfair Display', 'serif'] },
+                    colors: {
+                        'forest': { 50: '#f2f8f5', 100: '#dcece3', 800: '#166534', 900: '#0f3922' },
+                        'sage': { 100: '#E6EBE6', 200: '#CDD6CD', 500: '#8DA38D' },
+                        'terracotta': { 500: '#C77D63', 600: '#A85D45' },
+                        'cream': '#FDFCF8', 'sand': '#F4F1EA',
+                    },
+                    backgroundImage: { 'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')" },
+                    boxShadow: { 'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F4F1EA;
+            color: #0f3922;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    <script src="../js/webhook-manager.js"></script>
+</head>
+
+<body class="antialiased relative min-h-screen" x-data="acneAssessment()">
+
+    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+    <div class="blob bg-sage-200 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg"><span
+                            class="text-sand font-serif italic text-xl">A</span></div>
+                    <span class="text-xl font-serif font-bold tracking-tight text-forest-900">Forest & Sage</span>
+                </div>
+                <div class="text-xs font-bold text-forest-800/40 uppercase tracking-widest"
+                    x-text="'Question ' + (currentQuestion + 1) + ' of ' + totalQuestions"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-6 pt-32 pb-20">
+        <!-- Progress Bar -->
+        <div class="mb-12">
+            <div class="w-full bg-forest-900/5 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-forest-800 h-1.5 transition-all duration-700 ease-out"
+                    :style="`width: ${((currentQuestion + 1) / totalQuestions) * 100}%`"></div>
+            </div>
+        </div>
+
+        <!-- Assessment Form -->
+        <div x-show="!showContactForm">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-medium text-forest-900 mb-4"
+                    x-text="questions[currentQuestion].question"></h2>
+                <p class="text-forest-800/60" x-text="questions[currentQuestion].description"></p>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="grid gap-4 mb-12">
+                <template x-for="(option, index) in questions[currentQuestion].options" :key="index">
+                    <button @click="selectAnswer(option.value)"
+                        class="glass-panel text-left p-6 rounded-2xl transition-all duration-300 group hover:shadow-soft hover:-translate-y-0.5 border"
+                        :class="getSelectedAnswer() === option.value ? 'bg-forest-900 text-sand border-forest-900' : 'bg-white border-white hover:border-sage-200'">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-bold text-lg mb-1" x-text="option.text"></div>
+                                <div class="text-sm opacity-60" x-text="option.description"></div>
+                            </div>
+                            <div class="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors"
+                                :class="getSelectedAnswer() === option.value ? 'border-terracotta-500 bg-terracotta-500' : 'border-sage-100'">
+                                <div class="w-2 h-2 bg-white rounded-full"
+                                    x-show="getSelectedAnswer() === option.value"></div>
+                            </div>
+                        </div>
+                    </button>
+                </template>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex items-center justify-between">
+                <button @click="previousQuestion()" x-show="currentQuestion > 0"
+                    class="text-forest-800 font-bold text-sm tracking-widest uppercase flex items-center gap-2 hover:opacity-70 transition-opacity">
+                    <i class="fas fa-chevron-left text-xs"></i> Back
+                </button>
+                <div x-show="currentQuestion === 0"></div>
+                <div class="text-xs font-bold text-forest-900/40 uppercase tracking-widest">Select an option to proceed
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div x-show="showContactForm" x-cloak class="glass-panel rounded-[2rem] p-8 md:p-12 shadow-soft reveal-up">
+            <div class="text-center mb-8">
+                <div
+                    class="w-16 h-16 bg-forest-900 rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow">
+                    <i class="fas fa-check text-sand text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-serif font-medium text-forest-900 mb-4">Assessment Complete</h2>
+                <p class="text-forest-800/60 leading-relaxed">Where should we send your personalized Clear Skin
+                    Protocol?</p>
+            </div>
+
+            <form @submit.prevent="submitContactInfo()" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">Full
+                            Name</label>
+                        <input type="text" x-model="contactInfo.name" required
+                            class="w-full bg-white px-6 py-4 rounded-xl outline-none focus:ring-2 focus:ring-forest-800/20 transition-all border border-sage-100"
+                            placeholder="Jane Doe">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">Email
+                            Address</label>
+                        <input type="email" x-model="contactInfo.email" required
+                            class="w-full bg-white px-6 py-4 rounded-xl outline-none focus:ring-2 focus:ring-forest-800/20 transition-all border border-sage-100"
+                            placeholder="jane@example.com">
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">WhatsApp
+                        Phone Number</label>
+                    <input type="tel" x-model="contactInfo.phone" required
+                        class="w-full bg-white px-6 py-4 rounded-xl outline-none focus:ring-2 focus:ring-forest-800/20 transition-all border border-sage-100"
+                        placeholder="080 1234 5678">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-forest-900/40 uppercase tracking-widest ml-1">Age
+                        Range</label>
+                    <select x-model="contactInfo.ageRange"
+                        class="w-full bg-white px-6 py-4 rounded-xl outline-none focus:ring-2 focus:ring-forest-800/20 transition-all border border-sage-100 appearance-none">
+                        <option value="">Select age range</option>
+                        <option value="13-18">13-18 years</option>
+                        <option value="19-25">19-25 years</option>
+                        <option value="26-35">26-35 years</option>
+                        <option value="36-45">36-45 years</option>
+                        <option value="46+">46+ years</option>
+                    </select>
+                </div>
+
+                <button type="submit" :disabled="isSubmittingContact"
+                    class="w-full bg-forest-900 text-sand text-lg py-5 rounded-full font-bold hover:bg-forest-800 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-70">
+                    <span x-show="!isSubmittingContact" class="flex items-center gap-3">Get My Analysis <i
+                            class="fas fa-sparkles text-sm"></i></span>
+                    <span x-show="isSubmittingContact">Analyzing Your Skin...</span>
+                </button>
+
+                <p class="text-center text-[10px] text-forest-900/40 font-medium">Your data is secured with AES-256
+                    encryption & HIPAA compliance standards.</p>
+                <div x-show="contactError"
+                    class="mt-4 p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 text-center"
+                    x-text="contactError"></div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function acneAssessment() {
+            return {
+                currentQuestion: 0, totalQuestions: 10, answers: {}, isSubmitting: false,
+                showContactForm: false, showResults: false, isSubmittingContact: false,
+                contactInfo: { name: '', email: '', phone: '', ageRange: '' },
+                contactError: '',
+
+                questions: [
+                    { question: "How would you describe your current acne severity?", description: "Consider the past 3 months", options: [{ value: "mild", text: "Mild - Occasional breakouts", description: "Few pimples, mostly whiteheads/blackheads" }, { value: "moderate", text: "Moderate - Regular breakouts", description: "Several pimples, some inflamed" }, { value: "severe", text: "Severe - Frequent breakouts", description: "Many inflamed pimples, some cystic" }, { value: "very_severe", text: "Very Severe - Constant breakouts", description: "Widespread inflamed acne, cysts, nodules" }] },
+                    { question: "Where do you experience acne most frequently?", description: "Select your primary breakout areas", options: [{ value: "forehead", text: "Forehead and temples" }, { value: "cheeks", text: "Cheeks and jawline" }, { value: "chin", text: "Chin and mouth area" }, { value: "all_over", text: "All over face", description: "Multiple areas affected" }, { value: "body", text: "Body acne (back, chest)", description: "Primarily on body rather than face" }] },
+                    { question: "How long have you been dealing with acne?", description: "Your acne history timeline", options: [{ value: "less_6months", text: "Less than 6 months" }, { value: "6months_2years", text: "6 months to 2 years" }, { value: "2_5years", text: "2 to 5 years" }, { value: "5_10years", text: "5 to 10 years" }, { value: "10plus_years", text: "More than 10 years" }] },
+                    { question: "What triggers your acne breakouts?", description: "Factors that seem to worsen your acne", options: [{ value: "hormonal", text: "Hormonal changes (periods, stress)", description: "Breakouts tied to cycle or stress" }, { value: "diet", text: "Certain foods", description: "Breakouts after specific foods" }, { value: "products", text: "Skincare or makeup products", description: "Reactions to products used" }, { value: "environment", text: "Weather/environment", description: "Changes with seasons, humidity" }, { value: "unknown", text: "I me not sure", description: "Can't identify specific triggers" }] },
+                    { question: "How oily is your skin?", description: "Your natural skin type", options: [{ value: "very_oily", text: "Very oily - Shine within 1-2 hours", description: "Constant oil production" }, { value: "moderately_oily", text: "Moderately oily - Shine by midday", description: "Noticeable oil by afternoon" }, { value: "combination", text: "Combination - Oily T-zone only", description: "Oil in forehead/nose/chin area" }, { value: "normal", text: "Normal - Balanced skin", description: "Minimal oil, not dry" }, { value: "dry", text: "Dry - Tight, flaky skin", description: "Lack of oil production" }] },
+                    { question: "Have you tried any acne treatments before?", description: "Previous treatment experiences", options: [{ value: "none", text: "No treatments tried" }, { value: "over_counter", text: "Over-the-counter products only", description: "Drugstore creams, cleansers" }, { value: "prescription", text: "Prescription medications", description: "Doctor prescribed treatments" }, { value: "natural", text: "Natural/home remedies", description: "DIY treatments, herbal remedies" }, { value: "multiple", text: "Multiple types of treatments", description: "Combination of above" }] },
+                    { question: "How does acne affect your daily life?", description: "Impact on your confidence and activities", options: [{ value: "minimal", text: "Minimal impact", description: "Doesn't bother me much" }, { value: "moderate", text: "Moderate impact", description: "Sometimes affects confidence" }, { value: "significant", text: "Significant impact", description: "Often affects social situations" }, { value: "severe", text: "Severe impact", description: "Avoids social situations, very self-conscious" }, { value: "extreme", text: "Extreme impact", description: "Depression, anxiety, avoids all social contact" }] },
+                    { question: "What's your current skincare routine?", description: "Your daily skincare habits", options: [{ value: "none", text: "No routine", description: "Just wash with water or soap" }, { value: "basic", text: "Basic routine", description: "Cleanser and moisturizer" }, { value: "intermediate", text: "Intermediate routine", description: "Cleanser, toner, moisturizer" }, { value: "advanced", text: "Advanced routine", description: "Multiple steps, serums, treatments" }, { value: "professional", text: "Professional guidance", description: "Dermatologist recommended routine" }] },
+                    { question: "How would you rate your current stress levels?", description: "Stress can significantly impact acne", options: [{ value: "low", text: "Low stress", description: "Generally calm and relaxed" }, { value: "moderate", text: "Moderate stress", description: "Occasional stress, manageable" }, { value: "high", text: "High stress", description: "Frequently stressed, hard to manage" }, { value: "very_high", text: "Very high stress", description: "Constantly stressed, overwhelming" }, { value: "chronic", text: "Chronic stress", description: "Long-term stress affecting health" }] },
+                    { question: "What's your primary goal for acne treatment?", description: "What matters most to you", options: [{ value: "clear_skin", text: "Completely clear skin", description: "Want to eliminate all acne" }, { value: "reduce_breakouts", text: "Reduce frequency of breakouts", description: "Fewer pimples, less often" }, { value: "heal_scars", text: "Heal existing scars and marks", description: "Focus on post-acne healing" }, { value: "prevent_future", text: "Prevent future breakouts", description: "Long-term prevention" }, { value: "boost_confidence", text: "Improve confidence and self-esteem", description: "Feel better about appearance" }] }
+                ],
+
+                nextQuestion() { if (this.currentQuestion < this.totalQuestions - 1) this.currentQuestion++; },
+                previousQuestion() { if (this.currentQuestion > 0) this.currentQuestion--; },
+                selectAnswer(value) {
+                    this.answers[this.currentQuestion] = value;
+                    if (this.currentQuestion < this.totalQuestions - 1) {
+                        setTimeout(() => this.nextQuestion(), 400);
+                    } else {
+                        setTimeout(() => this.submitAssessment(), 400);
+                    }
+                },
+                getSelectedAnswer() { return this.answers[this.currentQuestion] || null; },
+
+                async submitAssessment() {
+                    this.isSubmitting = true;
+                    try {
+                        const acneType = this.calculateAcneType();
+                        this.assessmentData = { answers: this.answers, acneType: acneType, completedAt: new Date().toISOString() };
+                        this.showContactForm = true;
+                    } catch (error) { alert('Processing error. Please try again.'); }
+                    finally { this.isSubmitting = false; }
+                },
+
+                async submitContactInfo() {
+                    this.isSubmittingContact = true;
+                    try {
+                        const fullData = { ...this.assessmentData, contactInfo: this.contactInfo };
+                        if (window.WebhookManager) await window.WebhookManager.submitAssessment(fullData);
+                        localStorage.setItem('acneAssessmentData', JSON.stringify(fullData));
+                        const resultsData = this.generateResultsData(fullData);
+                        localStorage.setItem('acneResults', JSON.stringify(resultsData));
+                        window.location.href = 'results.html';
+                    } catch (error) { this.contactError = error.message || 'Submission failed. Please check your data.'; }
+                    finally { this.isSubmittingContact = false; }
+                },
+
+                calculateAcneType() {
+                    let scores = { hormonal: 0, inflammatory: 0, comedonal: 0, cystic: 0 };
+                    const answers = this.answers;
+                    if (answers[2] === '2_5years' || answers[2] === '5_10years') scores.hormonal += 2;
+                    if (answers[3] === 'hormonal') scores.hormonal += 3;
+                    if (answers[1] === 'chin' || answers[1] === 'jawline') scores.hormonal += 2;
+                    if (answers[0] === 'severe') scores.inflammatory += 2;
+                    if (answers[4] === 'very_oily') scores.comedonal += 2;
+                    if (answers[0] === 'very_severe') scores.cystic += 3;
+                    const primaryType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+                    return { primary: primaryType, scores: scores };
+                },
+
+                generateResultsData(data) {
+                    const type = data.acneType.primary;
+                    const db = {
+                        hormonal: { icon: '⚖️', title: 'Hormonal Acne', description: 'Linked to biological fluctuations (menstrual cycle, stress, cortisol).', traits: ['Jawline breakouts', 'Cystic depth', 'Cycle-related'] },
+                        inflammatory: { icon: '🔥', title: 'Inflammatory Acne', description: 'Red, painful breakouts driven by sensitivity and bacteria.', traits: ['Redness', 'Tenderness', 'Active lesions'] },
+                        comedonal: { icon: '⚫', title: 'Comedonal Acne', description: 'Clogged pores resulting in non-inflamed whiteheads and blackheads.', traits: ['Clogged pores', 'Texture issues', 'Oily T-zone'] },
+                        cystic: { icon: '⚡', title: 'Cystic Acne', description: 'Deep-seated, painful inflammation within the dermal layers.', traits: ['Deep cysts', 'Scarring potential', 'Long healing time'] }
+                    };
+                    return { acneType: db[type] || db.hormonal, severity: { level: 'Analyzing...', percentage: 85, description: 'Based on your severity report.' }, recommendations: { products: ['Cleanser', 'Serum', 'Moisturizer'], lifestyle: ['Hydration', 'Sleep', 'Nutrition'] }, timeline: [{ title: 'Phase 1', description: 'Reduced redness', duration: '2 Weeks' }, { title: 'Phase 2', description: 'Clearing', duration: '4-6 Weeks' }, { title: 'Phase 3', description: 'Consistency', duration: '90 Days' }] };
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

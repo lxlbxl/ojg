@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Weight Loss Assessment - Personalized Plan | Forest & Sage</title>
+  <meta name="description"
+    content="Get your FREE personalized weight loss plan in 60 seconds. Science-backed method used by 5,000+ women. No crash diets, no gym required.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../js/webhook-manager.js"></script>
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            'forest': {
+              50: '#f2f8f5',
+              100: '#dcece3',
+              800: '#166534',
+              900: '#0f3922', // Deep luxury green
+            },
+            'sage': {
+              100: '#E6EBE6',
+              200: '#CDD6CD',
+              500: '#8DA38D',
+            },
+            'terracotta': {
+              500: '#C77D63', // Warm accent
+              600: '#A85D45',
+            },
+            'cream': '#FDFCF8',
+            'sand': '#F4F1EA',
+          },
+          backgroundImage: {
+            'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+          },
+          boxShadow: {
+            'soft': '0 20px 40px -15px rgba(22, 101, 52, 0.1)',
+            'glow': '0 0 20px rgba(199, 125, 99, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    [x-cloak] {
+      display: none !important;
+    }
+
+    body {
+      background-color: #FDFCF8;
+      color: #0f3922;
+      overflow-x: hidden;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .blob {
+      position: absolute;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    .typing-animation::after {
+      content: '|';
+      animation: blink 1s infinite;
+      color: #C77D63;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: revealUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    @keyframes revealUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .shimmer {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="antialiased relative" x-data="landingPageApp()">
+  <!-- Ambient Background Elements -->
+  <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
+  <div class="blob bg-sage-200 w-[500px] h-[500px] rounded-full top-[-100px] left-[-100px]"></div>
+  <div class="blob bg-terracotta-500/20 w-[400px] h-[400px] rounded-full bottom-[-50px] right-[-50px]"></div>
+
+  <!-- Header -->
+  <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
+    <div class="max-w-6xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg">
+            <span class="text-sand font-serif italic text-xl">W</span>
+          </div>
+          <span class="text-xl font-serif font-bold tracking-tight text-forest-900">Forest & Sage</span>
+        </div>
+        <div class="hidden md:flex items-center gap-6">
+          <span class="text-sm font-medium text-forest-800/70">Expert-Led Wellness</span>
+          <div class="h-4 w-px bg-sage-200"></div>
+          <span class="text-sm font-medium text-forest-800">5,000+ Journeys Started</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex flex-col justify-center pt-24 pb-16 px-6 relative">
+    <div class="max-w-4xl mx-auto text-center reveal-up">
+      <!-- Status Badge -->
+      <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-4 py-2 rounded-full mb-8">
+        <span class="w-2 h-2 rounded-full bg-terracotta-500 animate-pulse"></span>
+        <span class="text-xs font-bold text-forest-800 uppercase tracking-widest">New Protocol Available for 2025</span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-4xl md:text-7xl font-serif font-medium leading-[1.1] text-forest-900 mb-8">
+        Your Weight Loss Journey is <br>
+        <span class="italic text-terracotta-600 typing-animation" x-show="showTyping">Unique</span>
+      </h1>
+
+      <!-- Subheadline -->
+      <p class="text-xl md:text-2xl text-forest-800/70 font-light leading-relaxed max-w-2xl mx-auto mb-12">
+        Stop guessing. Start losing. Get your personalized 90-day metabolic restoration plan in under 60 seconds.
+      </p>
+
+      <!-- CTA Button -->
+      <div class="relative inline-block group">
+        <div
+          class="absolute -inset-1 bg-gradient-to-r from-terracotta-500 to-forest-800 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200">
+        </div>
+        <button type="button" @click="startQuiz()"
+          class="relative bg-forest-900 text-sand text-xl px-12 py-5 rounded-full font-bold hover:bg-forest-800 transition-all flex items-center gap-3 shadow-xl cursor-pointer">
+          Start Your Assessment
+          <i class="fas fa-arrow-right text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Urgency Banner -->
+      <div class="mt-8 flex items-center justify-center gap-6">
+        <div class="flex items-center gap-2 text-forest-800">
+          <i class="fas fa-clock text-terracotta-500"></i>
+          <span class="text-sm font-medium">Offer ends in <span class="font-mono text-forest-900 font-bold"
+              x-text="timeLeft">23:45:12</span></span>
+        </div>
+        <div class="h-4 w-px bg-sage-200"></div>
+        <div class="text-sm text-forest-800">
+          <span class="font-bold">42</span> spots left today
+        </div>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-user-md text-xl"></i>
+          </div>
+          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">Doctor Approved</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-leaf text-xl"></i>
+          </div>
+          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">100% Natural</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-shield-alt text-xl"></i>
+          </div>
+          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">30-Day Guarantee</span>
+        </div>
+        <div class="flex flex-col items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
+            <i class="fas fa-shipping-fast text-xl"></i>
+          </div>
+          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">Fast Delivery</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Success Stories -->
+  <section class="py-24 px-6 bg-sand/30 relative">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 reveal-up">
+        <h2 class="text-3xl md:text-5xl font-serif text-forest-900 mb-4">Real Women, Real Transformations</h2>
+        <p class="text-forest-800/60 font-medium">Join 5,000+ women who reclaimed their health and confidence.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 reveal-up" style="animation-delay: 0.2s">
+        <!-- Testimonial 1 -->
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft">
+          <div class="flex items-center gap-4 mb-6">
+            <img
+              src="https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=portrait%20smiling%20Nigerian%20woman%20fit&image_size=square"
+              alt="Reviewer" class="w-14 h-14 rounded-full object-cover">
+            <div>
+              <h4 class="font-bold text-forest-900">Adunni K.</h4>
+              <p class="text-xs text-terracotta-600 font-bold uppercase tracking-wider">Lost 23kg</p>
+            </div>
+          </div>
+          <p class="text-forest-800/80 leading-relaxed italic">"I never thought I could lose weight while still eating
+            local foods. This protocol changed everything. My energy is back!"</p>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft scale-105 border-forest-100 translate-y-[-10px]">
+          <div class="flex items-center gap-4 mb-6">
+            <img
+              src="https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=portrait%20happy%20African%20woman%20fit%20healthy&image_size=square"
+              alt="Reviewer" class="w-14 h-14 rounded-full object-cover">
+            <div>
+              <h4 class="font-bold text-forest-900">Funmi O.</h4>
+              <p class="text-xs text-terracotta-600 font-bold uppercase tracking-wider">Size 18 to 12</p>
+            </div>
+          </div>
+          <p class="text-forest-800/80 leading-relaxed italic">"The metabolic assessment was spot on. Within 3 weeks, my
+            bloating was gone and the weight just started melting away."</p>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="glass-panel p-8 rounded-[2rem] shadow-soft">
+          <div class="flex items-center gap-4 mb-6">
+            <img
+              src="https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=portrait%20confident%20black%20woman%20fit%20lifestyle&image_size=square"
+              alt="Reviewer" class="w-14 h-14 rounded-full object-cover">
+            <div>
+              <h4 class="font-bold text-forest-900">Kemi A.</h4>
+              <p class="text-xs text-terracotta-600 font-bold uppercase tracking-wider">Healthy Lifestyle</p>
+            </div>
+          </div>
+          <p class="text-forest-800/80 leading-relaxed italic">"No gym, no extreme fasting. Just science and good
+            nutrition. I finally feel comfortable in my own skin again."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-forest-900 py-12 px-6 text-center">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex items-center justify-center gap-3 mb-8">
+        <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">
+          <span class="text-sand font-serif italic text-sm">W</span>
+        </div>
+        <span class="text-lg font-serif font-bold tracking-tight text-sand">Forest & Sage</span>
+      </div>
+      <p class="text-sand/40 text-xs">© 2025 Forest & Sage Wellness. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    function landingPageApp() {
+      return {
+        showTyping: false,
+        timeLeft: '23:45:12',
+
+        init() {
+          setTimeout(() => {
+            this.showTyping = true;
+          }, 500);
+          this.startCountdown();
+
+          // Track landing view
+          if (window.WebhookManager) {
+            window.WebhookManager.trackEvent('weight_landing_view', {
+              timestamp: new Date().toISOString()
+            });
+          }
+        },
+
+        startCountdown() {
+          // Set to 24 hours from now for persistent urgency feel
+          let totalSeconds = 23 * 3600 + 45 * 60 + 12;
+
+          setInterval(() => {
+            if (totalSeconds > 0) {
+              totalSeconds--;
+              const h = Math.floor(totalSeconds / 3600);
+              const m = Math.floor((totalSeconds % 3600) / 60);
+              const s = totalSeconds % 60;
+              this.timeLeft = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+          }, 1000);
+        },
+
+        startQuiz() {
+          if (window.WebhookManager) {
+            window.WebhookManager.trackEvent('weight_assessment_started_from_landing', {
+              timestamp: new Date().toISOString()
+            });
+          }
+          window.location.href = 'assessment.html';
+        }
+      };
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Your Weight Loss Transformation Journey!</title>
+    <meta name="description"
+        content="Thank you for your purchase! Get instant access to your weight loss program and start your transformation today.">
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Alpine.js CDN -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Webhook Manager -->
+    <script src="../js/webhook-manager.js"></script>
+    <!-- Flutterwave Script -->
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
+    <script src="../js/flutterwave-integration.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-primary-50 to-white min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-primary-100">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">W</span>
+                    </div>
+                    <span class="text-xl font-bold text-gray-800">Weight Loss Transformation Program</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-12" x-data="thankYouData()">
+        <!-- Success Icon -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
+                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Your Transformation!</h1>
+            <p class="text-xl text-gray-600">Your weight loss journey starts now</p>
+        </div>
+
+        <!-- Order Confirmation -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Order Confirmed!</h2>
+                <p class="text-gray-600">We've received your payment and your products are being prepared</p>
+            </div>
+
+            <div class="border-t border-b border-gray-200 py-4 mb-6">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Order Number:</span>
+                    <span class="font-mono text-gray-900" x-text="orderNumber"></span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Estimated Delivery:</span>
+                    <span class="font-semibold text-gray-900" x-text="deliveryDate"></span>
+                </div>
+            </div>
+
+            <div class="bg-primary-50 p-4 rounded-lg text-center">
+                <p class="text-primary-800 font-semibold">✅ Payment Confirmed</p>
+                <p class="text-primary-700 text-sm mt-1">Your products will be shipped within 24 hours</p>
+            </div>
+        </div>
+
+        <!-- OTO: Egbon Cross-Sell -->
+        <div class="bg-gradient-to-b from-gray-900 to-gray-800 rounded-lg shadow-2xl border-2 border-primary-500 p-8 mb-8 transform hover:scale-[1.01] transition-all relative overflow-hidden"
+            x-show="!otoPurchased">
+            <div
+                class="absolute top-0 right-0 bg-red-600 text-white px-4 py-1 font-bold text-sm transform rotate-45 translate-x-4 translate-y-4">
+                50% OFF</div>
+
+            <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold text-primary-500 mb-2">WAIT! Special One-Time Offer</h3>
+                <p class="text-gray-300">Add <span class="text-white font-bold">"Egbon" Formula</span> to your order
+                    specifically for men.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-6 mb-6">
+                <div class="w-full md:w-1/3">
+                    <img src="https://ojg.ng/egbon-bottle.png" alt="Egbon Supplement"
+                        class="w-full rounded-lg shadow-lg border border-gray-700">
+                </div>
+                <div class="w-full md:w-2/3 text-left">
+                    <h4 class="text-xl font-bold text-white mb-2">Egbon: The Ultimate Manhood Booster</h4>
+                    <ul class="space-y-2 text-gray-300 mb-4">
+                        <li class="flex items-center"><span class="text-primary-500 mr-2">✓</span> Enhanced Libido &
+                            Stamina</li>
+                        <li class="flex items-center"><span class="text-primary-500 mr-2">✓</span> Natural Testosterone
+                            Support</li>
+                        <li class="flex items-center"><span class="text-primary-500 mr-2">✓</span> Improved Energy
+                            Levels</li>
+                    </ul>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <span class="text-3xl font-bold text-white">₦10,000</span>
+                        <span class="text-gray-500 line-through text-lg">₦20,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button @click="purchaseOTO()" :disabled="isProcessingOTO"
+                    class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-lg shadow-lg transition-all flex justify-center items-center">
+                    <span x-show="!isProcessingOTO">Add to Order - ₦10,000</span>
+                    <span x-show="isProcessingOTO" class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        Processing...
+                    </span>
+                </button>
+                <button @click="dismissOTO()" class="w-full text-gray-500 hover:text-gray-300 text-sm underline">
+                    No thanks, I don't want to improve my performance
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Message for OTO -->
+        <div class="bg-primary-50 border border-primary-200 p-6 rounded-lg text-center shadow-md animate-fade-in-up mb-8"
+            x-show="otoPurchased" style="display: none;">
+            <p class="text-primary-800 font-bold text-xl mb-2">🎉 Offer Added Successfully!</p>
+            <p class="text-gray-600">The Egbon Formula has been added to your shipment.</p>
+        </div>
+
+        <!-- What's Next -->
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">What's Next?</h3>
+
+            <div class="space-y-6">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold">
+                            1</div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Immediate Access</h4>
+                        <p class="text-gray-600">Get instant access to your digital resources, meal plans, and exercise
+                            guides</p>
+                        <button @click="accessResources()"
+                            class="mt-2 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition-colors">
+                            Access Resources
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold">
+                            2</div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Product Shipment</h4>
+                        <p class="text-gray-600">Your personalized weight loss products will arrive within 2-3 business
+                            days</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0">
+                        <div
+                            class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white font-bold">
+                            3</div>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900">Support & Coaching</h4>
+                        <p class="text-gray-600">Join our exclusive support group and get weekly coaching sessions</p>
+                        <button @click="joinSupport()"
+                            class="mt-2 border border-primary-500 text-primary-500 px-4 py-2 rounded hover:bg-primary-50 transition-colors">
+                            Join Support Group
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                        </path>
+                    </svg>
+                </div>
+                <h4 class="font-semibold text-gray-900 mb-2">Meal Plans</h4>
+                <p class="text-gray-600 text-sm mb-4">Access your personalized meal plans and recipes</p>
+                <button @click="accessMealPlans()"
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                    View Meal Plans
+                </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6 text-center">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h4 class="font-semibold text-gray-900 mb-2">Workout Plans</h4>
+                <p class="text-gray-600 text-sm mb-4">Start your personalized exercise routine</p>
+                <button @click="accessWorkouts()"
+                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+                    Start Workouts
+                </button>
+            </div>
+        </div>
+
+        <!-- Success Tips -->
+        <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg shadow-lg p-8 text-white text-center">
+            <h3 class="text-2xl font-bold mb-4">Success Tips for Your Journey</h3>
+            <div class="grid md:grid-cols-3 gap-6 mt-6">
+                <div>
+                    <div class="text-3xl mb-2">📊</div>
+                    <h4 class="font-semibold mb-2">Track Progress</h4>
+                    <p class="text-sm opacity-90">Log your weight and measurements weekly</p>
+                </div>
+                <div>
+                    <div class="text-3xl mb-2">💧</div>
+                    <h4 class="font-semibold mb-2">Stay Hydrated</h4>
+                    <p class="text-sm opacity-90">Drink at least 8 glasses of water daily</p>
+                </div>
+                <div>
+                    <div class="text-3xl mb-2">🤝</div>
+                    <h4 class="font-semibold mb-2">Stay Connected</h4>
+                    <p class="text-sm opacity-90">Reach out to our support team anytime</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p>&copy; 2024 Weight Loss Solutions. All rights reserved.</p>
+            <p class="text-gray-400 mt-2">Questions? Contact us at support@weightlossolutions.com or call 0800-123-4567
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function thankYouData() {
+            return {
+                orderNumber: '',
+                deliveryDate: '',
+                isProcessingOTO: false,
+                otoPurchased: false,
+
+                formatPrice(amount) {
+                    if (window.ConfigManager) {
+                        return window.ConfigManager.formatAmount(amount, window.ConfigManager.getRegionSettings(window.ConfigManager.detectRegion()).currency);
+                    }
+                    return '$' + Number(amount).toLocaleString();
+                },
+
+                init() {
+                    this.generateOrderDetails();
+                    this.trackPurchase();
+                    this.testFlutterwaveInit();
+                },
+
+                async testFlutterwaveInit() {
+                    console.log('🧪 Testing Flutterwave initialization...');
+                    setTimeout(async () => {
+                        try {
+                            if (window.FlutterwaveIntegration) {
+                                await window.FlutterwaveIntegration.initialize();
+                            }
+                        } catch (e) { }
+                    }, 2000);
+                },
+
+                generateOrderDetails() {
+                    // Generate order number from URL or create new one
+                    const urlParams = new URLSearchParams(window.location.search);
+                    this.orderNumber = urlParams.get('order') || 'WEIGHT-' + Date.now().toString().slice(-6);
+
+                    // Use stored phone/email if available for OTO
+                    try {
+                        const stored = localStorage.getItem('weightAssessmentData');
+                        if (stored) {
+                            const data = JSON.parse(stored);
+                            if (data.contactInfo) {
+                                this.customerEmail = data.contactInfo.email;
+                                this.customerPhone = data.contactInfo.phone;
+                                this.customerName = data.contactInfo.name;
+                            }
+                        }
+                    } catch (e) { }
+
+                    // Calculate delivery date (3-5 business days)
+                    const today = new Date();
+                    const delivery = new Date(today.getTime() + (4 * 24 * 60 * 60 * 1000));
+                    this.deliveryDate = delivery.toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                },
+
+                async purchaseOTO() {
+                    this.isProcessingOTO = true;
+                    try {
+                        if (!window.FlutterwaveIntegration) throw new Error('Payment system loading...');
+
+                        // Use stored customer data or fallback
+                        const customer = {
+                            email: this.customerEmail || 'customer@example.com',
+                            phone: this.customerPhone || '08000000000',
+                            name: this.customerName || 'Valued Customer'
+                        };
+
+                        const paymentData = {
+                            plan: 'oto_egbon',
+                            amount: 10000,
+                            title: 'Egbon Manhood Booster',
+                            description: 'Add-on: Egbon Herbal Supplement',
+                            customer: customer,
+                            category: 'weight',
+                            meta: {
+                                is_oto: true,
+                                parent_order: this.orderNumber
+                            }
+                        };
+
+                        await window.FlutterwaveIntegration.processPayment(paymentData);
+
+                        this.otoPurchased = true;
+
+                    } catch (error) {
+                        console.error('OTO Payment error:', error);
+                        if (error.message !== 'Payment modal closed') {
+                            alert('Could not process payment: ' + error.message);
+                        }
+                    } finally {
+                        this.isProcessingOTO = false;
+                    }
+                },
+
+                dismissOTO() {
+                    this.otoPurchased = true; // Hides via x-show
+                    const el = document.querySelector('[x-show="!otoPurchased"]');
+                    if (el) el.style.display = 'none';
+                },
+
+                trackPurchase() {
+                    // Track successful purchase
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('weight_purchase_complete', {
+                            order_number: this.orderNumber,
+                            delivery_date: this.deliveryDate,
+                            value: 45000, // Default value, should come from actual purchase
+                            currency: 'NGN'
+                        });
+                    }
+                },
+
+                accessResources() {
+                    // Track resource access
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('weight_resources_accessed', {
+                            order_number: this.orderNumber
+                        });
+                    }
+
+                    // Show resources or redirect
+                    alert('Digital resources would be available here. This is a demo page.');
+                },
+
+                joinSupport() {
+                    // Track support group join
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('weight_support_join', {
+                            order_number: this.orderNumber
+                        });
+                    }
+
+                    // Show support group info
+                    alert('Support group information would be available here. This is a demo page.');
+                },
+
+                accessMealPlans() {
+                    // Track meal plan access
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('weight_meal_plans_accessed', {
+                            order_number: this.orderNumber
+                        });
+                    }
+
+                    // Show meal plans
+                    alert('Meal plans would be available here. This is a demo page.');
+                },
+
+                accessWorkouts() {
+                    // Track workout access
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('weight_workouts_accessed', {
+                            order_number: this.orderNumber
+                        });
+                    }
+
+                    // Show workouts
+                    alert('Workout plans would be available here. This is a demo page.');
+                }
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            // Additional initialization if needed
+        });
+    </script>
+</body>
+
+</html>

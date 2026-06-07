@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized 90-Day Acne Clear Skin Plan - Based on Your Assessment Results</title>
+    <meta name="description" content="Get your customized 90-Day Acne Clear Skin Plan based on your personal assessment. Tailored specifically for your skin type and acne patterns.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/webhook-manager.js"></script>
+    <script src="../js/admin-integration.js"></script>
+    <script src="../js/config.js"></script>
+    <script>
+        // Enhanced webhook helper using WebhookManager
+        async function callWebhook(endpoint, method = 'GET', data = null) {
+            try {
+                // Ensure WebhookManager is available
+                if (!window.WebhookManager) {
+                    throw new Error('WebhookManager not available');
+                }
+                
+                if (method === 'GET') {
+                    const url = window.WebhookManager.getUrl(endpoint);
+                    if (!url) {
+                        throw new Error(`Invalid endpoint: ${endpoint}`);
+                    }
+                    
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    return await response.json();
+                } else {
+                    return await window.WebhookManager.submitForm(endpoint, JSON.stringify(data), {
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+            } catch (error) {
+                console.error(`❌ Webhook call failed for ${endpoint}:`, error);
+                throw error;
+            }
+        }
+    </script>
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            background: linear-gradient(to right, #9acd32, #f5d020);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .pulse-green { animation: pulseGreen 2s infinite; }
+        .btn-grad {
+            background-image: linear-gradient(to right, #9acd32, #f5d020);
+            transition: all 0.3s ease;
+        }
+        .btn-grad:hover {
+            background-image: linear-gradient(to right, #8ab92d, #e6c01d);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(154, 205, 50, 0.3);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes pulseGreen {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(154, 205, 50, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(154, 205, 50, 0); }
+        }
+        .countdown-timer {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            animation: urgencyPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes urgencyPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .success-glow {
+            box-shadow: 0 0 25px rgba(154, 205, 50, 0.8), 0 0 50px rgba(245, 208, 32, 0.6), 0 0 75px rgba(154, 205, 50, 0.4), 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+        }
+        .success-glow:hover {
+            box-shadow: 0 0 35px rgba(154, 205, 50, 1), 0 0 60px rgba(245, 208, 32, 0.8), 0 0 90px rgba(154, 205, 50, 0.5), 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-green-900 text-white">
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1964367777749954');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1964367777749954&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+    
+    <!-- Hero -->
+    <section class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-green-900 px-4 py-12 relative overflow-hidden">
+        <!-- Floating Elements -->
+        <div class="absolute top-20 left-10 text-6xl opacity-20 floating">✨</div>
+        <div class="absolute top-40 right-20 text-4xl opacity-30 floating" style="animation-delay: 2s;">🌟</div>
+        <div class="absolute bottom-40 left-20 text-5xl opacity-25 floating" style="animation-delay: 4s;">💎</div>
+        
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            
+            <!-- Assessment Confirmation Badge -->
+            <div class="inline-flex items-center glass-effect rounded-full px-6 py-3 mb-6">
+                <span class="w-3 h-3 bg-green-400 rounded-full mr-3 animate-pulse"></span>
+                <span class="text-green-300 font-medium">✓ Acne Assessment Complete - Your Clear Skin Plan is Ready!</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                Your <span class="gradient-text">Personalized</span> 
+                <span class="block text-white">90-Day Clear Skin Plan</span>
+                <span class="text-2xl md:text-3xl lg:text-4xl text-green-300 block mt-4">
+                    Based on YOUR Acne Assessment Results
+                </span>
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                <strong class="text-yellow-400">Congratulations!</strong> Your acne assessment is complete. 
+                Now get your <strong class="text-green-400">customized clear skin treatment plan</strong> 
+                designed specifically for your skin type and acne patterns.
+            </p>
+
+            <!-- Benefits List -->
+            <div class="grid md:grid-cols-3 gap-4 mb-8 max-w-4xl mx-auto">
+                <div class="glass-effect rounded-lg p-4 border border-green-500/30">
+                    <div class="text-green-400 text-2xl mb-2">✨</div>
+                    <h3 class="font-bold text-lg mb-1">Clear, Glowing Skin</h3>
+                    <p class="text-gray-300 text-sm">Say goodbye to breakouts forever</p>
+                </div>
+                <div class="glass-effect rounded-lg p-4 border border-yellow-500/30">
+                    <div class="text-yellow-400 text-2xl mb-2">🌿</div>
+                    <h3 class="font-bold text-lg mb-1">Natural Healing</h3>
+                    <p class="text-gray-300 text-sm">Gentle, herbal-based treatments</p>
+                </div>
+                <div class="glass-effect rounded-lg p-4 border border-blue-500/30">
+                    <div class="text-blue-400 text-2xl mb-2">💪</div>
+                    <h3 class="font-bold text-lg mb-1">Boosted Confidence</h3>
+                    <p class="text-gray-300 text-sm">Feel amazing in your own skin</p>
+                </div>
+            </div>
+
+            <!-- Assessment Number Input -->
+            <div class="glass-effect rounded-2xl p-6 mb-8 max-w-md mx-auto border border-green-500/30">
+                <h3 class="text-lg font-bold text-white mb-3 text-center">Enter Your Assessment Number</h3>
+                <div class="space-y-3">
+                    <input 
+                        type="text" 
+                        x-model="assessmentId" 
+                        placeholder="e.g., ACNE-2024-A1B2C3" 
+                        class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50 font-mono text-center"
+                        @input="validateAssessmentId"
+                    >
+                    <p class="text-sm text-gray-400 text-center">Find this in your assessment email or report</p>
+                    <div x-show="!assessmentId || assessmentId.length < 10" class="text-yellow-400 text-sm text-center">
+                        ⚠️ Please enter your assessment number to proceed
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="relative inline-block">
+                <button 
+                    @click="assessmentId && assessmentId.length >= 10 ? scrollToOffer() : showAssessmentPrompt()" 
+                    :class="assessmentId && assessmentId.length >= 10 ? 'w-full pulse-green btn-grad text-black' : 'w-full bg-gray-600 cursor-pointer text-gray-400 hover:bg-gray-500'"
+                    class="text-xl md:text-2xl font-black py-6 px-12 rounded-full success-glow transition-all duration-300 hover:scale-105 mb-6"
+                    @mouseenter="!assessmentId || assessmentId.length < 10 ? showTooltip = true : null"
+                    @mouseleave="showTooltip = false"
+                >
+                    GET MY PERSONALIZED CLEAR SKIN PLAN
+                </button>
+                
+                <!-- Tooltip -->
+                <div 
+                    x-show="showTooltip && (!assessmentId || assessmentId.length < 10)"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 transform scale-95"
+                    x-transition:enter-end="opacity-100 transform scale-100"
+                    x-transition:leave="transition ease-in duration-150"
+                    x-transition:leave-start="opacity-100 transform scale-100"
+                    x-transition:leave-end="opacity-0 transform scale-95"
+                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-4 py-2 bg-[#9acd32] text-black text-sm font-semibold rounded-lg shadow-lg whitespace-nowrap z-50"
+                >
+                    📋 Enter your Assessment ID above to personalize your plan!
+                    <div class="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-[#9acd32]"></div>
+                </div>
+            </div>
+
+            <!-- Secondary Auto-Scroll CTA -->
+            <button 
+                @click="scrollToOffer()" 
+                class="block mx-auto mb-6 text-green-400 hover:text-green-300 transition-colors duration-300 group"
+            >
+                <div class="flex items-center space-x-2">
+                    <span class="text-lg font-semibold">See Full Plan Details & Pricing</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-y-1 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <div class="text-sm text-gray-400 mt-1">↓ Scroll down for complete details ↓</div>
+            </button>
+
+            <p class="text-gray-400 text-sm">⚡ Instant Download • 💰 44% OFF Today Only • 🔒 30-Day Money Back</p>
+        </div>
+    </section>
+
+    <!-- Assessment Results Review -->
+    <section class="py-16 px-4 bg-gray-800">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                Your Assessment Results Show These <span class="text-green-400">Key Areas</span> Need Attention
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3 bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+                        <i class="fas fa-exclamation-triangle text-red-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-red-300">Hormonal Imbalance</p>
+                            <p class="text-gray-400 text-sm">Your assessment indicates hormonal fluctuations contributing to breakouts</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
+                        <i class="fas fa-fire text-yellow-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-yellow-300">Inflammation Triggers</p>
+                            <p class="text-gray-400 text-sm">Diet and stress factors are amplifying skin inflammation</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                        <i class="fas fa-user-times text-blue-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-blue-300">Skincare Gaps</p>
+                            <p class="text-gray-400 text-sm">Current routine lacks targeted treatment for your acne type</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3 glass-effect rounded-lg p-4">
+                        <i class="fas fa-check-circle text-green-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-green-300">Natural Healing Protocol</p>
+                            <p class="text-gray-400 text-sm">Gentle herbal remedies to balance hormones without side effects</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 glass-effect rounded-lg p-4">
+                        <i class="fas fa-leaf text-green-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-green-300">Anti-Inflammatory Diet</p>
+                            <p class="text-gray-400 text-sm">Nigerian-friendly foods that heal your skin from within</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3 glass-effect rounded-lg p-4">
+                        <i class="fas fa-spa text-green-400 text-xl mt-1"></i>
+                        <div>
+                            <p class="font-semibold text-green-300">Custom Skincare Routine</p>
+                            <p class="text-gray-400 text-sm">Step-by-step daily routine tailored to your exact skin type</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-16 px-4 bg-gray-800">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">
+                Your <span class="text-green-400">90-Day Clear Skin Transformation</span> Plan
+            </h2>
+            
+            <!-- Pricing Card -->
+            <div class="max-w-lg mx-auto glass-effect rounded-2xl p-8 mb-12 shadow-2xl">
+                <div class="text-center mb-6">
+                    <div class="text-red-400 line-through text-2xl mb-2">₦<span x-text="pricing.originalPrice.toLocaleString()"></span></div>
+                    <div class="text-5xl font-black text-green-400 mb-2">₦<span x-text="pricing.salePrice.toLocaleString()"></span></div>
+                    <div class="bg-red-500 text-white px-4 py-1 rounded-full text-sm font-bold inline-block">
+                        SAVE 44% TODAY ONLY
+                    </div>
+                </div>
+                
+                <div class="space-y-3 mb-8">
+                    <template x-for="feature in pricing.features" :key="feature">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-check-circle text-green-400"></i>
+                            <span class="text-gray-200" x-text="feature"></span>
+                        </div>
+                    </template>
+                </div>
+                
+                <button 
+                    @click="initiatePayment()" 
+                    :disabled="!assessmentId || assessmentId.length < 10"
+                    :class="assessmentId && assessmentId.length >= 10 ? 'pulse-green btn-grad text-black' : 'bg-gray-600 cursor-not-allowed text-gray-400'"
+                    class="w-full text-2xl font-black py-6 px-16 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-105 mb-6"
+                >
+                    <span x-show="assessmentId && assessmentId.length >= 10">
+                        CLAIM MY CLEAR SKIN PLAN NOW - ₦<span x-text="pricing.salePrice.toLocaleString()"></span>
+                    </span>
+                    <span x-show="!assessmentId || assessmentId.length < 10">
+                        ENTER ASSESSMENT ID TO CONTINUE
+                    </span>
+                </button>
+                
+                <div class="text-gray-400 text-sm space-y-2">
+                    <p>✅ Customized Based on Your Assessment</p>
+                    <p>✅ 30-Day Money Back Guarantee</p>
+                    <p>✅ Instant Digital Download</p>
+                    <p>✅ Nigerian-Friendly Payment Options</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 px-4 bg-black/50 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
+                Real Results From Real Nigerian Women
+            </h2>
+            <p class="text-center text-gray-400 mb-12 text-lg">See how thousands of women have cleared their skin with our 90-Day Clear Skin Plan</p>
+            
+            <!-- Horizontal Scrolling Container -->
+            <div class="relative" x-show="testimonials.length > 0">
+                <!-- Scroll Buttons -->
+                <button 
+                    class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors duration-200"
+                    @click="document.getElementById('testimonials-container').scrollBy({left: -320, behavior: 'smooth'})"
+                >
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                
+                <button 
+                    class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-colors duration-200"
+                    @click="document.getElementById('testimonials-container').scrollBy({left: 320, behavior: 'smooth'})"
+                >
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+
+                <!-- Scrollable Testimonials Container -->
+                <div 
+                    id="testimonials-container"
+                    class="flex gap-6 overflow-x-auto scrollbar-hide pb-4 px-12"
+                    style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;"
+                >
+                    <template x-for="testimonial in testimonials" :key="testimonial.id">
+                        <div class="flex-none w-80 glass-effect rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2" style="scroll-snap-align: start;">
+                            <!-- Header with Avatar and Rating -->
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-lime-500 rounded-full flex items-center justify-center text-black font-bold text-xl mr-4 shadow-lg">
+                                        <span x-text="testimonial.name.charAt(0)"></span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white" x-text="testimonial.name"></h4>
+                                        <p class="text-green-400" x-text="testimonial.location"></p>
+                                        <div class="flex text-yellow-400 text-sm">
+                                            <template x-for="i in testimonial.rating">
+                                                <span class="text-lg">⭐</span>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Verified Badge -->
+                                <div class="text-green-400 text-sm" x-show="testimonial.verified">
+                                    <i class="fas fa-check-circle mr-2"></i>
+                                    <span>Verified Result</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Testimonial Content -->
+                            <p class="text-gray-300 italic" x-text="testimonial.result"></p>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Scroll Indicator Dots -->
+                <div class="flex justify-center mt-8 space-x-2">
+                    <template x-for="(testimonial, index) in testimonials.slice(0, 6)" :key="index">
+                        <button 
+                            class="w-3 h-3 rounded-full transition-colors duration-200"
+                            :class="index === 0 ? 'bg-green-500' : 'bg-gray-500 hover:bg-green-300'"
+                            @click="document.getElementById('testimonials-container').scrollTo({left: index * 320, behavior: 'smooth'})"
+                        ></button>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-16 px-4 bg-gradient-to-t from-gray-900 to-black">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                Your Personalized Clear Skin Solution is Just One Click Away
+            </h2>
+            <p class="text-xl text-gray-300 mb-8">
+                Based on YOUR assessment results, this plan is specifically designed for YOU. 
+                Don't wait – start your transformation today!
+            </p>
+            
+            <button 
+                @click="initiatePayment()" 
+                :disabled="!assessmentId || assessmentId.length < 10"
+                :class="assessmentId && assessmentId.length >= 10 ? 'pulse-green btn-grad text-black' : 'bg-gray-600 cursor-not-allowed text-gray-400'"
+                class="text-2xl font-black py-6 px-16 rounded-full shadow-2xl transform transition-all duration-300 hover:scale-105 mb-6"
+            >
+                <span x-show="assessmentId && assessmentId.length >= 10">
+                    CLAIM MY CLEAR SKIN PLAN NOW
+                </span>
+                <span x-show="!assessmentId || assessmentId.length < 10">
+                    ENTER ASSESSMENT ID ABOVE
+                </span>
+            </button>
+            
+            <div class="text-gray-400 text-sm space-y-2">
+                <p>✅ Customized Based on Your Assessment</p>
+                <p>✅ 30-Day Money Back Guarantee</p>
+                <p>✅ Instant Digital Download</p>
+                <p>✅ Nigerian-Friendly Payment Options</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function salesPageApp() {
+            return {
+                pricing: {
+                    originalPrice: 35000,
+                    salePrice: 19500,
+                    currency: 'NGN',
+                    features: [
+                        'Personalized 90-Day Clear Skin Protocol (Based on YOUR Assessment)',
+                        'Custom Nigerian Herbal Remedies Guide', 
+                        'Tailored Skincare Routine for Your Acne Type',
+                        'Personalized Diet Plan for Clearer Skin',
+                        'Assessment-Based Progress Tracking System',
+                        'Priority WhatsApp Support Group Access',
+                        'Monthly Check-ins with Skincare Coach'
+                    ]
+                },
+                testimonials: [],
+                countdown: '',
+                flutterwaveConfig: null,
+                assessmentId: '',
+                customerEmail: '',
+                customerName: '',
+                customerPhone: '',
+                showTooltip: false,
+                paymentError: null,
+
+                async init() {
+                    // Ensure WebhookManager is available and initialized
+                    if (!window.WebhookManager) {
+                        // Load WebhookManager if not available
+                        await new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = '../js/webhook-manager.js';
+                            script.onload = () => {
+                                if (window.WebhookManager) {
+                                    resolve();
+                                } else {
+                                    reject(new Error('Failed to load WebhookManager'));
+                                }
+                            };
+                            script.onerror = () => reject(new Error('Failed to load WebhookManager script'));
+                            document.head.appendChild(script);
+                        });
+                    }
+                    
+                    // Initialize WebhookManager if needed
+                    if (window.WebhookManager && !window.WebhookManager.config.loaded) {
+                        try {
+                            await window.WebhookManager.initialize();
+                        } catch (error) {
+                            console.error('Failed to initialize WebhookManager:', error);
+                        }
+                    }
+                    
+                    // Load data using WebhookManager
+                    await this.loadData();
+                    this.startCountdown();
+                    this.checkUrlParams();
+                },
+
+                checkUrlParams() {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const assessmentFromUrl = urlParams.get('assessment_id') || urlParams.get('aid');
+                    if (assessmentFromUrl) {
+                        this.assessmentId = assessmentFromUrl;
+                    }
+                },
+
+                validateAssessmentId() {
+                    return this.assessmentId && this.assessmentId.length >= 10 && /^[A-Z0-9-]+$/i.test(this.assessmentId);
+                },
+
+                async loadData() {
+                    try {
+                        // Check if ConfigManager is available
+                        if (!window.ConfigManager) {
+                            console.error('❌ ConfigManager is not available');
+                            return;
+                        }
+                        
+                        console.log('🔍 ConfigManager is available, loading data...');
+                        
+                        // Load pricing from config
+                        const pricingData = window.ConfigManager.getPricing('acne-treatment-plan');
+                        console.log('🔍 Pricing data from config:', pricingData);
+                        if (pricingData) {
+                            this.pricing = { ...this.pricing, ...pricingData };
+                            console.log('✅ Pricing loaded from config successfully:', this.pricing);
+                        } else {
+                            console.warn('⚠️ No pricing data found for acne-treatment-plan');
+                        }
+
+                        // Load testimonials from config
+                        const testimonialsData = window.ConfigManager.getTestimonials('acne');
+                        if (testimonialsData && testimonialsData.length > 0) {
+                            this.testimonials = testimonialsData;
+                            console.log('✅ Testimonials loaded from config successfully');
+                        }
+
+                        // Load Flutterwave config from config
+                        const flutterwaveConfig = window.ConfigManager.getPaymentConfig();
+                        if (flutterwaveConfig && flutterwaveConfig.publicKey) {
+                            this.flutterwaveConfig = {
+                                publicKey: flutterwaveConfig.publicKey,
+                                secretKey: flutterwaveConfig.secretKey
+                            };
+                            console.log('✅ Flutterwave config loaded from config successfully');
+                        } else {
+                            console.warn('⚠️ Failed to load Flutterwave config from config');
+                            this.flutterwaveConfig = { 
+                                publicKey: 'FLWPUBK_TEST-SAMPLE-KEY',
+                                secretKey: 'FLWSECK_TEST-SAMPLE-KEY'
+                            };
+                        }
+                    } catch (error) {
+                        console.error('❌ Failed to load data:', error);
+                        // Set fallback data
+                        this.testimonials = [
+                            {
+                                id: "error_fallback_001",
+                                name: "Kemi A.",
+                                location: "Lagos, Nigeria",
+                                rating: 5,
+                                result: "My acne completely cleared in 8 weeks! I haven't had a breakout since and my confidence is through the roof.",
+                                verified: true,
+                                category: "acne",
+                                date: "2024-01-15"
+                            },
+                            {
+                                id: "error_fallback_002",
+                                name: "Chioma O.",
+                                location: "Abuja, Nigeria",
+                                rating: 5,
+                                result: "No more painful cystic acne! My skin is smooth and glowing. Best investment I ever made.",
+                                verified: true,
+                                category: "acne",
+                                date: "2024-02-03"
+                            }
+                        ];
+                        this.flutterwaveConfig = { 
+                            publicKey: 'FLWPUBK_TEST-SAMPLE-KEY',
+                            secretKey: 'FLWSECK_TEST-SAMPLE-KEY'
+                        };
+                    }
+                },
+
+                startCountdown() {
+                    const endTime = Date.now() + (2 * 60 * 60 * 1000);
+                    const updateCountdown = () => {
+                        const now = Date.now();
+                        const timeLeft = Math.max(0, endTime - now);
+                        if (timeLeft === 0) {
+                            this.countdown = 'EXPIRED';
+                            return;
+                        }
+                        const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        this.countdown = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    };
+                    updateCountdown();
+                    setInterval(updateCountdown, 1000);
+                },
+
+                async initiatePayment() {
+                    try {
+                        // Validate assessment ID first
+                        if (!this.validateAssessmentId()) {
+                            alert('Please enter a valid Assessment ID to proceed.');
+                            return;
+                        }
+
+                        // Collect customer information
+                        const customerInfo = await this.collectCustomerInfo();
+                        if (!customerInfo) return;
+
+                        this.customerEmail = customerInfo.email;
+                        this.customerName = customerInfo.name;
+                        this.customerPhone = customerInfo.phone;
+
+                        // Track payment initiation
+                        if (window.WebhookManager) {
+                            await window.WebhookManager.trackConversion('payment_initiated', { 
+                                product: 'acne-90-day-plan',
+                                amount: this.pricing.salePrice,
+                                assessmentId: this.assessmentId
+                            });
+                        }
+
+                        if (!this.flutterwaveConfig) {
+                            throw new Error('Payment system not available');
+                        }
+
+                        // Initialize Flutterwave checkout
+                        FlutterwaveCheckout({
+                            public_key: this.flutterwaveConfig.publicKey,
+                            tx_ref: `acne-plan-${this.assessmentId}-${Date.now()}`,
+                            amount: this.pricing.salePrice,
+                            currency: 'NGN',
+                            country: 'NG',
+                            payment_options: 'card, banktransfer, ussd',
+                            customer: {
+                                email: this.customerEmail,
+                                phone_number: this.customerPhone,
+                                name: this.customerName,
+                            },
+                            callback: (response) => {
+                                this.handlePaymentCallback(response);
+                            },
+                            customizations: {
+                                title: '90-Day Clear Skin Plan',
+                                description: `Custom acne treatment plan for Assessment ID: ${this.assessmentId}`,
+                                logo: 'https://ojg.ng/logo.png',
+                            },
+                            meta: {
+                                assessment_id: this.assessmentId,
+                                product_type: 'acne-90-day-clear-skin-plan',
+                                personalized: true
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Payment initiation failed:', error);
+                        alert('Payment system temporarily unavailable. Please try again later.');
+                    }
+                },
+
+                async collectCustomerInfo() {
+                    return new Promise((resolve) => {
+                        const modal = document.createElement('div');
+                        modal.className = 'fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4';
+                        modal.innerHTML = `
+                            <div class="glass-effect rounded-lg p-6 max-w-md w-full">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Complete Your Order</h3>
+                                <form id="customerForm" class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                        <input 
+                                            type="text" 
+                                            id="custName" 
+                                            required 
+                                            class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                                            placeholder="Your full name"
+                                        >
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                        <input 
+                                            type="email" 
+                                            id="custEmail" 
+                                            required 
+                                            class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                                            placeholder="your@email.com"
+                                        >
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                        <input 
+                                            type="tel" 
+                                            id="custPhone" 
+                                            required 
+                                            class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-2 focus:ring-green-400/50"
+                                            placeholder="08012345678"
+                                        >
+                                    </div>
+                                    <div class="flex space-x-2 pt-4">
+                                        <button 
+                                            type="submit" 
+                                            class="flex-1 btn-grad text-black py-3 px-4 rounded-lg font-semibold transition-all duration-200"
+                                        >
+                                            Continue to Payment
+                                        </button>
+                                        <button 
+                                            type="button" 
+                                            id="cancelBtn" 
+                                            class="px-4 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        `;
+                        
+                        document.body.appendChild(modal);
+                        
+                        const form = modal.querySelector('#customerForm');
+                        const cancelBtn = modal.querySelector('#cancelBtn');
+                        
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            const name = modal.querySelector('#custName').value.trim();
+                            const email = modal.querySelector('#custEmail').value.trim();
+                            const phone = modal.querySelector('#custPhone').value.trim();
+                            
+                            if (name && email && phone) {
+                                document.body.removeChild(modal);
+                                resolve({ name, email, phone });
+                            }
+                        });
+                        
+                        cancelBtn.addEventListener('click', () => {
+                            document.body.removeChild(modal);
+                            resolve(null);
+                        });
+                    });
+                },
+
+                async handlePaymentCallback(response) {
+                    if (response.status === 'successful') {
+                        // Prepare comprehensive order data
+                        const orderData = {
+                            transaction_id: response.transaction_id,
+                            tx_ref: response.tx_ref,
+                            amount: this.pricing.salePrice,
+                            currency: 'NGN',
+                            assessment_id: this.assessmentId,
+                            customer: {
+                                name: this.customerName,
+                                email: this.customerEmail,
+                                phone: this.customerPhone
+                            },
+                            product: {
+                                type: 'acne-90-day-plan',
+                                name: '90-Day Clear Skin Plan',
+                                personalized: true
+                            },
+                            timestamp: new Date().toISOString(),
+                            payment_status: 'completed'
+                        };
+
+                        try {
+                            // Submit order data to webhook
+                            if (window.WebhookManager) {
+                                await window.WebhookManager.submitForm('salesLeads', JSON.stringify(orderData), {
+                                    headers: { 'Content-Type': 'application/json' }
+                                });
+                                await window.WebhookManager.trackConversion('payment_completed', {
+                                    transaction_id: response.transaction_id,
+                                    amount: this.pricing.salePrice,
+                                    assessmentId: this.assessmentId
+                                });
+                            }
+                            
+                            // Redirect to success page
+                            const successUrl = `./thank-you.html?tx_ref=${response.tx_ref}&assessment_id=${this.assessmentId}&email=${encodeURIComponent(this.customerEmail)}`;
+                            window.location.href = successUrl;
+                        } catch (error) {
+                            console.error('Failed to submit order data:', error);
+                            // Still redirect to success page
+                            window.location.href = `./thank-you.html?tx_ref=${response.tx_ref}&assessment_id=${this.assessmentId}`;
+                        }
+                    } else {
+                        alert('Payment was not successful. Please try again.');
+                    }
+                },
+
+                showAssessmentPrompt() {
+                    const assessmentInput = document.querySelector('input[x-model="assessmentId"]');
+                    if (assessmentInput) {
+                        assessmentInput.focus();
+                        assessmentInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        
+                        // Add a temporary highlight effect
+                        assessmentInput.classList.add('ring-4', 'ring-green-500', 'ring-opacity-75');
+                        setTimeout(() => {
+                            assessmentInput.classList.remove('ring-4', 'ring-green-500', 'ring-opacity-75');
+                        }, 2000);
+                    }
+                    
+                    alert('📋 Please enter your Assessment ID above to get your personalized plan!');
+                }
+            };
+        }
+    </script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</body>
+</html>
