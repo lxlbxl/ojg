@@ -1,0 +1,115 @@
+<!-- GDPR & NDPR Consent Checkbox Component
+     Include this in your forms to ensure compliance -->
+
+<div class="consent-checkbox-container mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+    <!-- Privacy Notice -->
+    <p class="text-sm text-gray-600 mb-4">
+        <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+        We respect your privacy and are committed to protecting your personal data in accordance with
+        GDPR (General Data Protection Regulation) and NDPR (Nigeria Data Protection Regulation).
+    </p>
+
+    <!-- Required Consent -->
+    <div class="space-y-3">
+        <label class="flex items-start space-x-3 cursor-pointer">
+            <input type="checkbox" id="consent-privacy" name="consent_privacy" required
+                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+            <span class="text-sm text-gray-700">
+                <strong class="text-red-600">*</strong>
+                I consent to the processing of my personal data for the purpose of receiving personalized health
+                recommendations.
+                I have read and agree to the <a href="/privacy-policy.html" target="_blank"
+                    class="text-green-600 hover:underline">Privacy Policy</a>.
+            </span>
+        </label>
+
+        <label class="flex items-start space-x-3 cursor-pointer">
+            <input type="checkbox" id="consent-health" name="consent_health" required
+                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+            <span class="text-sm text-gray-700">
+                <strong class="text-red-600">*</strong>
+                I consent to the processing of my sensitive health data (symptoms, medical history) for the purpose of
+                generating
+                personalized health plans. This data will be kept confidential and used only for providing my
+                recommendations.
+            </span>
+        </label>
+
+        <!-- Optional Marketing Consent -->
+        <label class="flex items-start space-x-3 cursor-pointer">
+            <input type="checkbox" id="consent-marketing" name="consent_marketing"
+                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+            <span class="text-sm text-gray-700">
+                <strong class="text-green-600">(Optional)</strong>
+                I would like to receive health tips, wellness advice, and special offers via email.
+                I can unsubscribe at any time.
+            </span>
+        </label>
+    </div>
+
+    <!-- Rights Notice -->
+    <div class="mt-4 pt-4 border-t border-gray-200">
+        <p class="text-xs text-gray-500">
+            <strong>Your Rights:</strong> You have the right to access, correct, or delete your personal data.
+            You may withdraw your consent at any time by contacting our Data Protection Officer at
+            <a href="mailto:dpo@ojgherbal.com" class="text-green-600 hover:underline">dpo@ojgherbal.com</a>
+        </p>
+    </div>
+</div>
+
+<script>
+    // Validation for consent checkboxes
+    (function () {
+        'use strict';
+
+        function validateConsent(form) {
+            const privacyConsent = form.querySelector('#consent-privacy');
+            const healthConsent = form.querySelector('#consent-health');
+
+            if (privacyConsent && !privacyConsent.checked) {
+                alert('You must consent to privacy processing to continue.');
+                return false;
+            }
+
+            if (healthConsent && !healthConsent.checked) {
+                alert('You must consent to health data processing to continue.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Attach to all forms when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('form').forEach(function (form) {
+                    form.addEventListener('submit', function (e) {
+                        if (!validateConsent(form)) {
+                            e.preventDefault();
+                        }
+                    });
+                });
+            });
+        } else {
+            document.querySelectorAll('form').forEach(function (form) {
+                form.addEventListener('submit', function (e) {
+                    if (!validateConsent(form)) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+    })();
+</script>
+
+<style>
+    .consent-checkbox-container input[type="checkbox"]:checked+span {
+        color: #059669;
+    }
+
+    .consent-checkbox-container label:hover {
+        background-color: #f0fdf4;
+        border-radius: 0.375rem;
+        padding: 0.25rem;
+    }
+</style>

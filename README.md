@@ -84,6 +84,30 @@ define('DB_PASS', 'your_pass');
 
 Email: pcos@ojg.ng
 
+## Compliance (GDPR & NDPR)
+
+This system includes comprehensive data protection compliance features:
+
+### Features
+- ✅ Privacy Policy page (`/privacy-policy.html`)
+- ✅ Cookie consent banner with granular options
+- ✅ Consent recording API for audit trail
+- ✅ GDPR/NDPR admin dashboard
+- ✅ Data subject rights (access, export, delete)
+- ✅ Consent checkboxes for forms
+
+### Setup
+1. Run the database schema: `backend/database/gdpr_schema.sql`
+2. Include cookie consent on all pages: `<script src="/js/cookie-consent.js"></script>`
+3. Add consent checkboxes to forms (see `backend/components/consent-checkbox.html`)
+4. Configure DPO email in admin dashboard
+
+📖 **Full documentation:** See `COMPLIANCE_GUIDE.md`
+
+### Admin Access
+- GDPR/NDPR Dashboard: `/backend/admin/gdpr-ndpr.php`
+- Features: User data export, deletion, consent records, compliance reports
+
 ## License
 
 © 2025 OJG Herbal. All rights reserved.

@@ -101,6 +101,8 @@
     <!-- Webhook Manager -->
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/tracking.js"></script>
+    <!-- Cookie Consent Banner -->
+    <script src="/js/cookie-consent.js"></script>
 </head>
 
 <body class="antialiased relative min-h-screen flex flex-col">
@@ -294,6 +296,54 @@
                                         </svg>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- GDPR/NDPR Consent Checkboxes -->
+                        <div class="consent-checkbox-container mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <p class="text-sm text-gray-600 mb-4">
+                                <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                                We respect your privacy and are committed to protecting your personal data in accordance
+                                with
+                                GDPR and NDPR.
+                            </p>
+                            <div class="space-y-3">
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-privacy-pcos" name="consent_privacy" required
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-red-600">*</strong>
+                                        I consent to the processing of my personal data for receiving personalized
+                                        health
+                                        recommendations. I agree to the <a href="/privacy-policy.html" target="_blank"
+                                            class="text-green-600 hover:underline">Privacy Policy</a>.
+                                    </span>
+                                </label>
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-health-pcos" name="consent_health" required
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-red-600">*</strong>
+                                        I consent to the processing of my sensitive health data for generating
+                                        personalized health plans.
+                                    </span>
+                                </label>
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-marketing-pcos" name="consent_marketing"
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-green-600">(Optional)</strong>
+                                        I would like to receive health tips and special offers. I can unsubscribe
+                                        anytime.
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-500">
+                                    <strong>Your Rights:</strong> You can access, correct, or delete your data.
+                                    Contact <a href="mailto:dpo@ojgherbal.com"
+                                        class="text-green-600 hover:underline">dpo@ojgherbal.com</a>
+                                </p>
                             </div>
                         </div>
 
