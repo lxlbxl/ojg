@@ -186,6 +186,44 @@
                     </select>
                 </div>
 
+                <!-- GDPR/NDPR Consent -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <p class="text-sm text-gray-600 mb-4">
+                        🔒 We respect your privacy and are committed to protecting your personal data in accordance with GDPR and NDPR.
+                    </p>
+                    <div class="space-y-3">
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-privacy-acne" required
+                                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <span class="text-sm text-gray-700">
+                                <strong class="text-red-600">*</strong>
+                                I consent to the processing of my personal data for receiving personalized health recommendations. I agree to the <a href="/privacy-policy.html" target="_blank" class="text-green-600 hover:underline">Privacy Policy</a>.
+                            </span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-health-acne" required
+                                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <span class="text-sm text-gray-700">
+                                <strong class="text-red-600">*</strong>
+                                I consent to the processing of my sensitive health data for generating personalized health plans.
+                            </span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-marketing-acne"
+                                class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            <span class="text-sm text-gray-700">
+                                <strong class="text-green-600">(Optional)</strong>
+                                I agree to receive skin health tips and wellness updates via email or WhatsApp.
+                            </span>
+                        </label>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <p class="text-xs text-gray-500">
+                            <strong>Your Rights:</strong> You can access, correct, or delete your data. Contact <a href="mailto:dpo@ojg.ng" class="text-green-600 hover:underline">dpo@ojg.ng</a>
+                        </p>
+                    </div>
+                </div>
+
                 <button type="submit" :disabled="isSubmittingContact"
                     class="w-full bg-forest-900 text-sand text-lg py-5 rounded-full font-bold hover:bg-forest-800 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-70">
                     <span x-show="!isSubmittingContact" class="flex items-center gap-3">Get My Analysis <i

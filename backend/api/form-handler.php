@@ -63,8 +63,12 @@ if (!$data) {
     exit();
 }
 
+// Assessment, tracking, and nurture submissions come from unauthenticated public forms
+// and have no session — CSRF does not apply to them.
+$publicFormTypes = ['assessment', 'tracking', 'nurture_queue'];
+$formTypeRaw = $data['form_type'] ?? 'unknown';
 $clientToken = $data['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-if (!validateCsrfToken($clientToken)) {
+if (!in_array($formTypeRaw, $publicFormTypes) && !validateCsrfToken($clientToken)) {
     http_response_code(403);
     echo json_encode(['error' => 'Invalid CSRF token']);
     exit();

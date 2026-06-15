@@ -154,8 +154,8 @@
                 </h1>
 
                 <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed font-light">
-                    Forget generic diets and static PDFs. You just unlocked a <strong>living, smart-personalized
-                        dashboard</strong> built for your <strong x-show="vitalityType" x-text="vitalityType"></strong><strong x-show="!vitalityType">Vitality</strong> type — adapting to your cycle and your progress every single day.
+                    Forget generic supplements and static PDFs. You just unlocked a <strong>living, smart-personalized
+                        dashboard</strong> built for your <strong x-show="vitalityType" x-text="vitalityType"></strong><strong x-show="!vitalityType">Vitality</strong> type — adapting to your vitality profile and your progress every single day.
                 </p>
 
                 <!-- Order Summary -->
@@ -259,20 +259,20 @@
                 <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8 mt-16 text-left">
                     <div class="space-y-3">
                         <div class="text-terracotta-600 text-2xl">✨</div>
-                        <h4 class="font-serif font-bold text-forest-900 text-lg">Smart-Personalized Daily Meals</h4>
+                        <h4 class="font-serif font-bold text-forest-900 text-lg">Testosterone-Support Daily Meals</h4>
                         <p class="text-sm text-gray-600 font-light leading-relaxed">Wake up to a fresh meal plan every
-                            morning — Jollof, Egusi, Moi Moi — all hormone-balancing and made for YOUR Vitality type.</p>
+                            morning — Jollof, Egusi, Moi Moi — all vitality-optimizing and made for YOUR type.</p>
                     </div>
                     <div class="space-y-3">
                         <div class="text-terracotta-600 text-2xl">🍵</div>
                         <h4 class="font-serif font-bold text-forest-900 text-lg">Herbal Tea Rituals & Tracking</h4>
-                        <p class="text-sm text-gray-600 font-light leading-relaxed">Morning and evening tea protocols
-                            with reminders. Your dashboard tracks your consistency and adapts with you.</p>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed">Morning and evening adaptogenic tea
+                            protocols with reminders. Your dashboard tracks consistency and adapts with you.</p>
                     </div>
                     <div class="space-y-3">
                         <div class="text-terracotta-600 text-2xl">📈</div>
-                        <h4 class="font-serif font-bold text-forest-900 text-lg">Body Data & Progress Tracking</h4>
-                        <p class="text-sm text-gray-600 font-light leading-relaxed">Log weight, cycles, symptoms — watch
+                        <h4 class="font-serif font-bold text-forest-900 text-lg">Vitality Data & Progress Tracking</h4>
+                        <p class="text-sm text-gray-600 font-light leading-relaxed">Log energy, sleep, strength — watch
                             your transformation unfold week by week inside your private portal.</p>
                     </div>
                 </div>
@@ -443,14 +443,14 @@
                             <li class="flex items-center group">
                                 <span
                                     class="w-6 h-6 rounded-full bg-forest-200 text-forest-800 flex items-center justify-center mr-3 text-xs group-hover:bg-forest-900 group-hover:text-sand transition-colors">✓</span>
-                                <span class="text-gray-700 font-light"><strong class="font-medium">Phase-Synced
-                                        Movement</strong>: Daily walking protocols that adapt to your cycle</span>
+                                <span class="text-gray-700 font-light"><strong class="font-medium">Strength-Synced
+                                        Movement</strong>: Daily protocols that optimise hormone production and recovery</span>
                             </li>
                             <li class="flex items-center group">
                                 <span
                                     class="w-6 h-6 rounded-full bg-forest-200 text-forest-800 flex items-center justify-center mr-3 text-xs group-hover:bg-forest-900 group-hover:text-sand transition-colors">✓</span>
-                                <span class="text-gray-700 font-light"><strong class="font-medium">Body Data
-                                        Tracking</strong>: Log weight, cycles, symptoms — watch progress in
+                                <span class="text-gray-700 font-light"><strong class="font-medium">Vitality Data
+                                        Tracking</strong>: Log energy, sleep, strength — watch progress in
                                     real-time</span>
                             </li>
                         </ul>
@@ -592,7 +592,7 @@
 
                     // Load vitality type and week 1 focus
                     const rawType = assessmentData.mensType?.primary || '';
-                    const typeLabels = { insulin:'Insulin-Resistant Vitality', inflammatory:'Inflammatory Vitality', adrenal:'Adrenal Vitality', postPill:'Post-Pill Vitality' };
+                    const typeLabels = { insulin:'Insulin-Resistant Vitality', inflammatory:'Inflammatory Vitality', adrenal:'Adrenal Vitality', metabolic:'Metabolic Burnout Vitality' };
                     this.vitalityType = typeLabels[rawType] || '';
                     this.week1Focus = this.getWeek1FocusMens(rawType);
 
@@ -616,10 +616,10 @@
                             { title: 'Do not skip breakfast — eat within 60 minutes of waking', why: 'Fasting amplifies cortisol in adrenal-dominant types and worsens the stress hormone loop.' },
                             { title: 'Start ashwagandha (500mg with dinner)', why: 'The most evidence-backed adaptogen for cortisol reduction — effects begin within 1–2 weeks.' }
                         ],
-                        postPill: [
-                            { title: 'Add zinc (30mg) and B6 (50mg) daily with food', why: 'Oral contraceptives deplete both — replenishing is the foundation of post-pill hormone recovery.' },
-                            { title: 'Do not start any new hormonal intervention for 90 days', why: 'Your body needs a clean recalibration window — interference resets the clock.' },
-                            { title: 'Track your cycle from day one, even if irregular', why: 'The return and regularization of your cycle is the clearest marker of recovery — baseline data is essential.' }
+                        metabolic: [
+                            { title: 'Increase daily caloric intake by 300–500 kcal for the first 2 weeks', why: 'Metabolic burnout is a restriction injury — the body needs a surplus signal to reactivate dormant hormone pathways.' },
+                            { title: 'Reduce training volume by 40% and eliminate all cardio this week', why: 'Overtraining is the primary driver — a deliberate deload is the first intervention, not more effort.' },
+                            { title: 'Add zinc (30mg) and magnesium glycinate (400mg) daily with dinner', why: 'Both are severely depleted by chronic stress and overtraining — they are the direct precursors to testosterone synthesis.' }
                         ]
                     };
                     return plans[type] || [];
@@ -674,8 +674,7 @@
                             currency: 'NGN',
                             product: this.orderDetails.planName,
                             mens_type: assessmentData.mensType || localStorage.getItem('mensType') || 'General',
-                            cycle_length: assessmentData.cycleLength || 28,
-                            last_period_date: assessmentData.lastPeriodDate || null,
+                            vitality_type: assessmentData.mensType?.primary || 'insulin',
                             allergies: assessmentData.allergies || 'None'
                         };
 

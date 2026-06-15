@@ -379,11 +379,11 @@
                     <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">The
                         Scientific Approach</span>
                     <h2 class="text-3xl md:text-5xl font-serif font-bold text-forest-900 mb-6">
-                        The 2-Step Hormonal Reset
+                        The 2-Step Vitality Reset
                     </h2>
                     <p class="text-xl text-gray-500 font-light max-w-2xl mx-auto">
                         To reverse <span x-text="mensTypeInfo.name" class="font-medium"></span>, you need a holistic
-                        approach that realigns your body's natural rhythms.
+                        approach that reactivates your body's natural hormone production systems.
                     </p>
                 </div>
 
@@ -397,13 +397,14 @@
                         <h3 class="font-serif text-2xl font-bold text-forest-900 mb-3">1. Herbal Intervention</h3>
                         <p class="text-gray-600 font-light mb-4 leading-relaxed">
                             We use potent <strong>African Roots & Leaves</strong> that have been used for centuries to
-                            naturally lower androgens and restore ovulation.
+                            naturally restore testosterone levels, improve insulin sensitivity, and reduce the cortisol
+                            load suppressing your vitality.
                         </p>
                         <ul class="space-y-2 text-sm text-gray-500">
+                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Restore natural
+                                testosterone synthesis</li>
                             <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Regulate insulin
-                                sensitivity</li>
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Lower excess male
-                                hormones</li>
+                                and metabolic function</li>
                         </ul>
                     </div>
 
@@ -415,14 +416,14 @@
                             🥗</div>
                         <h3 class="font-serif text-2xl font-bold text-forest-900 mb-3">2. Nutritional Therapy</h3>
                         <p class="text-gray-600 font-light mb-4 leading-relaxed">
-                            Specific <strong>hormone-balancing meals</strong> designed to reduce inflammation instantly
-                            and keep blood sugar stable.
+                            Specific <strong>vitality-optimizing meals</strong> using Nigerian cuisine designed to nourish
+                            your endocrine system and maintain stable blood sugar and hormone levels throughout the day.
                         </p>
                         <ul class="space-y-2 text-sm text-gray-500">
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Reduce
-                                inflammation instantly</li>
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Support metabolic
-                                function</li>
+                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Reduce systemic
+                                inflammation</li>
+                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Support long-term
+                                metabolic function</li>
                         </ul>
                     </div>
                 </div>
@@ -463,10 +464,10 @@
                     <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
                         <div
                             class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
-                            🚶‍♀️</div>
+                            💪</div>
                         <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Phase-Synced Movement Protocols</h4>
-                            <p class="text-gray-500 text-sm">Cycle-aware activity plans that adapt to your body</p>
+                            <h4 class="font-bold text-forest-900 mb-1">Strength-Synced Movement Protocols</h4>
+                            <p class="text-gray-500 text-sm">Activity plans that optimise hormone production and recovery</p>
                             <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦27,000</span>
                         </div>
                     </div>
@@ -475,9 +476,8 @@
                             class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
                             📊</div>
                         <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Body Data & Progress Tracking</h4>
-                            <p class="text-gray-500 text-sm">Log weight, cycles, symptoms — watch transformation unfold
-                            </p>
+                            <h4 class="font-bold text-forest-900 mb-1">Vitality Data & Progress Tracking</h4>
+                            <p class="text-gray-500 text-sm">Log energy, sleep, strength — watch your transformation unfold</p>
                             <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦90,000</span>
                         </div>
                     </div>
@@ -598,7 +598,6 @@
                 startingPrice: 0,
                 pricingLoaded: false,
                 typeTestimonials: [],
-                valueStackItems: [],
                 funnelConfig: { empathy:{}, mechanism:{steps:[]}, costOfInaction:{points:[]} },
                 socialProof: { count:'500+', label:'men' },
                 guarantee: { label:'90-Day Money-Back Guarantee', shortLabel:'90-Day Guarantee' },
@@ -611,7 +610,6 @@
                         this.socialProof = window.CONFIG.socialProof.mens;
                         this.guarantee = window.CONFIG.guarantee;
                         this.funnelConfig = window.CONFIG.FUNNEL_CONFIG.mens;
-                        this.valueStackItems = window.CONFIG.valueStack.mens;
                     }
                     this.loadAssessmentData();
                     this.loadPricing();
@@ -623,7 +621,6 @@
                         const result = await response.json();
                         if (result.success && result.data.plans.mens) {
                             const plans = result.data.plans.mens;
-                            // Use the lowest plan price as "Starting from" price
                             const prices = [];
                             if (plans['30-day']) prices.push(Number(plans['30-day'].price));
                             if (plans['90-day']) prices.push(Number(plans['90-day'].price));
@@ -644,30 +641,28 @@
                             this.assessmentData = JSON.parse(data);
                             this.mensTypeInfo = this.getVitalityTypeInfo(this.assessmentData.mensType.primary);
 
-                            // Load type-matched testimonials from config
                             if (window.CONFIG?.testimonials?.mens) {
                                 const pool = window.CONFIG.testimonials.mens;
                                 const type = this.assessmentData.mensType.primary;
                                 this.typeTestimonials = pool.filter(t => t.type === type);
-                                if (!this.typeTestimonials.length) this.typeTestimonials = pool.slice(0,2);
+                                if (!this.typeTestimonials.length) this.typeTestimonials = pool.slice(0, 2);
                             }
 
                             const a = this.assessmentData.answers || {};
                             this.profileInsights = this.buildProfileInsights(a);
                             this.profileSummary = this.buildProfileSummary(a, this.assessmentData.mensType.primary, this.assessmentData.contactInfo?.name?.split(' ')[0] || '');
                             this.personalizedEmpathy = this.buildPersonalizedEmpathy(a, this.assessmentData.contactInfo?.name?.split(' ')[0] || '');
-                            // Save Vitality type to localStorage for member area pre-fill
+
                             const mensTypeMap = {
-                                'insulin': 'Insulin Resistant',
-                                'inflammatory': 'Inflammatory',
-                                'adrenal': 'Adrenal',
-                                'postPill': 'Post-Pill'
+                                'insulin': 'Insulin-Resistant Vitality',
+                                'inflammatory': 'Inflammatory Vitality',
+                                'adrenal': 'Adrenal Vitality',
+                                'metabolic': 'Metabolic Burnout Vitality'
                             };
-                            const mensTypeForMember = mensTypeMap[this.assessmentData.mensType.primary] || 'Insulin Resistant';
+                            const mensTypeForMember = mensTypeMap[this.assessmentData.mensType.primary] || 'Insulin-Resistant Vitality';
                             localStorage.setItem('ojg_mens_type', mensTypeForMember);
                             localStorage.setItem('ojg_mens_type_confidence', this.assessmentData.mensType.confidence || 'medium');
 
-                            // Track results view
                             if (window.WebhookManager) {
                                 window.WebhookManager.trackConversion('results_page_view', {
                                     page: 'mens-funnel-results',
@@ -676,22 +671,27 @@
                                 });
                             }
 
-                            // Fire Meta Pixel Lead event — assessment completed with Vitality type
                             if (window.OJGTracking) {
                                 window.OJGTracking.trackLead('Vitality', this.assessmentData.mensType.primary);
                                 window.OJGTracking.trackCompleteRegistration('Vitality');
                             }
-                                  getVitalityTypeInfo(type) {
+                        }
+                        this.isLoading = false;
+                    }, 1500);
+                },
+
+                getVitalityTypeInfo(type) {
                     const typeInfo = {
                         insulin: {
                             name: "Insulin-Resistant Vitality",
-                            description: "Your low energy and stubborn fat are primarily driven by insulin resistance, which blocks your cells from absorbing glucose for energy and causes testosterone suppression.",
+                            prevalenceStat: "the most common metabolic vitality driver in men",
+                            description: "Your low energy and stubborn belly fat are primarily driven by insulin resistance — blocking your cells from absorbing glucose for energy and suppressing testosterone production.",
                             symptoms: [
-                                "Stubborn belly fat / midsection weight gain",
+                                "Stubborn belly fat and midsection weight gain",
                                 "Difficulty building or maintaining muscle",
-                                "Energy crashes after meals (especially carbs)",
+                                "Energy crashes after meals, especially carbs",
                                 "Frequent brain fog and lack of focus",
-                                "Cravings for sugar and carbohydrates"
+                                "Strong cravings for sugar and carbohydrates"
                             ],
                             causes: [
                                 "High insulin levels suppressing testosterone production",
@@ -707,23 +707,24 @@
                                 },
                                 {
                                     title: "Metabolic Optimizer Herb Blend",
-                                    teaser: "A morning and evening herbal ritual using a specific African root that clinical studies show reduces fasting insulin by up to 30%.",
+                                    teaser: "A morning and evening herbal ritual using a specific African root that reduces fasting insulin and supports natural testosterone synthesis.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
                                     title: "Androgen-Boost Movement Plan",
-                                    teaser: "A cycle-synced activity plan designed to force your muscles to absorb glucose without insulin — the key to breaking the resistance cycle.",
+                                    teaser: "A strength-focused activity plan designed to force your muscles to absorb glucose without insulin — the key to breaking the resistance cycle.",
                                     locked: "Full system inside portal"
                                 }
                             ]
                         },
                         inflammatory: {
                             name: "Inflammatory Vitality",
+                            prevalenceStat: "the second most common vitality driver in Nigerian men",
                             description: "Your vitality decline is driven by chronic inflammation — often starting in the gut — which suppresses luteinizing hormone and impairs testosterone synthesis.",
                             symptoms: [
                                 "Persistent joint pain or muscle stiffness",
                                 "Chronic fatigue that sleep doesn't fix",
-                                "Digestive issues (bloating, acid reflux)",
+                                "Digestive issues (bloating, heaviness after meals)",
                                 "Slow recovery after physical activity",
                                 "Brain fog and difficulty concentrating"
                             ],
@@ -741,7 +742,7 @@
                                 },
                                 {
                                     title: "Gut-Repair Herbal Blend",
-                                    teaser: "A powerful combination of African herbs that repair your gut lining — the hidden driver behind 80% of inflammatory Vitality cases.",
+                                    teaser: "A powerful combination of African herbs that repair your gut lining — the hidden driver behind 80% of inflammatory Vitality cases in men.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
@@ -753,16 +754,17 @@
                         },
                         adrenal: {
                             name: "Adrenal Vitality",
-                            description: "Your low drive and exhaustion are triggered by chronic stress and elevated cortisol, which directly down-regulates testosterone production.",
+                            prevalenceStat: "the leading driver of low testosterone in high-performing men",
+                            description: "Your low drive and exhaustion are triggered by chronic stress and elevated cortisol — which directly down-regulates testosterone production and depletes your energy reserves.",
                             symptoms: [
                                 "Chronic stress, anxiety, or feeling wired-but-tired",
                                 "Severe insomnia or waking up exhausted",
-                                "Afternoon energy crashes (around 2-4 PM)",
-                                "Loss of drive and motivation",
-                                "Difficulty handling stress and pressure"
+                                "Afternoon energy crashes (around 2–4 PM)",
+                                "Loss of drive, motivation, and competitive edge",
+                                "Difficulty handling pressure or recovering from stress"
                             ],
                             causes: [
-                                "Chronic elevation of stress hormones suppressing testosterone",
+                                "Chronic elevation of cortisol suppressing testosterone",
                                 "Adrenal gland dysfunction (HPA-axis burnout)",
                                 "Poor sleep quality and lack of deep recovery",
                                 "Overwork and prolonged psychological stress"
@@ -785,21 +787,22 @@
                                 }
                             ]
                         },
-                        postPill: {
+                        metabolic: {
                             name: "Metabolic Burnout Vitality",
-                            description: "Your vitality decline is driven by metabolic burnout — the aftermath of extreme dieting, stimulant overuse, or overtraining that has shut down your body's energy production.",
+                            prevalenceStat: "common in men who have pushed their bodies to the limit",
+                            description: "Your vitality decline is driven by metabolic burnout — the aftermath of extreme dieting, overtraining, or prolonged stress that has shut down your body's hormone and energy production systems.",
                             symptoms: [
-                                "Inability to shift body fat despite extreme restriction",
+                                "Inability to shift body fat despite restriction or exercise",
                                 "Loss of physical strength and stamina",
-                                "Constant feeling of cold or low body temp",
-                                "Low libido and morning erection frequency",
-                                "Muscle wastage and slow recovery"
+                                "Constant feeling of being cold or low body temperature",
+                                "Low libido and reduced morning erection frequency",
+                                "Muscle wastage and extremely slow recovery"
                             ],
                             causes: [
-                                "Severe metabolic adaptation from caloric restriction",
+                                "Severe metabolic adaptation from caloric restriction or overtraining",
                                 "Thyroid hormone down-regulation (low T3)",
-                                "Overtraining syndrome depleting nervous system",
-                                "Nutrient depletion from stimulants or poor diet"
+                                "Overtraining syndrome depleting the nervous system",
+                                "Nutrient depletion from stimulants, poor diet, or chronic stress"
                             ],
                             protocols: [
                                 {
@@ -809,12 +812,12 @@
                                 },
                                 {
                                     title: "Endocrine Support Herbal Blend",
-                                    teaser: "An African herbal protocol that clears synthetic hormone residue from your liver — the hidden reason your vitality hasn't returned.",
+                                    teaser: "An African herbal protocol targeting the thyroid and adrenal pathways — the hidden reason your vitality hasn't returned despite effort.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
                                     title: "Restorative Recovery System",
-                                    teaser: "A precise supplementation protocol targeting the 5 critical nutrients that stress depleted from your body.",
+                                    teaser: "A precise supplementation protocol targeting the 5 critical nutrients that chronic stress and overwork depleted from your body.",
                                     locked: "Full system inside portal"
                                 }
                             ]
@@ -825,45 +828,43 @@
 
                 buildProfileInsights(a) {
                     const map = {
-                        cycle:    { q:0,  label:'Menstrual Cycle',        icon:'🌙', values:{ regular:'Regular cycle — hormonal patterns are present but not severe', irregular:'Irregular cycle — a clear hormonal imbalance signal', absent:'Absent periods (3+ months) — significant hormonal disruption', heavy:'Heavy / prolonged bleeding — androgen and prostaglandin imbalance' }},
-                        hairGrowth:{ q:1, label:'Hair Growth Pattern',    icon:'💈', values:{ none:'No unwanted hair growth — androgens not a primary driver', mild:'Mild facial hair — mild androgen elevation', moderate:'Moderate body/face hair — moderate excess androgen signalling', severe:'Severe hair growth — significant androgen excess' }},
-                        weight:   { q:3,  label:'Weight Pattern',         icon:'⚖️', values:{ stable:'Stable weight — metabolic function is holding', gradual_gain:'Gradual weight gain — slow metabolic shift underway', rapid_gain:'Rapid weight gain — insulin resistance developing quickly', difficulty_losing:'Extreme difficulty losing weight — insulin resistance is entrenched' }},
-                        weightLoc:{ q:4,  label:'Where Weight Accumulates',icon:'📍', values:{ even:'Evenly distributed', belly:'Belly/waist — the insulin-resistance pattern', hips_thighs:'Hips and thighs — oestrogen-dominant pattern', upper_body:'Upper body — cortisol and androgen-driven' }},
-                        energy:   { q:6,  label:'Energy Levels',          icon:'⚡', values:{ high:'Good energy — metabolic function is relatively preserved', moderate:'Moderate fatigue — insulin or adrenal beginning to affect you', low:'Chronically low energy — cellular energy production is impaired', crashes:'Post-meal energy crashes — blood sugar regulation failure' }},
-                        stress:   { q:7,  label:'Stress Response',        icon:'🧠', values:{ well:'Good stress resilience — cortisol not a primary driver', moderate:'Sometimes overwhelmed — cortisol contributing to symptoms', poorly:'Often stressed and anxious — cortisol is actively worsening your hormones', chronic:'Chronic burnout — HPA-axis dysregulation driving your whole pattern' }},
-                        sleep:    { q:8,  label:'Sleep Quality',          icon:'😴', values:{ good:'Good sleep — recovery is happening', occasional:'Occasional sleep issues — cortisol occasionally disrupting you', frequent:'Frequent sleep problems — a significant hormonal aggravator', severe:'Severe insomnia — disrupting every hormonal recovery cycle' }},
-                        concern:  { q:11, label:'Your Primary Goal',      icon:'🎯', values:{ fertility:'Fertility and conception — the protocol directly supports ovulation', weight:'Weight management — metabolic reset is the centrepiece', appearance:'Physical appearance — hormonal balance reverses these changes', energy:'Energy and mood — the first things to improve on this protocol' }}
+                        energy:    { q:0,  label:'Energy Level',              icon:'⚡', values:{ high:'High energy — metabolic function relatively preserved', moderate:'Afternoon energy dips — a mid-day hormonal decline pattern', low:'Chronically low energy — cellular energy production is impaired', crashes:'Post-meal energy crashes — blood sugar regulation failure' }},
+                        libido:    { q:1,  label:'Drive & Function',           icon:'🔋', values:{ strong:'Strong libido and function — hormonal markers holding', reduced:'Reduced libido — early hormonal suppression signal', low:'Very low drive — significant hormonal decline indicated', dysfunction:'Performance difficulties — circulatory and hormonal factors at play' }},
+                        muscle:    { q:2,  label:'Muscle & Strength',          icon:'💪', values:{ maintained:'Muscle maintained — anabolic hormones relatively preserved', slight_loss:'Slight muscle loss — anabolic-to-catabolic shift beginning', significant_loss:'Significant muscle loss — catabolic dominance confirmed', difficult_gain:'Extreme difficulty gaining muscle — hormone or metabolic block present' }},
+                        weight:    { q:3,  label:'Weight Pattern',             icon:'⚖️', values:{ stable:'Stable weight — metabolic function holding', gradual_gain:'Gradual weight gain — slow metabolic shift underway', rapid_gain:'Rapid weight gain — insulin resistance developing quickly', difficulty_losing:'Extreme difficulty losing weight — insulin resistance entrenched' }},
+                        weightLoc: { q:4,  label:'Where Weight Accumulates',   icon:'📍', values:{ even:'Evenly distributed', belly:'Belly/waist — the classic insulin-resistance accumulation pattern', upper_body:'Upper body — cortisol-driven fat distribution pattern', overall:'Overall heaviness — systemic metabolic slowdown' }},
+                        sleep:     { q:5,  label:'Sleep Quality',              icon:'😴', values:{ good:'Good sleep — recovery and hormonal cycling intact', occasional:'Occasional sleep issues — cortisol occasionally disrupting recovery', frequent:'Frequent sleep problems — a significant hormonal aggravator', severe:'Severe insomnia — disrupting every hormonal recovery cycle' }},
+                        stress:    { q:6,  label:'Stress Response',            icon:'🧠', values:{ well:'Good stress resilience — cortisol not a primary driver', moderate:'Sometimes overwhelmed — cortisol beginning to affect your hormones', poorly:'Often stressed — cortisol is actively suppressing testosterone', chronic:'Chronic burnout — HPA-axis dysregulation driving your whole pattern' }},
+                        goal:      { q:11, label:'Your Primary Goal',          icon:'🎯', values:{ energy:'Energy restoration — the first thing to shift on this protocol', muscle:'Muscle and strength — anabolic recovery is the centrepiece', weight:'Weight management — metabolic reset drives this', drive:'Drive and stamina — hormonal balance directly restores these' }}
                     };
                     return Object.values(map)
-                        .map(m => { const val = a[m.q]; return val ? { icon:m.icon, label:m.label, value:m.values[val]||null } : null; })
+                        .map(m => { const val = a[m.q]; return val ? { icon: m.icon, label: m.label, value: m.values[val] || null } : null; })
                         .filter(Boolean);
                 },
 
                 buildProfileSummary(a, type, name) {
-                    const cycle = { regular:'a regular but symptomatic cycle', irregular:'an irregular cycle', absent:'absent periods', heavy:'heavy, prolonged periods' }[a[0]] || 'hormonal irregularities';
-                    const energy = { high:'good energy', moderate:'moderate fatigue', low:'chronic low energy', crashes:'post-meal energy crashes' }[a[6]] || 'fluctuating energy';
-                    const concern = { fertility:'fertility', weight:'weight management', appearance:'physical appearance changes', energy:'energy and mood' }[a[11]] || 'overall vitality';
-                    const typeLabel = { insulin:'Insulin-Resistant', inflammatory:'Inflammatory', adrenal:'Adrenal', postPill:'Metabolic Burnout' }[type] || 'Vitality';
+                    const energy = { high:'good energy', moderate:'afternoon energy dips', low:'chronic low energy', crashes:'post-meal energy crashes' }[a[0]] || 'fluctuating energy';
+                    const goal = { energy:'energy restoration', muscle:'building muscle and strength', weight:'weight management', drive:'improving drive and stamina' }[a[11]] || 'overall vitality';
+                    const typeLabel = { insulin:'Insulin-Resistant', inflammatory:'Inflammatory', adrenal:'Adrenal', metabolic:'Metabolic Burnout' }[type] || 'Vitality';
                     const n = name ? name + ', your' : 'Your';
-                    return `${n} assessment reveals ${cycle} combined with ${energy} — and your primary concern is ${concern}. The specific combination of symptoms you described is consistent with ${typeLabel} Vitality, a pattern that responds decisively to targeted nutritional, herbal, and lifestyle correction. This protocol was built around exactly what you told us.`;
+                    return `${n} assessment reveals ${energy} — and your primary focus is ${goal}. The specific combination of symptoms you described is consistent with ${typeLabel} Vitality, a pattern that responds decisively to targeted nutritional, herbal, and lifestyle correction. This protocol was built around exactly what you told us.`;
                 },
 
                 buildPersonalizedEmpathy(a, name) {
-                    const stress = a[7]; const energy = a[6]; const sleep = a[8];
+                    const stress = a[6]; const energy = a[0]; const sleep = a[5];
                     const n = name || '';
                     const burned = stress === 'chronic' || sleep === 'severe';
                     const drained = energy === 'low' || energy === 'crashes';
                     if (burned && drained) {
-                        return { heading: `${n ? n + ', your' : 'Your'} body is running on empty — and you know it`, body: `You told us you're dealing with chronic stress, poor sleep, and ongoing fatigue. That's not laziness or weakness — it's a measurable physiological state called HPA-axis dysregulation. Your adrenal glands, hormones, and energy systems are locked in a stress response that won't switch off. The first thing this protocol does is give your body permission to recover.` };
+                        return { heading: `${n ? n + ', your' : 'Your'} body is running on empty — and you know it`, body: `You told us you're dealing with chronic stress, poor sleep, and ongoing fatigue. That's not weakness or laziness — it's a measurable physiological state called HPA-axis dysregulation. Your adrenal glands, hormones, and energy systems are locked in a stress response that won't switch off. The first thing this protocol does is give your body permission to recover.` };
                     } else if (drained) {
-                        return { heading: `${n ? n + ', the' : 'The'} fatigue you're feeling has a very specific cause`, body: `You described low energy and fatigue that doesn't resolve with rest or willpower — and that's important data. This kind of fatigue is almost always hormonal in origin. Whether it's insulin resistance blocking your cells from using energy, or cortisol suppressing your recovery, the root can be identified and corrected. That's precisely what this protocol is designed to do.` };
+                        return { heading: `${n ? n + ', the' : 'The'} fatigue you're experiencing has a very specific cause`, body: `You described low energy and fatigue that doesn't resolve with rest or willpower — and that's important data. This kind of fatigue is almost always hormonal in origin. Whether it's insulin resistance blocking your cells from using energy, or cortisol suppressing your testosterone, the root can be identified and corrected. That's precisely what this protocol does.` };
                     } else {
-                        return { heading: `${n ? n + ', these' : 'These'} symptoms are not random — they form a clear picture`, body: `Looking at everything you shared, your symptoms aren't separate problems — they're a single hormonal pattern expressing itself in multiple ways. The good news is that when you treat the pattern at its root, everything tends to shift: cycle, energy, weight, skin, mood. The protocol ahead addresses exactly that pattern, specific to what you described.` };
+                        return { heading: `${n ? n + ', these' : 'These'} symptoms are not random — they form a clear picture`, body: `Looking at everything you shared, your symptoms aren't separate problems — they're a single hormonal pattern expressing itself in multiple ways. The good news is that when you treat the pattern at its root, everything tends to shift: energy, strength, drive, sleep, mental clarity. The protocol ahead addresses exactly that pattern, specific to what you described.` };
                     }
                 },
 
                 viewSolution() {
-                    // Track sales page visit intent
                     if (window.WebhookManager) {
                         window.WebhookManager.trackSalesVisit({
                             mensType: this.assessmentData.mensType.primary,
@@ -871,8 +872,6 @@
                             confidence: this.assessmentData.mensType.confidence
                         });
                     }
-
-                    // Redirect to sales page
                     window.location.href = 'select-plan.html';
                 }
             }

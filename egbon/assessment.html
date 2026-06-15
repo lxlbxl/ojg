@@ -205,14 +205,52 @@
                     </select>
                 </div>
                 
-                <button type="submit" 
+                <!-- GDPR/NDPR Consent -->
+                <div class="mt-4 p-4 bg-gray-700 rounded-lg border border-gray-600">
+                    <p class="text-sm text-gray-300 mb-4">
+                        🔒 We respect your privacy and are committed to protecting your personal data in accordance with GDPR and NDPR.
+                    </p>
+                    <div class="space-y-3">
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-privacy-egbon" required
+                                class="mt-1 w-4 h-4 border-gray-500 rounded focus:ring-2">
+                            <span class="text-sm text-gray-300">
+                                <strong class="text-red-400">*</strong>
+                                I consent to the processing of my personal data for receiving personalized health recommendations. I agree to the <a href="/privacy-policy.html" target="_blank" class="text-blue-400 hover:underline">Privacy Policy</a>.
+                            </span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-health-egbon" required
+                                class="mt-1 w-4 h-4 border-gray-500 rounded focus:ring-2">
+                            <span class="text-sm text-gray-300">
+                                <strong class="text-red-400">*</strong>
+                                I consent to the processing of my sensitive health data for generating personalized health plans.
+                            </span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer">
+                            <input type="checkbox" id="consent-marketing-egbon"
+                                class="mt-1 w-4 h-4 border-gray-500 rounded focus:ring-2">
+                            <span class="text-sm text-gray-300">
+                                <strong class="text-green-400">(Optional)</strong>
+                                I agree to receive health tips and wellness updates via WhatsApp or email.
+                            </span>
+                        </label>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-600">
+                        <p class="text-xs text-gray-400">
+                            <strong>Your Rights:</strong> You can access, correct, or delete your data. Contact <a href="mailto:dpo@ojg.ng" class="text-blue-400 hover:underline">dpo@ojg.ng</a>
+                        </p>
+                    </div>
+                </div>
+
+                <button type="submit"
                         :disabled="isSubmittingContact"
                         :class="isSubmittingContact ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'bg-accent-600 hover:bg-accent-700 text-white'"
                         class="w-full py-4 rounded-lg font-medium text-lg transition-colors">
                     <span x-show="!isSubmittingContact">Get My Personalized Results →</span>
                     <span x-show="isSubmittingContact">Processing...</span>
                 </button>
-                
+
                 <p class="text-xs text-gray-500 text-center">
                     We respect your privacy. Your information will only be used to provide your vitality assessment results.
                 </p>

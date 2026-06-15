@@ -253,7 +253,7 @@
                                     Name</label>
                                 <input type="text" x-model="contactInfo.name" required
                                     class="w-full px-5 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-forest-500 focus:border-forest-500 outline-none transition-all shadow-sm"
-                                    placeholder="Jane Doe">
+                                    placeholder="John Doe">
                             </div>
 
                             <div>
@@ -299,6 +299,44 @@
                                         </svg>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- GDPR/NDPR Consent -->
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                            <p class="text-sm text-gray-600 mb-4">
+                                🔒 We respect your privacy and are committed to protecting your personal data in accordance with GDPR and NDPR.
+                            </p>
+                            <div class="space-y-3">
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-privacy-mens" required
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-red-600">*</strong>
+                                        I consent to the processing of my personal data for receiving personalized health recommendations. I agree to the <a href="/privacy-policy.html" target="_blank" class="text-green-600 hover:underline">Privacy Policy</a>.
+                                    </span>
+                                </label>
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-health-mens" required
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-red-600">*</strong>
+                                        I consent to the processing of my sensitive health data for generating personalized health plans.
+                                    </span>
+                                </label>
+                                <label class="flex items-start space-x-3 cursor-pointer">
+                                    <input type="checkbox" id="consent-marketing-mens"
+                                        class="mt-1 w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                    <span class="text-sm text-gray-700">
+                                        <strong class="text-green-600">(Optional)</strong>
+                                        I agree to receive health tips and wellness updates via email or WhatsApp.
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-xs text-gray-500">
+                                    <strong>Your Rights:</strong> You can access, correct, or delete your data. Contact <a href="mailto:dpo@ojg.ng" class="text-green-600 hover:underline">dpo@ojg.ng</a>
+                                </p>
                             </div>
                         </div>
 
@@ -395,43 +433,43 @@
 
                 questions: [
                     {
-                        question: "How would you describe your menstrual cycle?",
-                        description: "Think about your periods over the last 6 months",
+                        question: "How would you describe your daily energy levels?",
+                        description: "Think about your typical day over the past month",
                         options: [
-                            { value: "regular", text: "Regular (every 21-35 days)", description: "Predictable timing each month" },
-                            { value: "irregular", text: "Irregular (varies by more than 7 days)", description: "Unpredictable timing" },
-                            { value: "absent", text: "Absent (no period for 3+ months)", description: "Missing periods entirely" },
-                            { value: "heavy", text: "Heavy/prolonged bleeding", description: "Lasting more than 7 days or very heavy flow" }
+                            { value: "high", text: "High energy most of the day", description: "Feels consistent from morning to evening" },
+                            { value: "moderate", text: "Good in the morning, fades by afternoon", description: "Mid-day dip is noticeable" },
+                            { value: "low", text: "Often tired and lacking drive", description: "Struggle to get through the day" },
+                            { value: "crashes", text: "Frequent energy crashes, especially after meals", description: "Sudden drops after eating" }
                         ]
                     },
                     {
-                        question: "Do you experience unwanted hair growth?",
-                        description: "Hair in places where men typically grow hair",
+                        question: "How is your libido and sexual function?",
+                        description: "Your drive and performance over the past 3 months",
                         options: [
-                            { value: "none", text: "No unwanted hair growth" },
-                            { value: "mild", text: "Mild (upper lip, chin)", description: "Occasional plucking needed" },
-                            { value: "moderate", text: "Moderate (face, chest, back)", description: "Regular removal required" },
-                            { value: "severe", text: "Severe (extensive body hair)", description: "Significant hair growth" }
+                            { value: "strong", text: "Strong drive, no concerns" },
+                            { value: "reduced", text: "Noticeably reduced libido", description: "Less interest than before" },
+                            { value: "low", text: "Very low drive, rarely thinking about it", description: "A significant change from before" },
+                            { value: "dysfunction", text: "Difficulty with performance or erections", description: "Physical performance concerns" }
                         ]
                     },
                     {
-                        question: "How is your hair on your scalp?",
-                        description: "Changes in hair thickness or hairline",
+                        question: "How has your muscle mass and strength changed?",
+                        description: "Compared to 1–2 years ago",
                         options: [
-                            { value: "normal", text: "Normal thickness and growth" },
-                            { value: "thinning", text: "Thinning or fine hair", description: "Less volume than before" },
-                            { value: "receding", text: "Receding hairline", description: "Male-pattern hair loss" },
-                            { value: "bald_spots", text: "Bald spots or significant loss", description: "Noticeable hair loss areas" }
+                            { value: "maintained", text: "Maintained strength and muscle without effort" },
+                            { value: "slight_loss", text: "Slightly harder to build or maintain muscle", description: "Progress has slowed noticeably" },
+                            { value: "significant_loss", text: "Significant muscle loss or weakness", description: "A clear change from before" },
+                            { value: "difficult_gain", text: "Extreme difficulty building muscle despite consistent effort" }
                         ]
                     },
                     {
                         question: "How would you describe your weight?",
-                        description: "Consider recent changes and difficulty managing weight",
+                        description: "Consider changes over the last 6–12 months",
                         options: [
                             { value: "stable", text: "Stable and easy to maintain" },
                             { value: "gradual_gain", text: "Gradual weight gain", description: "Slowly increasing over time" },
-                            { value: "rapid_gain", text: "Rapid weight gain", description: "Quick increase in short time" },
-                            { value: "difficulty_losing", text: "Extreme difficulty losing weight", description: "Diet and exercise don't work" }
+                            { value: "rapid_gain", text: "Rapid weight gain", description: "Quick increase in a short time" },
+                            { value: "difficulty_losing", text: "Extreme difficulty losing weight", description: "Diet and exercise aren't working" }
                         ]
                     },
                     {
@@ -439,79 +477,79 @@
                         description: "Your primary weight gain pattern",
                         options: [
                             { value: "even", text: "Evenly distributed" },
-                            { value: "belly", text: "Mainly around the belly/waist", description: "Apple-shaped weight gain" },
-                            { value: "hips_thighs", text: "Hips and thighs", description: "Pear-shaped weight gain" },
-                            { value: "upper_body", text: "Upper body and arms", description: "Shoulders, arms, upper back" }
+                            { value: "belly", text: "Mainly around the belly and waist", description: "Midsection / visceral fat pattern" },
+                            { value: "upper_body", text: "Upper body and chest", description: "Shoulders, chest, upper back" },
+                            { value: "overall", text: "All over — general heaviness", description: "No specific area, just overall" }
                         ]
                     },
                     {
-                        question: "How is your skin?",
-                        description: "Consider acne, dark patches, and skin texture",
+                        question: "How is your sleep quality?",
+                        description: "Your typical sleep over the last month",
                         options: [
-                            { value: "clear", text: "Generally clear and healthy" },
-                            { value: "occasional_acne", text: "Occasional breakouts", description: "Monthly or stress-related acne" },
-                            { value: "persistent_acne", text: "Persistent adult acne", description: "Ongoing acne issues" },
-                            { value: "dark_patches", text: "Dark patches (neck, armpits)", description: "Acanthosis nigricans" }
+                            { value: "good", text: "Sleep well most nights, wake refreshed" },
+                            { value: "occasional", text: "Occasional sleep issues", description: "Sometimes hard to fall or stay asleep" },
+                            { value: "frequent", text: "Frequently wake up tired or unrefreshed", description: "Sleep doesn't seem to help" },
+                            { value: "severe", text: "Serious insomnia or very poor sleep quality", description: "Major disruption most nights" }
                         ]
                     },
                     {
-                        question: "How are your energy levels?",
-                        description: "Your typical daily energy and fatigue patterns",
+                        question: "How well do you handle stress?",
+                        description: "Your stress levels and resilience right now",
                         options: [
-                            { value: "high", text: "High energy most days" },
-                            { value: "moderate", text: "Moderate with occasional fatigue" },
-                            { value: "low", text: "Often tired and low energy", description: "Struggling to get through the day" },
-                            { value: "crashes", text: "Energy crashes after meals", description: "Sudden drops in energy" }
+                            { value: "well", text: "Handle stress well, bounce back quickly" },
+                            { value: "moderate", text: "Sometimes overwhelmed, but manageable" },
+                            { value: "poorly", text: "Often anxious, irritable, or overwhelmed", description: "Stress affects you more than it should" },
+                            { value: "chronic", text: "Chronic burnout — feeling depleted constantly", description: "Running on empty every day" }
                         ]
                     },
                     {
-                        question: "How do you handle stress?",
-                        description: "Your stress levels and coping ability",
-                        options: [
-                            { value: "well", text: "Handle stress well" },
-                            { value: "moderate", text: "Sometimes overwhelmed", description: "Manageable most of the time" },
-                            { value: "poorly", text: "Often stressed and anxious", description: "Frequently feeling overwhelmed" },
-                            { value: "chronic", text: "Chronic stress/burnout", description: "Constantly feeling stressed" }
-                        ]
-                    },
-                    {
-                        question: "How is your sleep?",
-                        description: "Quality and consistency of your sleep",
-                        options: [
-                            { value: "good", text: "Sleep well most nights" },
-                            { value: "occasional", text: "Occasional sleep issues", description: "Sometimes hard to fall asleep" },
-                            { value: "frequent", text: "Frequent sleep problems", description: "Often wake up tired" },
-                            { value: "severe", text: "Severe insomnia/sleep disorders", description: "Major sleep disruption" }
-                        ]
-                    },
-                    {
-                        question: "How are your cravings?",
-                        description: "Food cravings and eating patterns",
+                        question: "How are your food cravings and appetite?",
+                        description: "Your typical eating patterns and hunger",
                         options: [
                             { value: "normal", text: "Normal appetite, few cravings" },
-                            { value: "sweet", text: "Strong sugar/carb cravings", description: "Especially afternoon/evening" },
-                            { value: "constant", text: "Constant hunger/cravings", description: "Never feel satisfied" },
-                            { value: "binge", text: "Binge eating episodes", description: "Periods of overeating" }
+                            { value: "sweet", text: "Strong sugar or carb cravings", description: "Especially in the afternoon or evening" },
+                            { value: "constant", text: "Constant hunger, hard to feel satisfied", description: "Never quite feel full" },
+                            { value: "binge", text: "Binge eating or loss of control around food", description: "Periods of overeating" }
                         ]
                     },
                     {
-                        question: "Have you recently stopped birth control?",
-                        description: "Hormonal birth control in the past 2 years",
+                        question: "How is your recovery and joint health?",
+                        description: "After exercise, stress, or physical activity",
                         options: [
-                            { value: "never", text: "Never used hormonal birth control" },
-                            { value: "long_ago", text: "Stopped more than 2 years ago" },
-                            { value: "recent", text: "Stopped within the last 2 years", description: "Still adjusting to being off" },
-                            { value: "currently", text: "Currently using birth control", description: "Pills, IUD, implant, etc." }
+                            { value: "good", text: "Recover well, no persistent joint pain" },
+                            { value: "slow", text: "Slower recovery than before", description: "Takes longer to bounce back" },
+                            { value: "joint_pain", text: "Persistent joint pain or muscle stiffness", description: "Ongoing discomfort after activity" },
+                            { value: "chronic", text: "Chronic inflammation, pain, or very slow recovery", description: "Significantly limiting activity" }
                         ]
                     },
                     {
-                        question: "What's your primary concern with Vitality?",
-                        description: "What bothers you most about your symptoms",
+                        question: "How is your hair on your scalp?",
+                        description: "Changes in thickness or hairline",
                         options: [
-                            { value: "fertility", text: "Fertility and getting pregnant" },
-                            { value: "weight", text: "Weight management", description: "Losing weight and keeping it off" },
-                            { value: "appearance", text: "Physical appearance", description: "Hair, skin, body changes" },
-                            { value: "energy", text: "Energy and mood", description: "Feeling better day-to-day" }
+                            { value: "normal", text: "Normal thickness and growth" },
+                            { value: "thinning", text: "Thinning or finer hair", description: "Less volume than before" },
+                            { value: "receding", text: "Receding hairline", description: "Temples or crown pulling back" },
+                            { value: "bald_spots", text: "Bald spots or significant hair loss", description: "Noticeable areas of loss" }
+                        ]
+                    },
+                    {
+                        question: "How is your mental clarity and focus?",
+                        description: "Your cognitive performance day-to-day",
+                        options: [
+                            { value: "sharp", text: "Sharp focus and mental clarity" },
+                            { value: "occasional_fog", text: "Occasional brain fog or forgetfulness", description: "Comes and goes" },
+                            { value: "frequent_fog", text: "Frequently foggy, hard to concentrate", description: "Affects productivity" },
+                            { value: "severe_fog", text: "Severe brain fog — affecting work or daily life", description: "Consistently clouded thinking" }
+                        ]
+                    },
+                    {
+                        question: "What is your primary goal right now?",
+                        description: "What matters most to you in your health journey",
+                        options: [
+                            { value: "energy", text: "Restore energy and reduce fatigue", description: "Feel switched-on and sharp again" },
+                            { value: "muscle", text: "Build muscle and improve strength", description: "Recover physical performance" },
+                            { value: "weight", text: "Lose weight, especially belly fat", description: "Shift the midsection for good" },
+                            { value: "drive", text: "Improve drive, stamina, and sexual function", description: "Restore confidence and performance" }
                         ]
                     }
                 ],
@@ -749,40 +787,36 @@
                 },
 
                 calculateVitalityType() {
-                    const answers = this.answers;
-                    let scores = {
-                        insulin: 0,
-                        inflammatory: 0,
-                        adrenal: 0,
-                        postPill: 0
-                    };
+                    const a = this.answers;
+                    let scores = { insulin: 0, inflammatory: 0, adrenal: 0, metabolic: 0 };
 
-                    // Insulin-resistant Vitality indicators
-                    if (answers[3] === 'rapid_gain' || answers[3] === 'difficulty_losing') scores.insulin += 2;
-                    if (answers[4] === 'belly') scores.insulin += 2;
-                    if (answers[5] === 'dark_patches') scores.insulin += 2;
-                    if (answers[6] === 'crashes') scores.insulin += 1;
-                    if (answers[9] === 'sweet' || answers[9] === 'constant') scores.insulin += 1;
+                    // Insulin-Resistant: post-meal crashes, belly fat, weight difficulty, sugar cravings
+                    if (a[0] === 'crashes') scores.insulin += 2;
+                    if (a[3] === 'rapid_gain' || a[3] === 'difficulty_losing') scores.insulin += 2;
+                    if (a[4] === 'belly') scores.insulin += 2;
+                    if (a[7] === 'sweet' || a[7] === 'constant') scores.insulin += 1;
+                    if (a[9] === 'receding' || a[9] === 'bald_spots') scores.insulin += 1;
 
-                    // Inflammatory Vitality indicators
-                    if (answers[5] === 'persistent_acne') scores.inflammatory += 2;
-                    if (answers[6] === 'low') scores.inflammatory += 1;
-                    if (answers[7] === 'poorly' || answers[7] === 'chronic') scores.inflammatory += 2;
-                    if (answers[8] === 'frequent' || answers[8] === 'severe') scores.inflammatory += 1;
-                    if (answers[3] === 'gradual_gain') scores.inflammatory += 1;
+                    // Inflammatory: joint pain, chronic inflammation, fatigue, brain fog
+                    if (a[8] === 'joint_pain' || a[8] === 'chronic') scores.inflammatory += 3;
+                    if (a[10] === 'frequent_fog' || a[10] === 'severe_fog') scores.inflammatory += 1;
+                    if (a[0] === 'low') scores.inflammatory += 1;
+                    if (a[3] === 'gradual_gain') scores.inflammatory += 1;
+                    if (a[5] === 'frequent' || a[5] === 'severe') scores.inflammatory += 1;
 
-                    // Adrenal Vitality indicators
-                    if (answers[7] === 'chronic') scores.adrenal += 3;
-                    if (answers[8] === 'severe') scores.adrenal += 2;
-                    if (answers[6] === 'low') scores.adrenal += 1;
-                    if (answers[1] === 'mild') scores.adrenal += 1;
+                    // Adrenal: chronic stress, burnout, insomnia, anxiety, low drive
+                    if (a[6] === 'chronic') scores.adrenal += 3;
+                    if (a[6] === 'poorly') scores.adrenal += 2;
+                    if (a[5] === 'severe') scores.adrenal += 2;
+                    if (a[0] === 'low' && a[6] !== 'well') scores.adrenal += 1;
+                    if (a[1] === 'low' || a[1] === 'dysfunction') scores.adrenal += 1;
 
-                    // Post-pill Vitality indicators
-                    if (answers[10] === 'recent') scores.postPill += 3;
-                    if (answers[0] === 'absent' && answers[10] === 'recent') scores.postPill += 2;
-                    if (answers[2] === 'thinning' && answers[10] === 'recent') scores.postPill += 1;
+                    // Metabolic Burnout: muscle loss, can't build, extreme fatigue, low libido
+                    if (a[2] === 'significant_loss' || a[2] === 'difficult_gain') scores.metabolic += 3;
+                    if (a[0] === 'low' && a[2] !== 'maintained') scores.metabolic += 1;
+                    if (a[1] === 'low') scores.metabolic += 1;
+                    if (a[3] === 'difficulty_losing') scores.metabolic += 1;
 
-                    // Determine primary type
                     const maxScore = Math.max(...Object.values(scores));
                     const primaryType = Object.keys(scores).find(key => scores[key] === maxScore);
 

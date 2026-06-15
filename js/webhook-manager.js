@@ -28,7 +28,8 @@ class WebhookManager {
                     egbonAssessment: '/webhook/egbon-assessment',
                     egbonSalesVisit: '/webhook/egbon-sales-visit',
                     egbonPurchaseIntent: '/webhook/egbon-purchase-intent',
-                    egbonPurchase: '/webhook/egbon-purchase'
+                    egbonPurchase: '/webhook/egbon-purchase',
+                    mensAssessment: '/webhook/mens-assessment'
                 },
                 payment: {
                     flutterwavePublicKey: null,
@@ -91,6 +92,7 @@ class WebhookManager {
         if (path.includes('pcos')) return 'pcos';
         if (path.includes('acne')) return 'acne';
         if (path.includes('weight')) return 'weight';
+        if (path.includes('mens')) return 'mens';
         return 'pcos';
     }
 
@@ -158,17 +160,11 @@ class WebhookManager {
     }
 
     /**
-     * Submit Assessment - Resilient to N8N failures
+     * Submit Assessment - saves directly to local DB only.
+     * N8N is never called from the client; webhooks to N8N are triggered server-side from Admin.
      */
     async submitAssessment(assessmentData) {
         const funnel = this.getCurrentFunnel();
-        const n8nData = {
-            ...assessmentData,
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-            url: window.location.href,
-            source: `${funnel}-funnel`
-        };
 
         const localData = {
             email: assessmentData.contactInfo?.email || '',
@@ -179,43 +175,11 @@ class WebhookManager {
             url: window.location.href
         };
 
-        let endpointKey = `${funnel}Assessment`;
-        if (!this.config.endpoints[endpointKey]) {
-            endpointKey = 'pcosAssessment';
+        const result = await this._submitToLocal('assessment', localData);
+        if (!result.success) {
+            throw new Error(result.error || 'Failed to save assessment. Please try again.');
         }
-
-        const n8nPromise = this.submitForm(endpointKey, JSON.stringify(n8nData), {
-            headers: { 'Content-Type': 'application/json' }
-        }).then(result => {
-            console.log('✅ Assessment sent to N8N');
-            return { success: true, result };
-        }).catch(error => {
-            console.warn('⚠️ N8N submission failed:', error.message);
-            return { success: false, error };
-        });
-
-        const localPromise = this._submitToLocal('assessment', localData)
-            .then(result => {
-                if (result.success) {
-                    console.log('✅ Assessment saved locally');
-                    return { success: true };
-                }
-                console.error('⚠️ Local save failed:', result.error);
-                return { success: false, error: result.error };
-            })
-            .catch(error => {
-                console.error('⚠️ Local save failed with error:', error);
-                return { success: false, error: error.message || error };
-            });
-
-        const [n8nResult, localResult] = await Promise.all([n8nPromise, localPromise]);
-
-        if (!n8nResult.success && !localResult.success) {
-            const combinedError = localResult.error || n8nResult.error?.message || 'Assessment submission failed on all channels.';
-            throw new Error(combinedError);
-        }
-
-        return n8nResult.success ? n8nResult.result : { success: true, local_only: true };
+        return result;
     }
 
     /**
