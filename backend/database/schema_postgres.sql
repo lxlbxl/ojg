@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
-    first_name VARCHAR(100) NOT NULL,
+    first_name VARCHAR(100),
     last_name VARCHAR(100),
     phone VARCHAR(20),
     age INTEGER,
@@ -254,7 +254,9 @@ CREATE TABLE IF NOT EXISTS ai_generation_logs (
     tokens_used INTEGER,
     cost DECIMAL(10,4),
     status VARCHAR(20) DEFAULT 'completed',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    user_id INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Consumed tokens (rate limiting)
@@ -283,10 +285,16 @@ CREATE TABLE IF NOT EXISTS member_profiles (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     condition_type VARCHAR(50),
+    pcos_type VARCHAR(50),
     treatment_plan TEXT,
     daily_log TEXT,
     progress_data TEXT,
     preferences TEXT,
+    subscription_status VARCHAR(20) DEFAULT 'inactive',
+    subscription_tier VARCHAR(50),
+    subscription_expiry TIMESTAMP,
+    payment_status VARCHAR(20) DEFAULT 'not_paid',
+    start_date TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
