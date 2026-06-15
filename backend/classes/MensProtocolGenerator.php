@@ -12,6 +12,12 @@ require_once __DIR__ . '/AbstractProtocolGenerator.php';
 class MensProtocolGenerator extends AbstractProtocolGenerator
 {
     private array $typeMap = [
+        // Assessment vitality types (from frontend scoring)
+        'insulin'        => 'Low-T Markers',           // insulin resistance → metabolic T suppression
+        'inflammatory'   => 'Body Composition/Performance', // inflammation → recovery/strength focus
+        'adrenal'        => 'Stress/Burnout',          // cortisol/HPA burnout → adrenal recovery
+        'metabolic'      => 'Low Energy/Fatigue',      // metabolic burnout → full energy restoration
+        // Legacy / alternate keys
         'energy'         => 'Low Energy/Fatigue',
         'fatigue'        => 'Low Energy/Fatigue',
         'testosterone'   => 'Low-T Markers',
