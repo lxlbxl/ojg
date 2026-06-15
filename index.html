@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>OJG Herbal | Natural Health Solutions for PCOS, Acne, Weight Loss & Men's Vitality — Nigeria</title>
+  <meta name="description"
+    content="OJG Herbal offers personalised Nigerian herbal protocols for PCOS, acne, weight loss, and men's vitality. 2,000+ people helped. 90-day money-back guarantee. Free assessment.">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://ojg.ng/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ojg.ng/">
+  <meta property="og:title" content="OJG Herbal | Natural Health Solutions for Nigerians">
+  <meta property="og:description"
+    content="Personalised herbal protocols for PCOS, acne, weight loss, and men's vitality. Free 2-minute assessment. 90-day guarantee.">
+  <meta property="og:image" content="https://ojg.ng/images/og-home.png">
+  <meta property="og:locale" content="en_NG">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OJG Herbal | Natural Health Solutions for Nigerians">
+  <meta name="twitter:description"
+    content="Personalised herbal protocols for PCOS, acne, weight loss, and men's vitality. Free 2-minute assessment.">
+
+  <!-- Schema.org -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "OJG Herbal",
+    "url": "https://ojg.ng",
+    "description": "Nigerian herbal wellness platform offering personalised health protocols for PCOS, acne, weight loss, and men's vitality.",
+    "areaServed": "NG",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer service",
+      "availableLanguage": ["English", "Yoruba", "Igbo", "Hausa"]
+    },
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "PCOS Herbal Protocol",
+        "url": "https://ojg.ng/pcos/"
+      },
+      {
+        "@type": "Offer",
+        "name": "Acne Clear Skin Protocol",
+        "url": "https://ojg.ng/acne/"
+      },
+      {
+        "@type": "Offer",
+        "name": "Weight Loss Protocol",
+        "url": "https://ojg.ng/weight/"
+      },
+      {
+        "@type": "Offer",
+        "name": "Men's Vitality Protocol",
+        "url": "https://ojg.ng/mens/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Alpine.js -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          colors: {
+            forest: {
+              50: '#f2f8f5',
+              100: '#dcece3',
+              200: '#b9d9c7',
+              800: '#166534',
+              900: '#0f3922',
+            },
+            sage: {
+              100: '#E6EBE6',
+              200: '#CDD6CD',
+              500: '#8DA38D',
+            },
+            terracotta: {
+              100: '#f9ede8',
+              200: '#f0d0c5',
+              500: '#C77D63',
+              600: '#A85D45',
+            },
+            cream: '#FDFCF8',
+            sand: '#F4F1EA',
+          },
+          backgroundImage: {
+            grain: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+          },
+          boxShadow: {
+            soft: '0 20px 40px -15px rgba(22, 101, 52, 0.1)',
+            glow: '0 0 20px rgba(199, 125, 99, 0.3)',
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.7s cubic-bezier(0.2,0.8,0.2,1) forwards',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              from: { opacity: '0', transform: 'translateY(28px)' },
+              to: { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #FDFCF8; color: #0f3922; }
+
+    .glass-panel {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .blob {
+      position: absolute;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    html, body { max-width: 100vw; overflow-x: hidden; }
+    * { box-sizing: border-box; }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    .funnel-card {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .funnel-card:hover { transform: translateY(-6px); box-shadow: 0 24px 48px -12px rgba(15,57,34,0.18); }
+    .funnel-card .card-arrow {
+      transition: transform 0.3s ease;
+    }
+    .funnel-card:hover .card-arrow { transform: translateX(5px); }
+
+    .step-line::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, #CDD6CD, transparent);
+      transform: translateY(-50%);
+    }
+
+    @media (max-width: 768px) {
+      .step-line::after { display: none; }
+    }
+  </style>
+</head>
+
+<body class="antialiased relative overflow-x-hidden" x-data="{ mobileMenu: false }">
+
+  <!-- Grain overlay -->
+  <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay" aria-hidden="true"></div>
+
+  <!-- Ambient blobs -->
+  <div class="blob bg-sage-200 w-[600px] h-[600px] rounded-full -top-40 -left-40 opacity-50" aria-hidden="true"></div>
+  <div class="blob bg-terracotta-200 w-96 h-96 rounded-full top-[30%] right-0 translate-x-1/3 opacity-30" aria-hidden="true"></div>
+  <div class="blob bg-forest-200 w-80 h-80 rounded-full bottom-[20%] -left-20 opacity-25" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════ HEADER ═══════════════════════════════ -->
+  <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/60">
+    <div class="max-w-6xl mx-auto px-5 py-4">
+      <div class="flex items-center justify-between">
+
+        <!-- Logo -->
+        <a href="/" class="flex items-center gap-3 group" aria-label="OJG Herbal — Home">
+          <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg group-hover:bg-forest-800 transition-colors">
+            <span class="text-sand font-serif italic text-xl leading-none">O</span>
+          </div>
+          <div>
+            <span class="text-lg font-serif font-bold tracking-tight text-forest-900 block leading-tight">OJG Herbal</span>
+            <span class="text-[10px] text-forest-800/50 font-medium tracking-widest uppercase hidden sm:block">Natural Wellness · Nigeria</span>
+          </div>
+        </a>
+
+        <!-- Desktop nav -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-forest-900/70" aria-label="Main navigation">
+          <a href="/pcos/" class="hover:text-forest-900 transition-colors">PCOS</a>
+          <a href="/acne/" class="hover:text-forest-900 transition-colors">Acne</a>
+          <a href="/weight/" class="hover:text-forest-900 transition-colors">Weight Loss</a>
+          <a href="/mens/" class="hover:text-forest-900 transition-colors">Men's Health</a>
+        </nav>
+
+        <!-- CTA -->
+        <a href="/pcos/" class="hidden md:inline-flex items-center gap-2 bg-forest-900 hover:bg-forest-800 text-sand text-sm font-semibold px-5 py-2.5 rounded-full transition-all shadow-sm">
+          Take Free Assessment
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+
+        <!-- Mobile menu button -->
+        <button @click="mobileMenu = !mobileMenu" class="md:hidden p-2 rounded-xl text-forest-900 hover:bg-sage-100 transition-colors" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu -->
+      <div x-show="mobileMenu" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden border-t border-sage-200/60 pt-4 pb-2 mt-4 space-y-1">
+        <a href="/pcos/" class="block px-3 py-2.5 rounded-xl text-forest-900 font-medium hover:bg-sage-100 transition-colors">PCOS Solutions</a>
+        <a href="/acne/" class="block px-3 py-2.5 rounded-xl text-forest-900 font-medium hover:bg-sage-100 transition-colors">Acne & Clear Skin</a>
+        <a href="/weight/" class="block px-3 py-2.5 rounded-xl text-forest-900 font-medium hover:bg-sage-100 transition-colors">Weight Loss</a>
+        <a href="/mens/" class="block px-3 py-2.5 rounded-xl text-forest-900 font-medium hover:bg-sage-100 transition-colors">Men's Health</a>
+        <div class="pt-2">
+          <a href="/pcos/" class="block text-center bg-forest-900 text-sand font-semibold px-5 py-3 rounded-full transition-all">Take Free Assessment →</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+    <section class="pt-36 pb-20 px-5 text-center relative" aria-labelledby="hero-heading">
+      <div class="max-w-4xl mx-auto relative z-10">
+
+        <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-4 py-2 rounded-full text-xs font-semibold tracking-widest text-forest-800 uppercase mb-8 reveal">
+          <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse-slow"></span>
+          Nigeria's Natural Wellness Platform
+        </div>
+
+        <h1 id="hero-heading" class="text-4xl sm:text-6xl md:text-7xl font-serif font-medium leading-[1.08] text-forest-900 mb-6 reveal" style="animation-delay:0.1s">
+          Herbal Protocols<br>
+          <span class="italic text-terracotta-600">Built for Your Body.</span>
+        </h1>
+
+        <p class="text-xl text-gray-600 font-light leading-relaxed mb-10 max-w-2xl mx-auto reveal" style="animation-delay:0.2s">
+          Stop guessing. Take a free 2-minute assessment and get a personalised Nigerian herbal protocol matched to your exact condition — backed by a 90-day guarantee.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-3 text-xs font-bold tracking-widest text-forest-800/60 uppercase mb-12 reveal" style="animation-delay:0.3s">
+          <span class="flex items-center gap-1.5">✅ 100% Free Assessment</span>
+          <span class="flex items-center gap-1.5">✅ Results in 2 Minutes</span>
+          <span class="flex items-center gap-1.5">✅ No Email Required to Start</span>
+          <span class="flex items-center gap-1.5">🛡️ 90-Day Guarantee</span>
+        </div>
+
+        <!-- Funnel selector prompt -->
+        <p class="text-sm font-semibold text-forest-900/50 uppercase tracking-widest mb-6 reveal" style="animation-delay:0.35s">
+          Choose your health concern ↓
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════ FUNNEL CARDS ════════════════════════════ -->
+    <section class="pb-24 px-5" aria-label="Health programs">
+      <div class="max-w-6xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-5 relative z-10">
+
+        <!-- PCOS -->
+        <a href="/pcos/" class="funnel-card bg-white rounded-[1.75rem] border border-sage-200 p-7 flex flex-col group reveal">
+          <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-3xl mb-5 shrink-0">🌸</div>
+          <h2 class="text-xl font-serif font-bold text-forest-900 mb-2">PCOS</h2>
+          <p class="text-gray-500 text-sm font-light leading-relaxed mb-6 flex-1">Irregular cycles, weight gain, hormonal acne, fatigue — matched to your specific PCOS type.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-xs font-semibold text-purple-700 bg-purple-50 px-3 py-1 rounded-full">500+ women</span>
+            <span class="card-arrow text-forest-900 font-bold text-lg">→</span>
+          </div>
+        </a>
+
+        <!-- Acne -->
+        <a href="/acne/" class="funnel-card bg-white rounded-[1.75rem] border border-sage-200 p-7 flex flex-col group reveal" style="animation-delay:0.08s">
+          <div class="w-14 h-14 bg-rose-50 rounded-2xl flex items-center justify-center text-3xl mb-5 shrink-0">🌿</div>
+          <h2 class="text-xl font-serif font-bold text-forest-900 mb-2">Acne & Clear Skin</h2>
+          <p class="text-gray-500 text-sm font-light leading-relaxed mb-6 flex-1">Hormonal, cystic, inflammatory, and comedonal acne — treated from the inside out.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-xs font-semibold text-rose-700 bg-rose-50 px-3 py-1 rounded-full">500+ people</span>
+            <span class="card-arrow text-forest-900 font-bold text-lg">→</span>
+          </div>
+        </a>
+
+        <!-- Weight Loss -->
+        <a href="/weight/" class="funnel-card bg-white rounded-[1.75rem] border border-sage-200 p-7 flex flex-col group reveal" style="animation-delay:0.16s">
+          <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-3xl mb-5 shrink-0">🔥</div>
+          <h2 class="text-xl font-serif font-bold text-forest-900 mb-2">Weight Loss</h2>
+          <p class="text-gray-500 text-sm font-light leading-relaxed mb-6 flex-1">Hormonal, metabolic, or lifestyle-driven weight — your root cause determines your plan.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-xs font-semibold text-blue-700 bg-blue-50 px-3 py-1 rounded-full">500+ people</span>
+            <span class="card-arrow text-forest-900 font-bold text-lg">→</span>
+          </div>
+        </a>
+
+        <!-- Men's Health -->
+        <a href="/mens/" class="funnel-card bg-white rounded-[1.75rem] border border-sage-200 p-7 flex flex-col group reveal" style="animation-delay:0.24s">
+          <div class="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-3xl mb-5 shrink-0">💪</div>
+          <h2 class="text-xl font-serif font-bold text-forest-900 mb-2">Men's Vitality</h2>
+          <p class="text-gray-500 text-sm font-light leading-relaxed mb-6 flex-1">Low energy, drive, and strength — protocols matched to your specific vitality driver.</p>
+          <div class="flex items-center justify-between mt-auto">
+            <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-3 py-1 rounded-full">500+ men</span>
+            <span class="card-arrow text-forest-900 font-bold text-lg">→</span>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ STATS ═══════════════════════════════ -->
+    <section class="py-16 px-5 bg-forest-900 relative overflow-hidden" aria-label="Key statistics">
+      <div class="absolute inset-0 bg-grain opacity-5 pointer-events-none" aria-hidden="true"></div>
+      <div class="max-w-5xl mx-auto relative z-10">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div class="reveal">
+            <p class="text-4xl md:text-5xl font-serif font-bold text-sand">2,000+</p>
+            <p class="text-xs font-bold tracking-widest uppercase text-forest-200/60 mt-2">People Helped</p>
+          </div>
+          <div class="reveal" style="animation-delay:0.1s">
+            <p class="text-4xl md:text-5xl font-serif font-bold text-sand">4</p>
+            <p class="text-xs font-bold tracking-widest uppercase text-forest-200/60 mt-2">Health Programmes</p>
+          </div>
+          <div class="reveal" style="animation-delay:0.2s">
+            <p class="text-4xl md:text-5xl font-serif font-bold text-terracotta-500">90</p>
+            <p class="text-xs font-bold tracking-widest uppercase text-forest-200/60 mt-2">Day Guarantee</p>
+          </div>
+          <div class="reveal" style="animation-delay:0.3s">
+            <p class="text-4xl md:text-5xl font-serif font-bold text-sand">100%</p>
+            <p class="text-xs font-bold tracking-widest uppercase text-forest-200/60 mt-2">Nigerian Botanicals</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════ HOW IT WORKS ════════════════════════════ -->
+    <section class="py-24 px-5" aria-labelledby="how-it-works-heading">
+      <div class="max-w-5xl mx-auto">
+
+        <div class="text-center mb-16 reveal">
+          <p class="text-xs font-bold tracking-widest uppercase text-terracotta-600 mb-3">Simple Process</p>
+          <h2 id="how-it-works-heading" class="text-3xl md:text-5xl font-serif text-forest-900">
+            From Assessment to<br><span class="italic text-gray-400">Results in 3 Steps</span>
+          </h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-10 md:gap-6 relative">
+
+          <div class="text-center relative reveal">
+            <div class="hidden md:block step-line" aria-hidden="true"></div>
+            <div class="w-16 h-16 bg-forest-900 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg">📋</div>
+            <span class="text-xs font-bold tracking-widest uppercase text-forest-800/40 mb-2 block">Step 01</span>
+            <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">Take the Free Assessment</h3>
+            <p class="text-gray-500 font-light text-sm leading-relaxed">Answer 12 questions about your symptoms. No email required. Takes 2 minutes.</p>
+          </div>
+
+          <div class="text-center relative reveal" style="animation-delay:0.15s">
+            <div class="hidden md:block step-line" aria-hidden="true"></div>
+            <div class="w-16 h-16 bg-terracotta-500 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg">🎯</div>
+            <span class="text-xs font-bold tracking-widest uppercase text-forest-800/40 mb-2 block">Step 02</span>
+            <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">Get Your Type & Protocol</h3>
+            <p class="text-gray-500 font-light text-sm leading-relaxed">See your specific condition type and receive a personalised protocol built around your biology.</p>
+          </div>
+
+          <div class="text-center reveal" style="animation-delay:0.3s">
+            <div class="w-16 h-16 bg-sage-500 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg">✨</div>
+            <span class="text-xs font-bold tracking-widest uppercase text-forest-800/40 mb-2 block">Step 03</span>
+            <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">Follow & Transform</h3>
+            <p class="text-gray-500 font-light text-sm leading-relaxed">Your 90-day plan with Nigerian herbs, meals, and tracking — backed by expert support.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════ WHY DIFFERENT ═══════════════════════════ -->
+    <section class="py-20 px-5 bg-sand" aria-labelledby="difference-heading">
+      <div class="max-w-5xl mx-auto">
+
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+
+          <div class="reveal">
+            <p class="text-xs font-bold tracking-widest uppercase text-terracotta-600 mb-3">Why OJG Herbal</p>
+            <h2 id="difference-heading" class="text-3xl md:text-4xl font-serif text-forest-900 mb-6">
+              Generic Advice Fails<br><span class="italic">Because You're Not Generic</span>
+            </h2>
+            <p class="text-gray-600 font-light leading-relaxed mb-6">
+              Most health advice treats everyone the same. But insulin-resistant PCOS is not the same as adrenal PCOS. Hormonal acne is not the same as cystic acne. Metabolic weight gain is not the same as emotional weight gain.
+            </p>
+            <p class="text-gray-600 font-light leading-relaxed mb-8">
+              Every OJG protocol starts with identifying your specific type. Then — and only then — do we prescribe the herbs, meals, and habits that are actually matched to your biology.
+            </p>
+            <a href="/pcos/" class="inline-flex items-center gap-2 bg-forest-900 hover:bg-forest-800 text-sand font-semibold px-7 py-4 rounded-full transition-all shadow-lg hover:-translate-y-0.5">
+              Find Your Type — Free
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+          </div>
+
+          <div class="space-y-4 reveal" style="animation-delay:0.15s">
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 flex gap-4 items-start shadow-sm">
+              <span class="text-2xl shrink-0">🧬</span>
+              <div>
+                <h3 class="font-serif font-bold text-forest-900 mb-1">Type-Specific Protocols</h3>
+                <p class="text-gray-500 text-sm font-light leading-relaxed">Your type determines your herbs, meals, and movement — not the other way around.</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 flex gap-4 items-start shadow-sm">
+              <span class="text-2xl shrink-0">🇳🇬</span>
+              <div>
+                <h3 class="font-serif font-bold text-forest-900 mb-1">Nigerian Botanicals</h3>
+                <p class="text-gray-500 text-sm font-light leading-relaxed">Sourced locally, no expensive imported supplements, built around Nigerian food culture.</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 flex gap-4 items-start shadow-sm">
+              <span class="text-2xl shrink-0">📊</span>
+              <div>
+                <h3 class="font-serif font-bold text-forest-900 mb-1">90-Day Progress Tracking</h3>
+                <p class="text-gray-500 text-sm font-light leading-relaxed">Log your symptoms, meals, and results. Watch the transformation unfold week by week.</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-gray-100 flex gap-4 items-start shadow-sm">
+              <span class="text-2xl shrink-0">🛡️</span>
+              <div>
+                <h3 class="font-serif font-bold text-forest-900 mb-1">90-Day Money-Back Guarantee</h3>
+                <p class="text-gray-500 text-sm font-light leading-relaxed">Follow the protocol. If you don't improve, we refund every kobo and you keep everything.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════ TESTIMONIALS ════════════════════════════ -->
+    <section class="py-24 px-5" aria-labelledby="testimonials-heading">
+      <div class="max-w-6xl mx-auto">
+
+        <div class="text-center mb-12 reveal">
+          <p class="text-xs font-bold tracking-widest uppercase text-terracotta-600 mb-3">Verified Results</p>
+          <h2 id="testimonials-heading" class="text-3xl md:text-5xl font-serif text-forest-900">
+            Real People.<br><span class="italic text-gray-400">Real Transformations.</span>
+          </h2>
+          <p class="text-gray-500 text-sm mt-4 font-light">Across all four programmes — verified purchases from Nigerians like you.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+          <!-- PCOS -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-soft transition-shadow reveal">
+            <div class="flex items-center gap-1 text-terracotta-500 text-sm mb-4">★★★★★</div>
+            <p class="text-gray-600 font-light italic text-sm leading-relaxed mb-5">"Finally got my period back after 8 months! The personalised plan made all the difference. I tried everything before — this was the first thing that actually worked."</p>
+            <div class="border-t border-gray-100 pt-4">
+              <p class="font-serif font-bold text-forest-900 text-sm">Sarah M.</p>
+              <p class="text-xs text-gray-400">Lagos · PCOS Protocol</p>
+              <div class="flex gap-1.5 mt-2">
+                <span class="text-[10px] bg-purple-50 text-purple-700 font-semibold px-2 py-0.5 rounded">Period returned</span>
+                <span class="text-[10px] bg-purple-50 text-purple-700 font-semibold px-2 py-0.5 rounded">-7kg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acne -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-soft transition-shadow reveal" style="animation-delay:0.08s">
+            <div class="flex items-center gap-1 text-terracotta-500 text-sm mb-4">★★★★★</div>
+            <p class="text-gray-600 font-light italic text-sm leading-relaxed mb-5">"My jawline breakouts cleared in 6 weeks. The protocol addressed the hormonal root cause — not just the surface pimples. I haven't had a hormonal breakout since."</p>
+            <div class="border-t border-gray-100 pt-4">
+              <p class="font-serif font-bold text-forest-900 text-sm">Adaeze O.</p>
+              <p class="text-xs text-gray-400">Lagos · Acne Protocol</p>
+              <div class="flex gap-1.5 mt-2">
+                <span class="text-[10px] bg-rose-50 text-rose-700 font-semibold px-2 py-0.5 rounded">Clear skin</span>
+                <span class="text-[10px] bg-rose-50 text-rose-700 font-semibold px-2 py-0.5 rounded">6 weeks</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weight -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-soft transition-shadow reveal" style="animation-delay:0.16s">
+            <div class="flex items-center gap-1 text-terracotta-500 text-sm mb-4">★★★★★</div>
+            <p class="text-gray-600 font-light italic text-sm leading-relaxed mb-5">"I had tried every diet. Nothing worked. The 90-Day plan reset my hormones and the weight finally came off. I have my confidence back."</p>
+            <div class="border-t border-gray-100 pt-4">
+              <p class="font-serif font-bold text-forest-900 text-sm">Chinwe O.</p>
+              <p class="text-xs text-gray-400">Lagos · Weight Protocol</p>
+              <div class="flex gap-1.5 mt-2">
+                <span class="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded">-18kg</span>
+                <span class="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded">Hormones balanced</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Men's -->
+          <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-soft transition-shadow reveal" style="animation-delay:0.24s">
+            <div class="flex items-center gap-1 text-terracotta-500 text-sm mb-4">★★★★★</div>
+            <p class="text-gray-600 font-light italic text-sm leading-relaxed mb-5">"I was exhausted by noon every day. The 90-day protocol completely reset my metabolism. More energy than I had in my 30s."</p>
+            <div class="border-t border-gray-100 pt-4">
+              <p class="font-serif font-bold text-forest-900 text-sm">Emeka O.</p>
+              <p class="text-xs text-gray-400">Lagos · Men's Protocol</p>
+              <div class="flex gap-1.5 mt-2">
+                <span class="text-[10px] bg-amber-50 text-amber-700 font-semibold px-2 py-0.5 rounded">-10kg</span>
+                <span class="text-[10px] bg-amber-50 text-amber-700 font-semibold px-2 py-0.5 rounded">Energy restored</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Live counter -->
+        <div class="mt-10 text-center">
+          <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-5 py-2.5 rounded-full text-xs font-semibold text-forest-800">
+            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <span id="live-counter">14 people</span> started an assessment in the last hour
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ GUARANTEE BAND ════════════════════════════ -->
+    <section class="py-20 px-5 bg-forest-900 relative overflow-hidden" aria-labelledby="guarantee-heading">
+      <div class="absolute inset-0 bg-grain opacity-5 pointer-events-none" aria-hidden="true"></div>
+      <div class="max-w-4xl mx-auto text-center relative z-10 reveal">
+        <div class="text-5xl mb-6">🛡️</div>
+        <h2 id="guarantee-heading" class="text-3xl md:text-4xl font-serif text-sand mb-5">
+          90-Day Money-Back Guarantee
+        </h2>
+        <p class="text-forest-200/80 font-light leading-relaxed mb-4 max-w-2xl mx-auto text-lg">
+          Try the full 90-day protocol. If your symptoms haven't improved, email us for a full refund — and keep everything. The only risk is staying where you are.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 mt-8 text-sm text-sand/70 font-medium">
+          <span class="flex items-center gap-1.5">✓ Full refund</span>
+          <span class="flex items-center gap-1.5">✓ Keep everything</span>
+          <span class="flex items-center gap-1.5">✓ 5-minute process</span>
+          <span class="flex items-center gap-1.5">✓ No questions asked</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════ FAQ ══════════════════════════════════ -->
+    <section class="py-24 px-5" aria-labelledby="faq-heading">
+      <div class="max-w-3xl mx-auto">
+
+        <div class="text-center mb-12 reveal">
+          <h2 id="faq-heading" class="text-3xl md:text-4xl font-serif text-forest-900">
+            Common Questions
+          </h2>
+        </div>
+
+        <div class="space-y-3" x-data="{ open: null }">
+
+          <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm reveal">
+            <button @click="open = open === 0 ? null : 0" class="w-full flex items-center justify-between p-6 text-left" :aria-expanded="open === 0">
+              <span class="font-serif font-bold text-forest-900">Is the assessment really free?</span>
+              <span class="text-terracotta-500 text-xl font-light ml-4 shrink-0" x-text="open === 0 ? '−' : '+'"></span>
+            </button>
+            <div x-show="open === 0" x-transition class="px-6 pb-6">
+              <p class="text-gray-500 font-light leading-relaxed text-sm">Yes — completely free, no email required to start. You'll see your personalised assessment results immediately. A paid protocol is available if you want the full 90-day plan, but the assessment itself costs nothing.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm reveal">
+            <button @click="open = open === 1 ? null : 1" class="w-full flex items-center justify-between p-6 text-left" :aria-expanded="open === 1">
+              <span class="font-serif font-bold text-forest-900">Is this medical advice?</span>
+              <span class="text-terracotta-500 text-xl font-light ml-4 shrink-0" x-text="open === 1 ? '−' : '+'"></span>
+            </button>
+            <div x-show="open === 1" x-transition class="px-6 pb-6">
+              <p class="text-gray-500 font-light leading-relaxed text-sm">No. OJG Herbal provides wellness and lifestyle protocols designed to complement your healthcare. If you are on medication or under a doctor's care, we recommend sharing your plan with your physician — especially before starting any new supplement.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm reveal">
+            <button @click="open = open === 2 ? null : 2" class="w-full flex items-center justify-between p-6 text-left" :aria-expanded="open === 2">
+              <span class="font-serif font-bold text-forest-900">Do I need to buy imported supplements?</span>
+              <span class="text-terracotta-500 text-xl font-light ml-4 shrink-0" x-text="open === 2 ? '−' : '+'"></span>
+            </button>
+            <div x-show="open === 2" x-transition class="px-6 pb-6">
+              <p class="text-gray-500 font-light leading-relaxed text-sm">No. Every protocol is built around Nigerian-sourced botanicals and locally available whole foods. No expensive imports, no strange ingredients — everything is accessible from Nigerian markets.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm reveal">
+            <button @click="open = open === 3 ? null : 3" class="w-full flex items-center justify-between p-6 text-left" :aria-expanded="open === 3">
+              <span class="font-serif font-bold text-forest-900">How fast will I see results?</span>
+              <span class="text-terracotta-500 text-xl font-light ml-4 shrink-0" x-text="open === 3 ? '−' : '+'"></span>
+            </button>
+            <div x-show="open === 3" x-transition class="px-6 pb-6">
+              <p class="text-gray-500 font-light leading-relaxed text-sm">Most people notice initial changes — energy, cravings, sleep — within the first 2–3 weeks. Visible results (skin clearing, cycle regularity, weight shifts) typically emerge between weeks 4–8. The full 90-day protocol is designed for lasting, root-cause transformation.</p>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm reveal">
+            <button @click="open = open === 4 ? null : 4" class="w-full flex items-center justify-between p-6 text-left" :aria-expanded="open === 4">
+              <span class="font-serif font-bold text-forest-900">Is my payment secure?</span>
+              <span class="text-terracotta-500 text-xl font-light ml-4 shrink-0" x-text="open === 4 ? '−' : '+'"></span>
+            </button>
+            <div x-show="open === 4" x-transition class="px-6 pb-6">
+              <p class="text-gray-500 font-light leading-relaxed text-sm">Yes. All payments are processed by Flutterwave — Nigeria's leading payment processor — with 256-bit SSL encryption. Your card details are never stored by us.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════ FINAL CTA ════════════════════════════════ -->
+    <section class="pb-24 px-5" aria-labelledby="cta-heading">
+      <div class="max-w-3xl mx-auto text-center bg-gradient-to-br from-forest-900 to-forest-800 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden reveal">
+        <div class="absolute inset-0 bg-grain opacity-5 pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute -top-20 -right-20 w-64 h-64 bg-terracotta-500 rounded-full opacity-10 blur-3xl" aria-hidden="true"></div>
+
+        <h2 id="cta-heading" class="text-3xl md:text-4xl font-serif text-sand mb-4 relative z-10">
+          Not Sure Where to Start?
+        </h2>
+        <p class="text-forest-200/70 font-light mb-8 text-lg relative z-10">
+          Take the free 2-minute assessment and we'll identify your condition type and the protocol built for it.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <a href="/pcos/" class="bg-sand text-forest-900 font-bold px-8 py-4 rounded-full hover:bg-white transition-all shadow-lg text-sm">
+            🌸 PCOS Assessment
+          </a>
+          <a href="/acne/" class="bg-sand text-forest-900 font-bold px-8 py-4 rounded-full hover:bg-white transition-all shadow-lg text-sm">
+            🌿 Acne Assessment
+          </a>
+          <a href="/weight/" class="bg-sand text-forest-900 font-bold px-8 py-4 rounded-full hover:bg-white transition-all shadow-lg text-sm">
+            🔥 Weight Assessment
+          </a>
+          <a href="/mens/" class="bg-sand text-forest-900 font-bold px-8 py-4 rounded-full hover:bg-white transition-all shadow-lg text-sm">
+            💪 Men's Assessment
+          </a>
+        </div>
+
+        <p class="text-forest-200/40 text-xs mt-8 relative z-10">Free · No email required · Results in 2 minutes</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+  <footer class="bg-forest-900 text-sand py-14 relative overflow-hidden" role="contentinfo">
+    <div class="absolute inset-0 bg-grain opacity-5 pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+
+      <div class="grid md:grid-cols-4 gap-10 mb-12">
+
+        <!-- Brand -->
+        <div class="md:col-span-1">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+              <span class="text-sand font-serif italic text-xl">O</span>
+            </div>
+            <span class="font-serif font-bold text-sand text-lg">OJG Herbal</span>
+          </div>
+          <p class="text-forest-200/50 text-sm font-light leading-relaxed">
+            Nigeria's natural wellness platform. Personalised herbal protocols for lasting health transformation.
+          </p>
+        </div>
+
+        <!-- Programmes -->
+        <div>
+          <h3 class="text-xs font-bold tracking-widest uppercase text-forest-200/40 mb-4">Programmes</h3>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="/pcos/" class="text-forest-200/60 hover:text-sand transition-colors">PCOS Solutions</a></li>
+            <li><a href="/acne/" class="text-forest-200/60 hover:text-sand transition-colors">Acne & Clear Skin</a></li>
+            <li><a href="/weight/" class="text-forest-200/60 hover:text-sand transition-colors">Weight Loss</a></li>
+            <li><a href="/mens/" class="text-forest-200/60 hover:text-sand transition-colors">Men's Vitality</a></li>
+          </ul>
+        </div>
+
+        <!-- Quick links -->
+        <div>
+          <h3 class="text-xs font-bold tracking-widest uppercase text-forest-200/40 mb-4">Quick Links</h3>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="/pcos/assessment.html" class="text-forest-200/60 hover:text-sand transition-colors">Free Assessment</a></li>
+            <li><a href="/member/" class="text-forest-200/60 hover:text-sand transition-colors">Member Login</a></li>
+            <li><a href="/privacy-policy.html" class="text-forest-200/60 hover:text-sand transition-colors">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h3 class="text-xs font-bold tracking-widest uppercase text-forest-200/40 mb-4">Support</h3>
+          <ul class="space-y-2.5 text-sm">
+            <li>
+              <a href="https://wa.me/2348133149989" target="_blank" rel="noopener noreferrer" class="text-forest-200/60 hover:text-sand transition-colors flex items-center gap-2">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+                WhatsApp Support
+              </a>
+            </li>
+          </ul>
+          <div class="mt-6 bg-white/5 border border-white/10 rounded-xl p-4">
+            <p class="text-xs text-forest-200/40 uppercase tracking-widest font-bold mb-1">Guarantee</p>
+            <p class="text-sm text-sand/80 font-light">🛡️ 90-Day Money-Back</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-forest-200/30">
+        <p>© <span id="footer-year"></span> OJG Herbal. All rights reserved.</p>
+        <p class="text-center">This content is for educational purposes only and does not replace professional medical advice. Always consult your doctor before starting a new health programme.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <div class="fixed bottom-6 right-6 z-40">
+    <a href="https://wa.me/2348133149989?text=Hi%2C%20I%20have%20questions%20about%20OJG%20Herbal"
+      target="_blank" rel="noopener noreferrer"
+      class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+      aria-label="Chat on WhatsApp">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/>
+      </svg>
+      <span class="text-sm font-medium hidden sm:inline">Ask a Question</span>
+    </a>
+  </div>
+
+  <script>
+    // Footer year
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Live counter
+    const counter = document.getElementById('live-counter');
+    if (counter) {
+      const update = () => {
+        counter.textContent = (8 + Math.floor(Math.random() * 18)) + ' people';
+      };
+      update();
+      setInterval(update, 45000);
+    }
+  </script>
+
+</body>
+</html>

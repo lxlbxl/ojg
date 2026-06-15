@@ -153,11 +153,28 @@ You are a holistic dermatology-informed skin specialist with deep expertise in a
   ],
 
   "supplements": [
-    {"name": "...", "dosage": "...", "timing": "...", "benefit": "Specific acne benefit", "note": "..."}
+    {
+      "name": "...",
+      "dosage": "...",
+      "timing": "...",
+      "benefit": "Specific acne benefit",
+      "mechanism": "What this does in the skin/body — the biological job it performs (e.g. 'reduces sebum overproduction by lowering DHT at the follicle level')",
+      "replaces": "What imported supplement or clinical ingredient this mirrors, and why this version achieves the same outcome (e.g. 'Replaces pharmaceutical-grade zinc gluconate — zinc from egusi seeds delivers the same sebum-regulating and anti-inflammatory action at a fraction of the cost'). If this IS the standard supplement, explain why it was chosen over alternatives.",
+      "note": "..."
+    }
   ],
 
   "herbal_protocols": [
-    {"herb": "English name", "local_name": "Local name from Region Profile", "preparation": "...", "dosage": "...", "benefit": "Skin-specific benefit", "caution": "..."}
+    {
+      "herb": "English name",
+      "local_name": "Local name from Region Profile",
+      "preparation": "...",
+      "dosage": "...",
+      "benefit": "Skin-specific benefit",
+      "mechanism": "The biological mechanism this herb targets in the skin (e.g. 'turmeric's curcumin blocks NF-κB, the inflammatory pathway that triggers sebaceous gland overactivity and the red, inflamed papules typical of hormonal acne')",
+      "replaces": "What clinical supplement, topical, or pharmaceutical this herb is doing the same job as (e.g. 'Replaces imported anti-inflammatory supplements — turmeric achieves the same NF-κB inhibition as pharmaceutical NSAIDs at culinary doses, without gut side effects')",
+      "caution": "..."
+    }
   ],
 
   "lifestyle_tips": [

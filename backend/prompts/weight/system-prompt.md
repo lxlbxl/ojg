@@ -181,11 +181,28 @@ You are a certified metabolic nutritionist and functional medicine practitioner 
   },
 
   "supplements": [
-    {"name": "...", "dosage": "...", "timing": "...", "benefit": "Specific metabolic or hormonal benefit", "note": "..."}
+    {
+      "name": "...",
+      "dosage": "...",
+      "timing": "...",
+      "benefit": "Specific metabolic or hormonal benefit",
+      "mechanism": "What this does in the body — the metabolic or hormonal job it performs (e.g. 'magnesium activates over 300 enzymes involved in glucose metabolism, directly improving insulin sensitivity and reducing the cortisol spike that drives fat storage around the abdomen')",
+      "replaces": "What imported supplement or clinical ingredient this mirrors, and why this version achieves the same outcome (e.g. 'Replaces synthetic magnesium glycinate supplements — pumpkin seeds and bitter greens provide the same bioavailable magnesium at food-safe doses, with the added benefit of co-nutrients like zinc and B vitamins'). If this IS the standard supplement, explain why it was chosen over alternatives.",
+      "note": "..."
+    }
   ],
 
   "herbal_protocols": [
-    {"herb": "English name", "local_name": "Local language name", "preparation": "...", "dosage": "...", "benefit": "Metabolic/fat-loss benefit", "caution": "..."}
+    {
+      "herb": "English name",
+      "local_name": "Local language name",
+      "preparation": "...",
+      "dosage": "...",
+      "benefit": "Metabolic/fat-loss benefit",
+      "mechanism": "The biological mechanism this herb targets — what is actually happening in the metabolism when she uses this (e.g. 'cinnamon's cinnamaldehyde activates GLUT4 transporters on muscle cells, mimicking insulin to pull glucose out of the blood without requiring additional insulin secretion — the same mechanism as metformin, but milder')",
+      "replaces": "What clinical supplement, pharmaceutical, or imported product this herb is doing the same job as (e.g. 'Replaces imported berberine supplements for mild insulin sensitisation — cinnamon achieves comparable GLUT4 activation at a fraction of the cost, with an exceptional safety profile')",
+      "caution": "..."
+    }
   ],
 
   "lifestyle_tips": [

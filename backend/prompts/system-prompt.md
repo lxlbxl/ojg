@@ -133,13 +133,28 @@ You MUST output valid JSON only. No text before or after the JSON. Use the exact
     ],
 
     "supplements": [
-        {"name": "Supplement Name", "dosage": "Exact dosage", "timing": "When to take", "benefit": "Specific benefit for their PCOS type", "note": "Any warnings or tips"},
-        {"name": "...", "dosage": "...", "timing": "...", "benefit": "...", "note": "..."}
+        {
+          "name": "Supplement Name",
+          "dosage": "Exact dosage",
+          "timing": "When to take",
+          "benefit": "Specific benefit for their PCOS type",
+          "mechanism": "The biological job this performs in the body",
+          "replaces": "What imported or clinical supplement this mirrors and why it achieves the same outcome",
+          "note": "Any warnings or tips"
+        }
     ],
 
     "herbal_protocols": [
-        {"herb": "Herb Name", "yoruba_name": "Yoruba/local name if applicable", "preparation": "How to prepare", "dosage": "How much and how often", "benefit": "Specific benefit", "caution": "Any warnings"},
-        {"herb": "...", "yoruba_name": "...", "preparation": "...", "dosage": "...", "benefit": "...", "caution": "..."}
+        {
+          "herb": "Herb Name",
+          "local_name": "Yoruba / Igbo / Hausa name as applicable",
+          "preparation": "How to prepare",
+          "dosage": "How much and how often",
+          "benefit": "Specific benefit",
+          "mechanism": "The biological mechanism this herb targets",
+          "replaces": "What clinical supplement or pharmaceutical this herb is doing the same job as",
+          "caution": "Any warnings"
+        }
     ],
 
     "lifestyle_tips": [

@@ -179,12 +179,37 @@ You are a men's functional health specialist and performance nutritionist with d
   ],
 
   "supplements": [
-    {"name": "Creatine Monohydrate", "dosage": "5g/day", "timing": "Any time — consistency matters", "benefit": "Most evidence-backed supplement: +5–10% strength, +5–7% muscle, cognitive benefit", "note": "Body composition and low-T types prioritise this"},
-    {"name": "...", "dosage": "...", "timing": "...", "benefit": "...", "note": "..."}
+    {
+      "name": "Creatine Monohydrate",
+      "dosage": "5g/day",
+      "timing": "Any time — consistency matters",
+      "benefit": "Most evidence-backed supplement: +5–10% strength, +5–7% muscle, cognitive benefit",
+      "mechanism": "Replenishes phosphocreatine in muscle cells, enabling faster ATP regeneration during explosive effort — directly increases training volume and recovery speed, which drives the testosterone stimulus",
+      "replaces": "No direct herbal equivalent exists at this dose-response — this is the one supplement the evidence supports unreservedly. No food source delivers therapeutic creatine at 5g/day without eating >1kg of red meat.",
+      "note": "Body composition and low-T types prioritise this"
+    },
+    {
+      "name": "...",
+      "dosage": "...",
+      "timing": "...",
+      "benefit": "...",
+      "mechanism": "What this does in the body — the biological job it performs (e.g. 'supports Leydig cell testosterone synthesis by providing the zinc co-factor required for the enzyme chain that converts cholesterol to testosterone')",
+      "replaces": "What imported supplement or clinical ingredient this mirrors, and why the local/natural version achieves the same outcome. If this IS the standard supplement, explain why it was chosen over alternatives.",
+      "note": "..."
+    }
   ],
 
   "herbal_protocols": [
-    {"herb": "English name", "local_name": "Local language name from Region Profile", "preparation": "...", "dosage": "...", "benefit": "Specific male health benefit (energy/T/cortisol)", "caution": "..."}
+    {
+      "herb": "English name",
+      "local_name": "Local language name from Region Profile",
+      "preparation": "...",
+      "dosage": "...",
+      "benefit": "Specific male health benefit (energy/T/cortisol)",
+      "mechanism": "The biological mechanism this herb targets — what is actually happening hormonally or neurologically when he uses this (e.g. 'ashwagandha reduces cortisol at the hypothalamus level, which removes cortisol's suppression of LH release — more LH means more Leydig cell stimulation and higher testosterone output')",
+      "replaces": "What clinical supplement, pharmaceutical, or imported product this herb is doing the same job as (e.g. 'Replaces imported cortisol-manager supplements like phosphatidylserine — ashwagandha achieves the same HPA-axis downregulation via withanolides, with stronger evidence at equivalent cost or less')",
+      "caution": "..."
+    }
   ],
 
   "lifestyle_tips": [

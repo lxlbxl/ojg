@@ -1,6 +1,9 @@
 # OJG Herbal — root .htaccess
 # Front controller + structural variant routing
 
+# Serve index.html as the default document
+DirectoryIndex index.html
+
 # Enable URL rewriting
 RewriteEngine On
 

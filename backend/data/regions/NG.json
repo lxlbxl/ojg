@@ -21,7 +21,8 @@
     {"name": "Scent Leaf (Basil)", "local_name": "Efirin (Yoruba) / Nchanwu (Igbo) / Daidoya (Hausa)", "use": "antibacterial, blood sugar, stress adaptogen"},
     {"name": "Fenugreek Seeds",  "local_name": "Hulba (Hausa / Arabic) / Ewedu seed",             "use": "insulin sensitivity, hormonal support, milk production"},
     {"name": "Bitter Kola",      "local_name": "Orogbo (Yoruba) / Namijin goro (Hausa)",           "use": "vitality, anti-inflammatory, traditional tonic"},
-    {"name": "Neem (Dongoyaro)", "local_name": "Dongoyaro (Yoruba/Hausa) / Ogwu afia (Igbo)",     "use": "antibacterial, antifungal, blood purifier — topical use primarily"}
+    {"name": "Neem (Dongoyaro)", "local_name": "Dongoyaro (Yoruba/Hausa) / Ogwu afia (Igbo)",     "use": "antibacterial, antifungal, blood purifier — topical use primarily"},
+    {"name": "Spearmint",       "local_name": "Spearmint (available in markets, health stores, and suya spice sellers in urban areas)", "use": "anti-androgen — reduces free testosterone, visible reduction in facial hair and acne in PCOS; 2 cups of tea daily is the clinically studied dose"}
   ],
   "where_to_source": "local open markets (Balogun, Mile 12, Eke, Oja), herbal medicine sellers (agbo sellers), pharmacies, and health food stores in urban areas",
   "typical_cost_band": "low-medium",

@@ -174,12 +174,12 @@ const CONFIG = {
       images: {
         dashboard: "../images/acne/dashboard-mockup.png",
         transformation: "../images/acne/glowing-skin-confidence.png",
-        mechanism: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&w=600&q=80",
+        mechanism: "../images/acne/follicle-mechanism.png",
         types: {
-          hormonal: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80",
-          inflammatory: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80",
-          comedonal: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=600&q=80",
-          cystic: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80"
+          hormonal: "../images/acne/type-hormonal.png",
+          inflammatory: "../images/acne/type-inflammatory.png",
+          comedonal: "../images/acne/type-comedonal.png",
+          cystic: "../images/acne/type-cystic.png"
         }
       },
       empathy: {
