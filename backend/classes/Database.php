@@ -225,7 +225,11 @@ class Database
 
     private function initializeMemberSchema()
     {
-        $schemaFile = APP_ROOT . '/database/member_schema.sql';
+        if ($this->isPostgres()) {
+            $schemaFile = APP_ROOT . '/database/member_schema_postgres.sql';
+        } else {
+            $schemaFile = APP_ROOT . '/database/member_schema.sql';
+        }
 
         if (file_exists($schemaFile)) {
             $schema = file_get_contents($schemaFile);
