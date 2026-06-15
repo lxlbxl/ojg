@@ -120,149 +120,135 @@
             localStorage.getItem('csrf_token') || '';
     }
 
-    // Create consent banner HTML
+    // Create consent banner HTML — slim, on-brand, GDPR & NDPR compliant
     function createBannerHTML() {
         return `
-            <div id="cookie-consent-banner" class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t z-50" style="display: none;">
-                <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Main Message -->
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-900 mb-2">
-                                🍪 We Value Your Privacy
-                            </h3>
-                            <p class="text-gray-600 text-sm mb-4">
-                                We use cookies to enhance your browsing experience, analyze site traffic, 
-                                and personalize content. By continuing to use our site, you consent to our 
-                                use of cookies in accordance with our 
-                                <a href="/privacy-policy.html" target="_blank" class="text-green-600 hover:underline">Privacy Policy</a>.
-                            </p>
-                            <p class="text-xs text-gray-500">
-                                Compliant with GDPR (EU) and NDPR (Nigeria) regulations.
-                            </p>
-                        </div>
-                        
-                        <!-- Consent Options -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <p class="font-medium text-gray-800 text-sm">Essential Cookies</p>
-                                    <p class="text-xs text-gray-500">Required for site functionality</p>
-                                </div>
-                                <span class="text-green-600 text-sm font-medium">Always Active</span>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <p class="font-medium text-gray-800 text-sm">Analytics Cookies</p>
-                                    <p class="text-xs text-gray-500">Help us improve our site</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="consent-analytics" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                                </label>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <div>
-                                    <p class="font-medium text-gray-800 text-sm">Marketing Cookies</p>
-                                    <p class="text-xs text-gray-500">Personalized ads and content</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="consent-marketing" class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t">
-                        <button id="consent-reject-all" class="flex-1 px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition font-medium">
-                            Reject Non-Essential
+            <style>
+                #ojg-cookie-bar { font-family: 'Outfit', system-ui, sans-serif; }
+                #ojg-cookie-bar button { cursor: pointer; font-family: inherit; transition: opacity 0.15s; }
+                #ojg-cookie-bar button:hover { opacity: 0.8; }
+                #ojg-cookie-modal-overlay { font-family: 'Outfit', system-ui, sans-serif; }
+                .ojg-toggle { position: relative; display: inline-block; width: 40px; height: 22px; }
+                .ojg-toggle input { opacity: 0; width: 0; height: 0; }
+                .ojg-toggle-slider {
+                    position: absolute; inset: 0; background: #d1d5db; border-radius: 22px; transition: 0.25s;
+                }
+                .ojg-toggle-slider::before {
+                    content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px;
+                    background: white; border-radius: 50%; transition: 0.25s;
+                }
+                .ojg-toggle input:checked + .ojg-toggle-slider { background: #166534; }
+                .ojg-toggle input:checked + .ojg-toggle-slider::before { transform: translateX(18px); }
+            </style>
+
+            <!-- Slim cookie bar -->
+            <div id="ojg-cookie-bar" role="dialog" aria-label="Cookie consent" aria-live="polite"
+                style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9998;
+                       background:rgba(15,57,34,0.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+                       border-top:1px solid rgba(255,255,255,0.07);padding:11px 20px;">
+                <div style="max-width:1152px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;">
+                    <p style="color:rgba(244,241,234,0.7);font-size:11.5px;line-height:1.5;flex:1;min-width:200px;margin:0;">
+                        🍪 We use essential &amp; analytics cookies.
+                        <a href="/privacy-policy.html" target="_blank" rel="noopener"
+                           style="color:rgba(244,241,234,0.85);text-decoration:underline;text-underline-offset:2px;">Privacy&nbsp;Policy</a>
+                        &nbsp;·&nbsp;GDPR &amp; NDPR compliant.
+                    </p>
+                    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+                        <button id="consent-manage"
+                            style="color:rgba(244,241,234,0.55);font-size:11.5px;background:none;border:none;
+                                   padding:0;text-decoration:underline;text-underline-offset:2px;">
+                            Manage
                         </button>
-                        <button id="consent-customize" class="flex-1 px-6 py-3 border border-green-600 rounded-lg text-green-600 hover:bg-green-50 transition font-medium">
-                            Customize Settings
+                        <button id="consent-reject-all"
+                            style="color:rgba(244,241,234,0.75);font-size:11.5px;background:none;
+                                   border:1px solid rgba(244,241,234,0.22);padding:5px 13px;border-radius:999px;">
+                            Essential only
                         </button>
-                        <button id="consent-accept-all" class="flex-1 sm:flex-none px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
-                            Accept All Cookies
-                        </button>
-                    </div>
-                    
-                    <!-- Manage Link -->
-                    <div class="text-center mt-4">
-                        <button id="consent-manage" class="text-sm text-gray-500 hover:text-gray-700 underline">
-                            Manage Cookie Preferences
+                        <button id="consent-accept-all"
+                            style="color:#0f3922;background:#F4F1EA;font-size:11.5px;font-weight:600;
+                                   border:none;padding:6px 14px;border-radius:999px;">
+                            Accept all
                         </button>
                     </div>
                 </div>
             </div>
-            
-            <!-- Preferences Modal -->
-            <div id="cookie-preferences-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" style="display: none;">
-                <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                    <div class="p-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="text-2xl font-bold text-gray-900">Cookie Preferences</h2>
-                            <button id="close-preferences" class="text-gray-500 hover:text-gray-700">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        
-                        <div class="space-y-4 mb-6">
-                            <div class="border rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Essential Cookies</h3>
-                                        <p class="text-sm text-gray-600 mt-1">These cookies are necessary for the website to function properly. They enable basic functions like page navigation and access to secure areas.</p>
-                                    </div>
-                                    <span class="text-green-600 text-sm font-medium">Always Active</span>
-                                </div>
+
+            <!-- Cookie preferences modal -->
+            <div id="ojg-cookie-modal-overlay"
+                style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;
+                       align-items:center;justify-content:center;padding:16px;">
+                <div style="background:#FDFCF8;border-radius:20px;max-width:440px;width:100%;
+                            max-height:90vh;overflow-y:auto;padding:28px;position:relative;">
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                        <h2 style="font-size:17px;font-weight:700;color:#0f3922;margin:0;">Cookie Preferences</h2>
+                        <button id="ojg-close-modal"
+                            style="background:none;border:none;color:#9ca3af;font-size:20px;line-height:1;padding:0;">✕</button>
+                    </div>
+
+                    <p style="font-size:12px;color:#6b7280;line-height:1.6;margin-bottom:18px;">
+                        We use cookies to improve your experience and analyse site usage, in line with
+                        GDPR (EU) and NDPR (Nigeria) regulations. Adjust your preferences below.
+                    </p>
+
+                    <!-- Essential -->
+                    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                            <div>
+                                <p style="font-size:13px;font-weight:600;color:#0f3922;margin:0 0 2px;">Essential</p>
+                                <p style="font-size:11px;color:#9ca3af;margin:0;">Login, sessions, security. Cannot be disabled.</p>
                             </div>
-                            
-                            <div class="border rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Analytics Cookies</h3>
-                                        <p class="text-sm text-gray-600 mt-1">These cookies help us understand how visitors use our website by collecting and reporting information anonymously. This helps us improve our website.</p>
-                                    </div>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" id="modal-consent-analytics" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="border rounded-lg p-4">
-                                <div class="flex justify-between items-start">
-                                    <div>
-                                        <h3 class="font-semibold text-gray-800">Marketing Cookies</h3>
-                                        <p class="text-sm text-gray-600 mt-1">These cookies are used to track visitors across websites to display relevant ads and limit the number of times you see an advertisement.</p>
-                                    </div>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" id="modal-consent-marketing" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-3">
-                            <button id="save-preferences" class="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium">
-                                Save Preferences
-                            </button>
-                        </div>
-                        
-                        <div class="mt-6 pt-6 border-t text-center">
-                            <a href="/privacy-policy.html" target="_blank" class="text-sm text-green-600 hover:underline">
-                                Learn more in our Privacy Policy
-                            </a>
+                            <span style="font-size:11px;font-weight:600;color:#166534;white-space:nowrap;">Always on</span>
                         </div>
                     </div>
+
+                    <!-- Analytics -->
+                    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                            <div>
+                                <p style="font-size:13px;font-weight:600;color:#0f3922;margin:0 0 2px;">Analytics</p>
+                                <p style="font-size:11px;color:#9ca3af;margin:0;">Anonymous usage data to help us improve the site.</p>
+                            </div>
+                            <label class="ojg-toggle" aria-label="Analytics cookies">
+                                <input type="checkbox" id="modal-consent-analytics">
+                                <span class="ojg-toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Marketing -->
+                    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:20px;">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                            <div>
+                                <p style="font-size:13px;font-weight:600;color:#0f3922;margin:0 0 2px;">Marketing</p>
+                                <p style="font-size:11px;color:#9ca3af;margin:0;">Personalised content and relevant offers.</p>
+                            </div>
+                            <label class="ojg-toggle" aria-label="Marketing cookies">
+                                <input type="checkbox" id="modal-consent-marketing">
+                                <span class="ojg-toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="save-preferences"
+                        style="width:100%;background:#0f3922;color:#F4F1EA;font-size:13px;font-weight:600;
+                               border:none;padding:12px;border-radius:12px;">
+                        Save preferences
+                    </button>
+
+                    <p style="text-align:center;margin-top:14px;font-size:11px;color:#d1d5db;">
+                        <a href="/privacy-policy.html" target="_blank" rel="noopener"
+                           style="color:#6b7280;text-decoration:underline;text-underline-offset:2px;">
+                            Full Privacy Policy
+                        </a>
+                        &nbsp;·&nbsp; You can change preferences any time.
+                    </p>
                 </div>
             </div>
+
+            <!-- Hidden inputs kept for syncToggles compatibility -->
+            <input type="checkbox" id="consent-analytics" style="display:none">
+            <input type="checkbox" id="consent-marketing" style="display:none">
         `;
     }
 
@@ -274,29 +260,30 @@
         document.body.appendChild(bannerContainer);
 
         const consent = getConsent();
-        const banner = document.getElementById('cookie-consent-banner');
-        const modal = document.getElementById('cookie-preferences-modal');
+        const banner = document.getElementById('ojg-cookie-bar');
+        const modal = document.getElementById('ojg-cookie-modal-overlay');
 
-        // Check if consent already given
+        // Don't show if consent already recorded in localStorage
         if (consent.granted) {
-            // Sync toggles with saved consent
             syncToggles(consent.categories);
-            return; // Don't show banner
+            return;
         }
 
-        // Show banner
-        banner.style.display = 'block';
+        // Don't show again if already shown during this browser session
+        // (user saw it on a previous page this visit but hasn't chosen yet)
+        if (sessionStorage.getItem('ojg_banner_seen')) {
+            return;
+        }
 
-        // Button handlers
+        // Show banner and mark as seen for this session
+        banner.style.display = 'block';
+        sessionStorage.setItem('ojg_banner_seen', '1');
+
+        // Accept all
         document.getElementById('consent-accept-all').addEventListener('click', function () {
             const newConsent = {
                 granted: true,
-                categories: {
-                    essential: true,
-                    analytics: true,
-                    marketing: true,
-                    functional: true
-                }
+                categories: { essential: true, analytics: true, marketing: true, functional: true }
             };
             saveConsent(newConsent);
             recordConsentToBackend(newConsent);
@@ -304,15 +291,11 @@
             syncToggles(newConsent.categories);
         });
 
+        // Essential only
         document.getElementById('consent-reject-all').addEventListener('click', function () {
             const newConsent = {
                 granted: true,
-                categories: {
-                    essential: true,
-                    analytics: false,
-                    marketing: false,
-                    functional: false
-                }
+                categories: { essential: true, analytics: false, marketing: false, functional: false }
             };
             saveConsent(newConsent);
             recordConsentToBackend(newConsent);
@@ -320,18 +303,17 @@
             syncToggles(newConsent.categories);
         });
 
-        document.getElementById('consent-customize').addEventListener('click', function () {
-            modal.style.display = 'flex';
-        });
-
+        // Open modal
         document.getElementById('consent-manage').addEventListener('click', function () {
             modal.style.display = 'flex';
         });
 
-        document.getElementById('close-preferences').addEventListener('click', function () {
+        // Close modal
+        document.getElementById('ojg-close-modal').addEventListener('click', function () {
             modal.style.display = 'none';
         });
 
+        // Save from modal
         document.getElementById('save-preferences').addEventListener('click', function () {
             const newConsent = {
                 granted: true,
@@ -349,11 +331,9 @@
             syncToggles(newConsent.categories);
         });
 
-        // Close modal on outside click
+        // Close modal on backdrop click
         modal.addEventListener('click', function (e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
+            if (e.target === modal) modal.style.display = 'none';
         });
     }
 

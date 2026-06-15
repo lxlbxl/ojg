@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -79,6 +79,7 @@
             transition: width 0.5s ease-out;
         }
     </style>
+    <script src="/js/cookie-consent.js"></script>
 </head>
 
 <body class="antialiased relative min-h-screen overflow-hidden flex flex-col" x-data="generator()">
@@ -110,7 +111,7 @@
                     <div
                         class="absolute inset-0 border-4 border-forest-900 rounded-full border-t-transparent animate-spin">
                     </div>
-                    <div class="absolute inset-0 flex items-center justify-center text-3xl">🧠</div>
+                    <div class="absolute inset-0 flex items-center justify-center text-3xl">ðŸ§ </div>
                 </div>
 
                 <div>
@@ -138,7 +139,7 @@
             <div x-show="completed" style="display: none;" class="space-y-8 animate-fade-in-up">
                 <div
                     class="w-24 h-24 bg-forest-50 text-forest-900 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner border border-forest-100">
-                    ✓
+                    âœ“
                 </div>
 
                 <div>
@@ -173,7 +174,7 @@
             <!-- Error State -->
             <div x-show="error" style="display: none;" class="space-y-6">
                 <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto text-3xl">
-                    😕
+                    ðŸ˜•
                 </div>
                 <h2 class="text-2xl font-serif font-bold text-red-800">Connection Interrupted</h2>
                 <p class="text-gray-600" x-text="errorMessage"></p>
@@ -202,7 +203,7 @@
     </footer>
 
     <script>
-        // API URL — uses the PHP backend (same server, no separate Node.js process needed)
+        // API URL â€” uses the PHP backend (same server, no separate Node.js process needed)
         const API_BASE_URL = '../backend/api';
 
         const GENERATION_TIMEOUT_MS = 120000; // 2 minutes

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Weight Loss Protocol is Ready — Choose Your Access</title>
+    <title>Your Weight Loss Protocol is Ready â€” Choose Your Access</title>
     <meta name="description"
         content="Your personalized Weight Loss protocol is ready. Choose your preferred format and start your 90-day transformation today.">
 
@@ -58,6 +58,7 @@
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/flutterwave-integration.js"></script>
     <script src="../js/tracking.js"></script>
+    <script src="/js/cookie-consent.js"></script>
 </head>
 
 <body class="antialiased relative overflow-x-hidden">
@@ -77,7 +78,7 @@
                 </div>
                 <!-- Honest urgency: removed fake "Offer Active" -->
                 <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-3 md:px-4 py-1.5 rounded-full text-xs font-medium text-forest-800 uppercase">
-                    🛡️ <span class="hidden md:inline">90-Day</span> Guarantee
+                    ðŸ›¡ï¸ <span class="hidden md:inline">90-Day</span> Guarantee
                 </div>
             </div>
         </div>
@@ -85,18 +86,18 @@
 
     <main class="pt-24 pb-16 px-4 md:px-6" x-data="selectPlanPage()">
 
-        <!-- ① Personalization Header (keeps thread from assessment) -->
+        <!-- â‘  Personalization Header (keeps thread from assessment) -->
         <section class="max-w-4xl mx-auto mb-10 md:mb-14 text-center reveal-up">
             <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">Your Protocol is Ready</span>
             <h1 class="text-4xl md:text-6xl font-serif font-medium leading-[1.1] text-forest-900 mb-4" data-exp="plan-headline">
                 Your <span class="italic text-terracotta-600" x-text="weightType"></span> Protocol<span x-show="customerData.name" x-cloak>, <span x-text="customerData.name.split(' ')[0]"></span></span>.
             </h1>
             <p class="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-                Choose how you want to access your personalized 90-day plan — both options include the <strong>exact same</strong> protocol.
+                Choose how you want to access your personalized 90-day plan â€” both options include the <strong>exact same</strong> protocol.
             </p>
         </section>
 
-        <!-- ② Format Choice (Abundance Reframe) -->
+        <!-- â‘¡ Format Choice (Abundance Reframe) -->
         <section class="max-w-5xl mx-auto mb-12 md:mb-16">
             <div class="grid md:grid-cols-12 gap-12 items-start">
 
@@ -108,18 +109,18 @@
                             :class="selectedPlan === 'web' ? 'selected border-forest-800 bg-forest-50' : 'border-gray-200 bg-white'"
                             @click="selectPlan('web')" id="plan-card-portal">
                             <div class="absolute top-0 right-0 bg-terracotta-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">MOST POPULAR</div>
-                            <div class="text-3xl mb-3">💻</div>
+                            <div class="text-3xl mb-3">ðŸ’»</div>
                             <h3 class="font-serif font-bold text-lg text-forest-900 mb-1">Member Portal</h3>
                             <p class="text-xs text-gray-500 mb-3">Interactive dashboard with daily tracking, AI-powered meal updates, and automated reminders.</p>
                             <ul class="text-xs space-y-2 mb-4">
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Daily Dynamic Meal Plans</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Interactive Symptom Tracker</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Community Access</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> <strong>+ PDF guides as a bonus</strong></li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Daily Dynamic Meal Plans</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Interactive Symptom Tracker</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Community Access</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> <strong>+ PDF guides as a bonus</strong></li>
                             </ul>
                             <div class="text-center">
-                                <span class="block text-xs text-gray-400 line-through">₦<span x-text="originalPrice.toLocaleString()"></span></span>
-                                <span class="block text-xl font-serif font-bold text-forest-900">₦<span x-text="price.toLocaleString()"></span></span>
+                                <span class="block text-xs text-gray-400 line-through">â‚¦<span x-text="originalPrice.toLocaleString()"></span></span>
+                                <span class="block text-xl font-serif font-bold text-forest-900">â‚¦<span x-text="price.toLocaleString()"></span></span>
                             </div>
                         </div>
 
@@ -127,30 +128,30 @@
                         <div class="option-card border-2 rounded-2xl p-6 cursor-pointer relative"
                             :class="selectedPlan === 'pdf' ? 'selected border-forest-800 bg-forest-50' : 'border-gray-200 bg-white'"
                             @click="selectPlan('pdf')" id="plan-card-pdf">
-                            <div class="text-3xl mb-3">📄</div>
+                            <div class="text-3xl mb-3">ðŸ“„</div>
                             <h3 class="font-serif font-bold text-lg text-forest-900 mb-1">Instant PDF Download</h3>
                             <p class="text-xs text-gray-500 mb-3">Beautifully designed, printer-friendly guides. Yours to keep forever, no login required.</p>
                             <ul class="text-xs space-y-2 mb-4">
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Complete Meal Plan PDF</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Printable Trackers</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> No Internet Needed</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Keep Forever</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Complete Meal Plan PDF</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Printable Trackers</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> No Internet Needed</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">âœ“</span> Keep Forever</li>
                             </ul>
                             <div class="text-center">
-                                <span class="block text-xs text-gray-400 line-through">₦<span x-text="originalPrice.toLocaleString()"></span></span>
-                                <span class="block text-xl font-serif font-bold text-forest-900">₦<span x-text="price.toLocaleString()"></span></span>
+                                <span class="block text-xs text-gray-400 line-through">â‚¦<span x-text="originalPrice.toLocaleString()"></span></span>
+                                <span class="block text-xl font-serif font-bold text-forest-900">â‚¦<span x-text="price.toLocaleString()"></span></span>
                             </div>
                         </div>
                     </div>
 
                     <p class="text-center text-sm font-bold text-forest-800">
-                        ✓ Both options include the complete 90-day protocol. No compromise.
+                        âœ“ Both options include the complete 90-day protocol. No compromise.
                     </p>
 
                     <div class="reveal-up delay-200">
                         <button @click="scrollToOrder()" id="plan-proceed-cta" data-exp="plan-cta"
                             class="group relative w-full overflow-hidden bg-forest-900 text-sand px-8 py-5 rounded-full font-sans font-medium transition-all hover:shadow-soft hover:-translate-y-1 text-center text-lg">
-                            <span x-show="pricingLoaded" x-cloak x-text="'Get Started with ' + (selectedPlan === 'web' ? 'Portal Access' : 'PDF Download') + ' →'"></span>
+                            <span x-show="pricingLoaded" x-cloak x-text="'Get Started with ' + (selectedPlan === 'web' ? 'Portal Access' : 'PDF Download') + ' â†’'"></span>
                             <span x-show="!pricingLoaded">Loading Options...</span>
                         </button>
                     </div>
@@ -183,7 +184,7 @@
             </div>
         </section>
 
-        <!-- ③ Value Stack vs Price (The No-Brainer Gap) -->
+        <!-- â‘¢ Value Stack vs Price (The No-Brainer Gap) -->
         <section class="max-w-4xl mx-auto mb-12 md:mb-16" data-exp="value-stack">
             <div class="glass-panel rounded-[2rem] p-8 md:p-12 shadow-soft">
                 <div class="text-center mb-8">
@@ -200,39 +201,39 @@
                                     <p class="text-gray-500 text-xs" x-text="item.desc"></p>
                                 </div>
                             </div>
-                            <span class="text-gray-400 text-sm line-through shrink-0 ml-4">₦<span x-text="item.value.toLocaleString()"></span></span>
+                            <span class="text-gray-400 text-sm line-through shrink-0 ml-4">â‚¦<span x-text="item.value.toLocaleString()"></span></span>
                         </div>
                     </template>
                 </div>
                 <div class="bg-forest-50 rounded-2xl p-6 text-center border border-forest-100">
-                    <p class="text-gray-500 text-sm mb-2">Total Value: <strong class="line-through text-gray-700">₦197,000</strong></p>
+                    <p class="text-gray-500 text-sm mb-2">Total Value: <strong class="line-through text-gray-700">â‚¦197,000</strong></p>
                     <p class="text-3xl font-serif font-bold text-forest-900" x-show="pricingLoaded" x-cloak>
-                        Your Price Today: <span class="text-terracotta-600">₦<span x-text="price.toLocaleString()"></span></span>
+                        Your Price Today: <span class="text-terracotta-600">â‚¦<span x-text="price.toLocaleString()"></span></span>
                     </p>
                     <p class="text-green-700 font-bold text-sm mt-2" x-show="pricingLoaded" x-cloak>
-                        You save ₦<span x-text="(originalPrice - price).toLocaleString()"></span> today
+                        You save â‚¦<span x-text="(originalPrice - price).toLocaleString()"></span> today
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- ④ Guarantee Centerpiece (highest-ROI block) -->
+        <!-- â‘£ Guarantee Centerpiece (highest-ROI block) -->
         <section class="max-w-3xl mx-auto mb-12 md:mb-16 px-4" data-exp="pricing-guarantee">
             <div class="guarantee-centerpiece p-8 md:p-12 text-center shadow-soft">
-                <div class="text-6xl mb-4">🛡️</div>
+                <div class="text-6xl mb-4">ðŸ›¡ï¸</div>
                 <h3 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-3" x-text="guarantee.label"></h3>
                 <p class="text-gray-700 font-light max-w-xl mx-auto leading-relaxed mb-4">
-                    Try the full 90-day protocol. If your <strong x-text="weightType"></strong> symptoms haven't improved, email us for a full refund — and keep everything. <strong>The only risk is staying where you are.</strong>
+                    Try the full 90-day protocol. If your <strong x-text="weightType"></strong> symptoms haven't improved, email us for a full refund â€” and keep everything. <strong>The only risk is staying where you are.</strong>
                 </p>
                 <div class="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-wide text-forest-700">
                     <template x-for="bullet in guarantee.bullets" :key="bullet">
-                        <span class="flex items-center gap-1.5">✓ <span x-text="bullet"></span></span>
+                        <span class="flex items-center gap-1.5">âœ“ <span x-text="bullet"></span></span>
                     </template>
                 </div>
             </div>
         </section>
 
-        <!-- ⑤ Testimonials (3-4 different ones from results page) -->
+        <!-- â‘¤ Testimonials (3-4 different ones from results page) -->
         <section class="max-w-5xl mx-auto mb-12 md:mb-16" data-exp="plan-testimonials">
             <div class="text-center mb-8">
                 <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">More Real Results</span>
@@ -242,14 +243,14 @@
                 <template x-for="(t, idx) in planTestimonials" :key="idx">
                     <div class="glass-panel rounded-2xl p-6 shadow-soft border-l-4 border-l-forest-800">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="text-terracotta-500 text-sm">★★★★★</span>
+                            <span class="text-terracotta-500 text-sm">â˜…â˜…â˜…â˜…â˜…</span>
                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Verified</span>
                         </div>
                         <blockquote class="text-gray-700 italic leading-relaxed mb-4 text-sm">&ldquo;<span x-text="t.quote"></span>&rdquo;</blockquote>
                         <div class="flex items-center gap-3">
                             <div class="w-8 h-8 rounded-full bg-forest-100 flex items-center justify-center text-forest-700 font-bold text-sm" x-text="t.name.charAt(0)"></div>
                             <div>
-                                <p class="font-bold text-forest-900 text-sm" x-text="t.name + ' · ' + t.city"></p>
+                                <p class="font-bold text-forest-900 text-sm" x-text="t.name + ' Â· ' + t.city"></p>
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     <template x-for="tag in (t.tags || [])" :key="tag">
                                         <span class="text-xs bg-forest-50 text-forest-700 px-2 py-0.5 rounded font-medium" x-text="tag"></span>
@@ -262,7 +263,7 @@
             </div>
         </section>
 
-        <!-- ⑥ FAQ / Objection Handling -->
+        <!-- â‘¥ FAQ / Objection Handling -->
         <section class="max-w-3xl mx-auto mb-12 md:mb-16" data-exp="faq-block">
             <div class="text-center mb-8">
                 <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">Questions?</span>
@@ -281,7 +282,7 @@
             </div>
         </section>
 
-        <!-- ⑦ Order Section -->
+        <!-- â‘¦ Order Section -->
         <section id="order-section" class="max-w-3xl mx-auto" x-show="showOrderForm"
             x-transition:enter="transition ease-out duration-500"
             x-transition:enter-start="opacity-0 transform translate-y-10"
@@ -289,7 +290,7 @@
             <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="bg-forest-900 p-8 text-center">
                     <h2 class="text-2xl md:text-3xl font-serif text-white mb-2">Secure Your Spot</h2>
-                    <p class="text-forest-200 text-sm" x-text="guarantee.shortLabel + ' · 256-bit SSL'"></p>
+                    <p class="text-forest-200 text-sm" x-text="guarantee.shortLabel + ' Â· 256-bit SSL'"></p>
                 </div>
 
                 <div class="p-8 md:p-12">
@@ -304,13 +305,13 @@
                                         x-text="selectedPlan === 'web' ? 'Member Portal Access' : 'Instant PDF Download'"></span>
                                 </div>
                                 <span class="font-bold text-forest-800 shrink-0 ml-4" x-show="pricingLoaded" x-cloak
-                                    x-text="'₦' + price.toLocaleString()"></span>
+                                    x-text="'â‚¦' + price.toLocaleString()"></span>
                             </div>
                             <ul class="space-y-2 text-sm text-gray-600">
-                                <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Smart-personalized daily meal plans</li>
-                                <li class="flex items-center gap-2"><span class="text-green-500">✓</span> Herbal rituals + movement tracking</li>
-                                <li class="flex items-center gap-2" x-show="selectedPlan === 'web'"><span class="text-green-500">✓</span> <strong>Interactive Dashboard & Community</strong></li>
-                                <li class="flex items-center gap-2" x-show="selectedPlan === 'pdf'"><span class="text-green-500">✓</span> <strong>Forever-Keep Downloadable Files</strong></li>
+                                <li class="flex items-center gap-2"><span class="text-green-500">âœ“</span> Smart-personalized daily meal plans</li>
+                                <li class="flex items-center gap-2"><span class="text-green-500">âœ“</span> Herbal rituals + movement tracking</li>
+                                <li class="flex items-center gap-2" x-show="selectedPlan === 'web'"><span class="text-green-500">âœ“</span> <strong>Interactive Dashboard & Community</strong></li>
+                                <li class="flex items-center gap-2" x-show="selectedPlan === 'pdf'"><span class="text-green-500">âœ“</span> <strong>Forever-Keep Downloadable Files</strong></li>
                             </ul>
                         </div>
 
@@ -323,8 +324,8 @@
                                 <input type="checkbox" x-model="bumpAdded" class="mt-1 w-5 h-5 accent-terracotta-500 shrink-0">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
-                                        <span class="inline-block bg-terracotta-500 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">🔥 <span x-text="bump.badge"></span></span>
-                                        <span class="text-terracotta-700 font-bold text-sm">+ ₦<span x-text="(bump.price || 0).toLocaleString()"></span></span>
+                                        <span class="inline-block bg-terracotta-500 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">ðŸ”¥ <span x-text="bump.badge"></span></span>
+                                        <span class="text-terracotta-700 font-bold text-sm">+ â‚¦<span x-text="(bump.price || 0).toLocaleString()"></span></span>
                                     </div>
                                     <h4 class="font-serif font-bold text-forest-900 text-base leading-snug" x-text="bump.title"></h4>
                                     <p class="text-gray-600 text-xs leading-relaxed mt-1" x-text="bump.desc"></p>
@@ -384,14 +385,14 @@
 
                         <!-- Guarantee adjacent to CTA -->
                         <div class="guarantee-centerpiece p-5 text-center" data-exp="checkout-guarantee">
-                            <p class="text-sm font-semibold text-forest-900">🛡️ Protected by our <strong x-text="guarantee.label"></strong></p>
-                            <p class="text-xs text-forest-800 mt-1">Follow the protocol — see results or get a full refund. Zero risk.</p>
+                            <p class="text-sm font-semibold text-forest-900">ðŸ›¡ï¸ Protected by our <strong x-text="guarantee.label"></strong></p>
+                            <p class="text-xs text-forest-800 mt-1">Follow the protocol â€” see results or get a full refund. Zero risk.</p>
                         </div>
 
                         <button type="submit" id="pay-button" :disabled="isProcessing || !pricingLoaded"
                             class="w-full bg-forest-900 hover:bg-forest-800 text-sand font-medium text-lg py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-2">
                             <span x-show="!isProcessing && pricingLoaded" x-cloak
-                                x-text="'Pay ₦' + price.toLocaleString() + ' — ' + (selectedPlan === 'web' ? 'Join Portal' : 'Download Now')"></span>
+                                x-text="'Pay â‚¦' + price.toLocaleString() + ' â€” ' + (selectedPlan === 'web' ? 'Join Portal' : 'Download Now')"></span>
                             <span x-show="!isProcessing && !pricingLoaded" class="animate-pulse">Loading...</span>
                             <span x-show="isProcessing" class="flex items-center justify-center gap-2">
                                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -410,15 +411,15 @@
                                     <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">256-bit SSL Secured</span>
                                 </div>
                                 <div class="flex flex-col items-center gap-1">
-                                    <span class="text-xl">💳</span>
-                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">Card · Bank · Transfer</span>
+                                    <span class="text-xl">ðŸ’³</span>
+                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">Card Â· Bank Â· Transfer</span>
                                 </div>
                                 <div class="flex flex-col items-center gap-1">
-                                    <span class="text-xl">⚡</span>
+                                    <span class="text-xl">âš¡</span>
                                     <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">Powered by Flutterwave</span>
                                 </div>
                                 <div class="flex flex-col items-center gap-1">
-                                    <span class="text-xl">🛡️</span>
+                                    <span class="text-xl">ðŸ›¡ï¸</span>
                                     <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide" x-text="guarantee.shortLabel"></span>
                                 </div>
                             </div>
@@ -434,12 +435,12 @@
         <!-- Second guarantee below fold (no one should miss it) -->
         <section class="max-w-3xl mx-auto px-4 py-10" x-show="!showOrderForm">
             <div class="guarantee-centerpiece p-8 md:p-10 text-center shadow-soft">
-                <div class="text-5xl mb-3">🛡️</div>
+                <div class="text-5xl mb-3">ðŸ›¡ï¸</div>
                 <h3 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-2" x-text="guarantee.label"></h3>
-                <p class="text-gray-700 font-light max-w-xl mx-auto leading-relaxed" x-text="guarantee.bodyText || 'Try the full 90-day protocol. If your symptoms haven\\'t improved, email us for a full refund — and keep everything. No questions asked.'"></p>
+                <p class="text-gray-700 font-light max-w-xl mx-auto leading-relaxed" x-text="guarantee.bodyText || 'Try the full 90-day protocol. If your symptoms haven\\'t improved, email us for a full refund â€” and keep everything. No questions asked.'"></p>
                 <div class="flex flex-wrap justify-center gap-4 mt-6 text-xs font-bold uppercase tracking-wide text-forest-700">
                     <template x-for="bullet in guarantee.bullets" :key="bullet">
-                        <span class="flex items-center gap-1.5">✓ <span x-text="bullet"></span></span>
+                        <span class="flex items-center gap-1.5">âœ“ <span x-text="bullet"></span></span>
                     </template>
                 </div>
             </div>
@@ -451,7 +452,7 @@
         <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <span class="text-sand font-serif italic text-xl">P</span>
         </div>
-        <p class="text-forest-200/60 text-sm">© <span id="footer-year"></span> Weight Loss Transformation. All rights reserved.</p>
+        <p class="text-forest-200/60 text-sm">Â© <span id="footer-year"></span> Weight Loss Transformation. All rights reserved.</p>
     </footer>
 
     <script>
