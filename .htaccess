@@ -20,8 +20,10 @@ RewriteRule ^([a-z0-9]+)__([a-z0-9]+)/(.*)$ router.php [L,QSA]
 # (the tracker fires; router.php returns false to let Apache serve the file)
 RewriteRule ^(pcos|acne|weight|mens|egbon)/(.*)$ router.php [L,QSA]
 
-# Admin SPA entry
+# Admin: /admin and /admin/ go to the SPA entry point
 RewriteRule ^admin/?$ backend/admin/index.php [L,QSA]
+# Admin: /admin/login.php, /admin/dashboard.php, etc. map to backend/admin/*
+RewriteRule ^admin/(.+)$ backend/admin/$1 [L,QSA]
 
 # API entry points: pass through as-is
 RewriteRule ^backend/api/(.*)$ backend/api/$1 [L,QSA]

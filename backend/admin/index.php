@@ -1,6 +1,7 @@
 <?php
-session_start();
-require_once '../config/config.php';
+// config.php sets the session name (ojg_admin_session) before calling session_start(),
+// so it must be required before any manual session_start() call.
+require_once __DIR__ . '/../config/config.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['admin_id'])) {
