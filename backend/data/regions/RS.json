@@ -1,0 +1,34 @@
+{
+  "country": "Serbia",
+  "country_code": "RS",
+  "climate_zone": "continental",
+  "measurement_system": "metric",
+  "staple_foods": [
+    "whole-grain and rye bread", "beans (pasulj)", "cabbage (kiseli kupus / sauerkraut)",
+    "peppers (paprika, ajvar)", "potatoes", "corn (polenta / proja)", "onions and garlic",
+    "walnuts and hazelnuts", "plums", "yoghurt and kajmak (dairy)"
+  ],
+  "common_proteins": [
+    "pork", "chicken", "beef", "freshwater fish (carp, catfish)", "eggs",
+    "legumes (pasulj, leća/lentils, soja)", "dairy (sir/cheese, yoghurt)"
+  ],
+  "common_cooking_fats": ["sunflower oil", "lard (mast)", "butter"],
+  "locally_available_herbs": [
+    {"name": "Nettle",           "local_name": "Kopriva",             "use": "anti-inflammatory, mineral-rich (iron, magnesium), kidney support, hormonal balance"},
+    {"name": "Chamomile",        "local_name": "Kamilica",            "use": "calming, anti-inflammatory, digestive, sleep support"},
+    {"name": "Yarrow",           "local_name": "Hajdučka trava",      "use": "cycle support, anti-inflammatory, digestive"},
+    {"name": "Lemon Balm",       "local_name": "Matičnjak",           "use": "calming, sleep, stress/cortisol support, thyroid (mild)"},
+    {"name": "Sage",             "local_name": "Žalfija",             "use": "hormonal balance (menopause support), antimicrobial"},
+    {"name": "Elderberry",       "local_name": "Zova / Bazga",        "use": "immune support, anti-inflammatory, antiviral"},
+    {"name": "Raspberry Leaf",   "local_name": "Lišće maline",        "use": "uterine tonic, cycle support, iron source"},
+    {"name": "St John's Wort",   "local_name": "Kantarion / Gorčika", "use": "mood support — FLAG: interacts with many medications; use with caution"}
+  ],
+  "where_to_source": "green markets (pijaca) in every town, apoteka (pharmacy chains stock herbs), herbal pharmacies (biljne apoteke), health food stores (zdravo hrana prodavnica), supermarkets for basic herbs",
+  "typical_cost_band": "low-medium",
+  "dietary_norms": "Predominantly Orthodox Christian. Orthodox fasting periods observed by many (no meat/dairy on Wednesdays, Fridays, and during Great Lent and Advent — plant-based food common then). Pork is the most common meat. Dairy very widely consumed. Grilling (roštilj) is a primary cooking method.",
+  "language_for_local_names": "Serbian",
+  "herb_warnings": {
+    "st_johns_wort": "Interacts with: antidepressants (serotonin syndrome risk), contraceptives (reduces efficacy), blood thinners, HIV medications. ALWAYS flag this interaction before recommending."
+  },
+  "reviewed": true
+}

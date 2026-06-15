@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Vitality Type Results - Personalized Treatment Plan</title>
     <meta name="description"
@@ -105,12 +106,17 @@
         }
     </style>
 
-    <!-- Webhook Manager -->
+    <!-- Config (single source of truth) -->
     <script src="../js/config.js"></script>
+    <!-- Webhook Manager -->
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/tracking.js"></script>
     <!-- Cookie Consent Banner -->
     <script src="/js/cookie-consent.js"></script>
+    <style>
+        .guarantee-box { background:linear-gradient(135deg,#f2f8f5,#dcece3); border:2px solid #166534; border-radius:1.5rem; }
+        [x-cloak] { display:none !important; }
+    </style>
 </head>
 
 <body class="antialiased relative min-h-screen">
@@ -127,7 +133,8 @@
                     <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg">
                         <span class="text-sand font-serif italic text-xl">P</span>
                     </div>
-                    <span class="text-lg font-serif font-bold tracking-tight text-forest-900">Your Vitality Report</span>
+                    <span class="text-lg font-serif font-bold tracking-tight text-forest-900">Your Vitality
+                        Report</span>
                 </div>
                 <div class="text-sm text-forest-800">
                     <span
@@ -141,38 +148,61 @@
     </header>
 
     <!-- Main Content -->
-    <main class="pt-28 pb-12 px-4 md:px-6" x-data="mensResults()">
+    <main class="pt-28 pb-12 px-4 md:px-6" x-data="mensResults()" x-init="init()">
 
         <!-- Loading State -->
         <div x-show="isLoading" class="text-center py-24 min-h-[60vh] flex flex-col items-center justify-center">
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-forest-900 mx-auto mb-6"></div>
             <h2 class="text-3xl font-serif font-bold text-forest-900 mb-3">Analyzing Your Unique Profile...</h2>
-            <p class="text-gray-500 font-light text-lg">Comparing your symptoms with our database of 10,000+ women.</p>
+            <p class="text-gray-500 font-light text-lg">Your answers matched against <strong x-text="socialProof.count + ' ' + socialProof.label"></strong> we've helped.</p>
         </div>
 
         <!-- Results Content -->
         <div x-show="!isLoading && assessmentData">
 
-            <!-- Congratulations Section -->
+            <!-- ① Congratulations / Diagnosis Header -->
             <section class="text-center mb-10 md:mb-16 max-w-4xl mx-auto">
-                <div
-                    class="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-soft relative overflow-hidden">
-                    <div
-                        class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-terracotta-500 via-forest-500 to-terracotta-500">
-                    </div>
-
-                    <div
-                        class="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm">
-                        🎉
-                    </div>
-                    <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-4">
-                        Analysis Complete, <span x-text="assessmentData?.contactInfo?.name?.split(' ')[0] || ''"
-                            class="italic text-terracotta-600"></span>!
+                <div class="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-soft relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-terracotta-500 via-forest-500 to-terracotta-500"></div>
+                    <div class="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm">🎉</div>
+                    <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-4" data-exp="results-headline">
+                        Analysis Complete, <span x-text="assessmentData?.contactInfo?.name?.split(' ')[0] || ''" class="italic text-terracotta-600"></span>!
                     </h1>
                     <p class="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-                        We've identified your specific Vitality driver. This is the first step to finally taking control of
-                        your health.
+                        Your answers show strong markers of <strong x-text="mensTypeInfo.name" class="text-forest-900"></strong> —
+                        <span x-text="mensTypeInfo.prevalenceStat || 'the most common male vitality driver'" class="text-gray-600"></span>.
                     </p>
+                </div>
+            </section>
+
+            <!-- ① NEW: Your Vitality Profile — mirrors their answers as insights -->
+            <section class="mb-12 md:mb-16 max-w-4xl mx-auto" x-show="profileInsights.length > 0" x-cloak>
+                <div class="glass-panel rounded-[2rem] p-8 md:p-12 shadow-soft">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">What We Heard From You</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-8">Your Vitality Profile, In Plain English</h2>
+                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                        <template x-for="insight in profileInsights" :key="insight.label">
+                            <div class="flex items-start gap-4 bg-forest-50 rounded-2xl p-4 border border-forest-100/60">
+                                <span class="text-2xl shrink-0 mt-0.5" x-text="insight.icon"></span>
+                                <div>
+                                    <p class="text-[10px] font-bold text-forest-800/50 uppercase tracking-widest mb-1" x-text="insight.label"></p>
+                                    <p class="text-forest-900 font-medium leading-snug text-sm" x-text="insight.value"></p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="bg-gradient-to-r from-terracotta-50 to-white border border-terracotta-100 rounded-xl p-5">
+                        <p class="text-terracotta-900 font-medium text-sm leading-relaxed" x-text="profileSummary"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ② Empathy Beat — before the pitch -->
+            <section class="mb-12 md:mb-16 max-w-4xl mx-auto" data-exp="empathy-beat">
+                <div class="bg-gradient-to-br from-sand to-cream border border-sage-200 rounded-[2rem] p-8 md:p-12 shadow-soft">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">Before We Go Further</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-4" x-text="personalizedEmpathy.heading || funnelConfig.empathy.heading"></h2>
+                    <p class="text-lg text-gray-700 leading-relaxed font-light" x-text="personalizedEmpathy.body || funnelConfig.empathy.body"></p>
                 </div>
             </section>
 
@@ -241,12 +271,62 @@
                 </div>
             </section>
 
+            <!-- ④ Mechanism -->
+            <section class="mb-12 md:mb-16 max-w-5xl mx-auto" data-exp="mechanism">
+                <div class="text-center mb-10">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">The Root Reason</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4" x-text="funnelConfig.mechanism.heading"></h2>
+                    <p class="text-xl text-gray-500 font-light max-w-2xl mx-auto" x-text="funnelConfig.mechanism.subheading"></p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <template x-for="(step, i) in funnelConfig.mechanism.steps" :key="i">
+                        <div class="glass-panel p-8 rounded-2xl border-t-4" :class="i===0?'border-t-terracotta-500':(i===1?'border-t-sage-400':'border-t-forest-800')">
+                            <div class="text-3xl mb-4" x-text="step.icon"></div>
+                            <h4 class="font-serif text-lg font-bold text-forest-900 mb-3" x-text="step.title"></h4>
+                            <p class="text-gray-600 font-light text-sm leading-relaxed" x-text="step.body"></p>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <!-- ⑤ Type-Specific Testimonials -->
+            <section data-exp="type-testimonial" class="max-w-5xl mx-auto mb-12 md:mb-16">
+                <div class="text-center mb-8">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">Real Proof</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest-900">Men With Your Type — Who Did It</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <template x-for="(t, idx) in typeTestimonials.slice(0,2)" :key="idx">
+                        <div class="bg-gradient-to-br from-sand to-cream border-2 border-terracotta-200 rounded-3xl p-8 shadow-soft">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-terracotta-500 text-xl">★★★★★</span>
+                                <span class="inline-block bg-terracotta-500 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">Verified</span>
+                            </div>
+                            <h4 class="font-serif text-lg font-bold text-forest-900 mb-2" x-text="t.headline"></h4>
+                            <blockquote class="font-serif text-base text-forest-900 italic leading-relaxed mb-4">&ldquo;<span x-text="t.quote"></span>&rdquo;</blockquote>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-forest-100 flex items-center justify-center text-forest-700 font-bold" x-text="t.name.charAt(0)"></div>
+                                <div>
+                                    <p class="font-bold text-forest-900 text-sm" x-text="t.name + ' · ' + t.city"></p>
+                                    <div class="flex flex-wrap gap-1 mt-1">
+                                        <template x-for="tag in (t.tags||[])" :key="tag">
+                                            <span class="text-xs bg-forest-50 text-forest-700 px-2 py-0.5 rounded font-medium" x-text="tag"></span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
             <!-- Your Healing Protocol Preview (Teaser - not giving away the solution) -->
             <section class="mb-20 max-w-6xl mx-auto">
                 <div class="text-center mb-10">
-                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4">Your Personalized Healing Protocol</h2>
-                    <p class="text-gray-500">We've identified 3 targeted interventions for <span x-text="mensTypeInfo.name"
-                            class="font-bold text-forest-800"></span></p>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4">Your Personalized Healing
+                        Protocol</h2>
+                    <p class="text-gray-500">We've identified 3 targeted interventions for <span
+                            x-text="mensTypeInfo.name" class="font-bold text-forest-800"></span></p>
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-6">
@@ -259,11 +339,15 @@
                             </div>
                             <h4 class="font-serif text-xl font-bold text-forest-900 mb-3" x-text="protocol.title">
                             </h4>
-                            <p class="text-gray-600 font-light text-sm leading-relaxed"
-                                x-text="protocol.teaser"></p>
+                            <p class="text-gray-600 font-light text-sm leading-relaxed" x-text="protocol.teaser"></p>
                             <!-- Locked overlay -->
-                            <div class="mt-4 flex items-center gap-2 text-xs font-bold text-terracotta-600 uppercase tracking-wider">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                            <div
+                                class="mt-4 flex items-center gap-2 text-xs font-bold text-terracotta-600 uppercase tracking-wider">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd"
+                                        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
                                 <span x-text="protocol.locked"></span>
                             </div>
                         </div>
@@ -271,63 +355,21 @@
                 </div>
             </section>
 
-            <!-- The Problem Section (Glassmorphism Warning) -->
-            <section class="mb-20 max-w-5xl mx-auto">
-                <div
-                    class="bg-gradient-to-br from-terracotta-50 to-white border border-terracotta-100 rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
+            <!-- ⑧ Cost of Inaction (Ethical Urgency) -->
+            <section class="mb-12 md:mb-16 max-w-4xl mx-auto" data-exp="cost-of-inaction">
+                <div class="bg-gradient-to-br from-terracotta-50 to-white border border-terracotta-100 rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
                     <div class="absolute top-0 right-0 text-9xl opacity-5 pointer-events-none select-none">!</div>
-
-                    <h2 class="text-3xl font-serif font-bold text-terracotta-900 mb-6">Here's the Truth They Won't Tell
-                        You...</h2>
-                    <p class="text-lg text-gray-700 mb-8 max-w-3xl leading-relaxed">
-                        Free tips and generic advice will <strong>not</strong> fix <strong
-                            x-text="mensTypeInfo.name"></strong>. You need a system that works for YOUR body — one that
-                        adapts daily, tracks your cycles, and gives you Nigerian recipes you'll actually eat.
-                    </p>
-
-                    <div class="grid md:grid-cols-2 gap-10">
-                        <div>
-                            <h3 class="font-bold text-terracotta-800 mb-4 uppercase text-xs tracking-widest">Without a
-                                proper plan:</h3>
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Symptoms often return with a vengeance</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Wasted money on generic supplements</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Years of frustration and trial & error</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-forest-800 mb-4 uppercase text-xs tracking-widest">You need a
-                                system that includes:</h3>
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800"><strong>Smart-personalized meals</strong> crafted daily
-                                        for
-                                        your type</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800">Herbal tea rituals with <strong>tracking &
-                                            reminders</strong></span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800">A <strong>private member portal</strong> that evolves
-                                        with you</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">The Real Cost of Waiting</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-terracotta-900 mb-6" x-text="funnelConfig.costOfInaction.heading"></h2>
+                    <ul class="space-y-4">
+                        <template x-for="point in funnelConfig.costOfInaction.points" :key="point">
+                            <li class="flex items-start gap-3">
+                                <span class="text-terracotta-500 text-lg shrink-0 mt-0.5">→</span>
+                                <span class="text-gray-700 font-light leading-relaxed" x-text="point"></span>
+                            </li>
+                        </template>
+                    </ul>
+                    <p class="text-sm text-gray-500 mt-6 italic">This is factual and honest — not pressure. You deserve to know what continued inaction means for your long-term health.</p>
                 </div>
             </section>
 
@@ -389,7 +431,8 @@
             <!-- Value Stack Preview (Price Anchoring) -->
             <section class="max-w-5xl mx-auto mb-12 md:mb-16">
                 <div class="text-center mb-10">
-                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">What's Inside Your Portal</span>
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">What's
+                        Inside Your Portal</span>
                     <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4">
                         Everything Built for <span x-text="mensTypeInfo.name" class="italic text-terracotta-600"></span>
                     </h2>
@@ -397,15 +440,20 @@
 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🥗</div>
+                        <div
+                            class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            🥗</div>
                         <div>
                             <h4 class="font-bold text-forest-900 mb-1">Smart-Personalized Daily Meals</h4>
-                            <p class="text-gray-500 text-sm">Nigerian recipes that target your specific hormonal imbalance</p>
+                            <p class="text-gray-500 text-sm">Nigerian recipes that target your specific hormonal
+                                imbalance</p>
                             <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦45,000</span>
                         </div>
                     </div>
                     <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🍵</div>
+                        <div
+                            class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            🍵</div>
                         <div>
                             <h4 class="font-bold text-forest-900 mb-1">Morning & Evening Herbal Rituals</h4>
                             <p class="text-gray-500 text-sm">Type-specific blends with daily reminders & tracking</p>
@@ -413,7 +461,9 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🚶‍♀️</div>
+                        <div
+                            class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            🚶‍♀️</div>
                         <div>
                             <h4 class="font-bold text-forest-900 mb-1">Phase-Synced Movement Protocols</h4>
                             <p class="text-gray-500 text-sm">Cycle-aware activity plans that adapt to your body</p>
@@ -421,10 +471,13 @@
                         </div>
                     </div>
                     <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">📊</div>
+                        <div
+                            class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">
+                            📊</div>
                         <div>
                             <h4 class="font-bold text-forest-900 mb-1">Body Data & Progress Tracking</h4>
-                            <p class="text-gray-500 text-sm">Log weight, cycles, symptoms — watch transformation unfold</p>
+                            <p class="text-gray-500 text-sm">Log weight, cycles, symptoms — watch transformation unfold
+                            </p>
                             <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦90,000</span>
                         </div>
                     </div>
@@ -432,7 +485,8 @@
 
                 <div class="text-center mt-8">
                     <p class="text-sm text-gray-400">Total Value: <span class="line-through">₦197,000</span></p>
-                    <p class="text-2xl font-serif font-bold text-forest-900 mt-1" x-show="pricingLoaded && startingPrice > 0" x-cloak>
+                    <p class="text-2xl font-serif font-bold text-forest-900 mt-1"
+                        x-show="pricingLoaded && startingPrice > 0" x-cloak>
                         Your Assessment Price: Starting from <span x-text="'₦' + startingPrice.toLocaleString()"></span>
                     </p>
                     <p class="text-2xl font-serif font-bold text-forest-900 mt-1 animate-pulse" x-show="!pricingLoaded">
@@ -453,24 +507,34 @@
 
                     <div class="relative z-10">
                         <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6">
-                            Ready to Start Your <span x-text="mensTypeInfo.name" class="italic text-terracotta-400"></span> Protocol?
+                            Ready to Start Your <span x-text="mensTypeInfo.name"
+                                class="italic text-terracotta-400"></span> Protocol?
                         </h2>
                         <p class="text-xl text-forest-100 mb-10 font-light max-w-2xl mx-auto">
-                            Your personalized treatment plan is ready. Choose the program that fits your journey — 30-day quick start or the complete 90-day transformation.
+                            Your personalized treatment plan is ready. Choose the program that fits your journey —
+                            30-day quick start or the complete 90-day transformation.
                         </p>
 
+                        <!-- Guarantee before CTA -->
+                        <div class="guarantee-box mx-auto max-w-lg mb-8 p-5 text-forest-900" data-exp="results-guarantee">
+                            <div class="flex items-center justify-center gap-3 mb-2">
+                                <span class="text-3xl">🛡️</span>
+                                <span class="font-serif font-bold text-xl" x-text="guarantee.label"></span>
+                            </div>
+                            <p class="text-sm text-forest-800 font-light">Try the full 90-day protocol. If your symptoms haven't improved, email us for a full refund — and keep everything.</p>
+                        </div>
+
                         <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                            <button @click="viewSolution()"
+                            <button @click="viewSolution()" id="results-main-cta" data-exp="results-cta"
                                 class="bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold text-lg md:text-xl px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-glow hover:shadow-lg">
-                                See My Treatment Plan →
+                                See My Vitality Plan Options →
                             </button>
                         </div>
 
-                        <div
-                            class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-xs font-bold tracking-widest text-forest-300 uppercase mt-6">
+                        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-xs font-bold tracking-widest text-forest-300 uppercase mt-6">
                             <span class="flex items-center gap-2">✓ Instant Portal Access</span>
-                            <span class="flex items-center gap-2">✓ Money-Back Guarantee</span>
-                            <span class="flex items-center gap-2">✓ 500+ Women Transformed</span>
+                            <span class="flex items-center gap-2">✓ <span x-text="guarantee.shortLabel"></span></span>
+                            <span class="flex items-center gap-2">✓ <span x-text="socialProof.count + ' ' + socialProof.label + ' helped'"></span></span>
                         </div>
 
                         <!-- WhatsApp CTA -->
@@ -479,7 +543,12 @@
                             <a href="https://wa.me/2348133149989?text=Hi%2C%20I%20just%20completed%20my%20Vitality%20assessment%20and%20I%20have%20some%20questions%20about%20the%20treatment%20plan"
                                 target="_blank"
                                 class="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-medium transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                    <path
+                                        d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z" />
+                                </svg>
                                 Chat with a Vitality Specialist on WhatsApp
                             </a>
                         </div>
@@ -504,11 +573,13 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-sage-200 py-12">
         <div class="max-w-6xl mx-auto px-6 text-center">
-            <p class="text-forest-900/40 text-sm">© <span id="footer-year"></span> Vitality Solutions. All rights reserved.
+            <p class="text-forest-900/40 text-sm">© <span id="footer-year"></span> Vitality Solutions. All rights
+                reserved.
             </p>
         </div>
-    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+        <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+                href="/backend/admin/" class="hover:underline">Admin</a></p>
+    </footer>
 
     <!-- Results Logic -->
     <script>
@@ -526,8 +597,22 @@
                 mensTypeInfo: {},
                 startingPrice: 0,
                 pricingLoaded: false,
+                typeTestimonials: [],
+                valueStackItems: [],
+                funnelConfig: { empathy:{}, mechanism:{steps:[]}, costOfInaction:{points:[]} },
+                socialProof: { count:'500+', label:'men' },
+                guarantee: { label:'90-Day Money-Back Guarantee', shortLabel:'90-Day Guarantee' },
+                profileInsights: [],
+                profileSummary: '',
+                personalizedEmpathy: { heading: '', body: '' },
 
                 init() {
+                    if (window.CONFIG) {
+                        this.socialProof = window.CONFIG.socialProof.mens;
+                        this.guarantee = window.CONFIG.guarantee;
+                        this.funnelConfig = window.CONFIG.FUNNEL_CONFIG.mens;
+                        this.valueStackItems = window.CONFIG.valueStack.mens;
+                    }
                     this.loadAssessmentData();
                     this.loadPricing();
                 },
@@ -553,13 +638,24 @@
                 },
 
                 loadAssessmentData() {
-                    // Simulate loading delay
                     setTimeout(() => {
                         const data = localStorage.getItem('mensAssessmentData');
                         if (data) {
                             this.assessmentData = JSON.parse(data);
                             this.mensTypeInfo = this.getVitalityTypeInfo(this.assessmentData.mensType.primary);
 
+                            // Load type-matched testimonials from config
+                            if (window.CONFIG?.testimonials?.mens) {
+                                const pool = window.CONFIG.testimonials.mens;
+                                const type = this.assessmentData.mensType.primary;
+                                this.typeTestimonials = pool.filter(t => t.type === type);
+                                if (!this.typeTestimonials.length) this.typeTestimonials = pool.slice(0,2);
+                            }
+
+                            const a = this.assessmentData.answers || {};
+                            this.profileInsights = this.buildProfileInsights(a);
+                            this.profileSummary = this.buildProfileSummary(a, this.assessmentData.mensType.primary, this.assessmentData.contactInfo?.name?.split(' ')[0] || '');
+                            this.personalizedEmpathy = this.buildPersonalizedEmpathy(a, this.assessmentData.contactInfo?.name?.split(' ')[0] || '');
                             // Save Vitality type to localStorage for member area pre-fill
                             const mensTypeMap = {
                                 'insulin': 'Insulin Resistant',
@@ -585,43 +681,37 @@
                                 window.OJGTracking.trackLead('Vitality', this.assessmentData.mensType.primary);
                                 window.OJGTracking.trackCompleteRegistration('Vitality');
                             }
-                        }
-                        this.isLoading = false;
-                    }, 2000);
-                },
-
-                getVitalityTypeInfo(type) {
+                                  getVitalityTypeInfo(type) {
                     const typeInfo = {
                         insulin: {
                             name: "Insulin-Resistant Vitality",
-                            description: "Your Vitality is primarily driven by insulin resistance, affecting how your body processes sugar and stores fat.",
+                            description: "Your low energy and stubborn fat are primarily driven by insulin resistance, which blocks your cells from absorbing glucose for energy and causes testosterone suppression.",
                             symptoms: [
-                                "Weight gain around the midsection",
-                                "Difficulty losing weight despite diet and exercise",
-                                "Dark patches on skin (neck, armpits)",
-                                "Sugar and carb cravings",
-                                "Energy crashes after meals",
-                                "Irregular periods"
+                                "Stubborn belly fat / midsection weight gain",
+                                "Difficulty building or maintaining muscle",
+                                "Energy crashes after meals (especially carbs)",
+                                "Frequent brain fog and lack of focus",
+                                "Cravings for sugar and carbohydrates"
                             ],
                             causes: [
-                                "High insulin levels disrupting strength",
-                                "Poor blood sugar regulation",
-                                "Inflammation from insulin resistance",
-                                "Genetic predisposition to diabetes"
+                                "High insulin levels suppressing testosterone production",
+                                "Poor blood sugar regulation and metabolic speed",
+                                "Systemic inflammation from insulin resistance",
+                                "Genetic predisposition to metabolic slowdown"
                             ],
                             protocols: [
                                 {
-                                    title: "Insulin-Reset Meal Protocol",
+                                    title: "Insulin-Reset Nutrition Protocol",
                                     teaser: "A specific combination of Nigerian foods eaten in a precise sequence that forces your body to reset insulin sensitivity within weeks.",
                                     locked: "Full meal plan inside portal"
                                 },
                                 {
-                                    title: "Blood Sugar Stabilizer Blend",
+                                    title: "Metabolic Optimizer Herb Blend",
                                     teaser: "A morning and evening herbal ritual using a specific African root that clinical studies show reduces fasting insulin by up to 30%.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
-                                    title: "Metabolic Movement System",
+                                    title: "Androgen-Boost Movement Plan",
                                     teaser: "A cycle-synced activity plan designed to force your muscles to absorb glucose without insulin — the key to breaking the resistance cycle.",
                                     locked: "Full system inside portal"
                                 }
@@ -629,21 +719,19 @@
                         },
                         inflammatory: {
                             name: "Inflammatory Vitality",
-                            description: "Your Vitality is driven by chronic inflammation that disrupts hormone production and ovarian function.",
+                            description: "Your vitality decline is driven by chronic inflammation — often starting in the gut — which suppresses luteinizing hormone and impairs testosterone synthesis.",
                             symptoms: [
-                                "Persistent adult acne",
-                                "Chronic fatigue and low energy",
-                                "Joint pain or stiffness",
-                                "Digestive issues",
-                                "Mood swings and irritability",
-                                "Slow wound healing"
+                                "Persistent joint pain or muscle stiffness",
+                                "Chronic fatigue that sleep doesn't fix",
+                                "Digestive issues (bloating, acid reflux)",
+                                "Slow recovery after physical activity",
+                                "Brain fog and difficulty concentrating"
                             ],
                             causes: [
-                                "Chronic low-grade inflammation",
-                                "Food sensitivities or allergies",
-                                "Gut health imbalances",
-                                "Environmental toxin exposure",
-                                "Chronic stress"
+                                "Chronic low-grade systemic inflammation",
+                                "Gut barrier dysfunction (leaky gut)",
+                                "Food sensitivities triggering immune response",
+                                "Environmental or lifestyle toxin accumulation"
                             ],
                             protocols: [
                                 {
@@ -652,12 +740,12 @@
                                     locked: "Full meal plan inside portal"
                                 },
                                 {
-                                    title: "Gut-Healing Herbal Blend",
+                                    title: "Gut-Repair Herbal Blend",
                                     teaser: "A powerful combination of African herbs that repair your gut lining — the hidden driver behind 80% of inflammatory Vitality cases.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
-                                    title: "Inflammation Tracking System",
+                                    title: "Systemic Inflammation Tracker",
                                     teaser: "A daily symptom tracker that maps your inflammation triggers and automatically adjusts your protocol as your body heals.",
                                     locked: "Full system inside portal"
                                 }
@@ -665,79 +753,113 @@
                         },
                         adrenal: {
                             name: "Adrenal Vitality",
-                            description: "Your Vitality is triggered by chronic stress and elevated stress hormones that disrupt your reproductive system.",
+                            description: "Your low drive and exhaustion are triggered by chronic stress and elevated cortisol, which directly down-regulates testosterone production.",
                             symptoms: [
-                                "Chronic stress and anxiety",
-                                "Severe insomnia or sleep issues",
-                                "Extreme fatigue, especially morning",
-                                "Mild excess hair growth",
-                                "Irregular periods during stress",
-                                "Difficulty handling stress"
+                                "Chronic stress, anxiety, or feeling wired-but-tired",
+                                "Severe insomnia or waking up exhausted",
+                                "Afternoon energy crashes (around 2-4 PM)",
+                                "Loss of drive and motivation",
+                                "Difficulty handling stress and pressure"
                             ],
                             causes: [
-                                "Chronic elevation of stress hormones",
-                                "Adrenal gland dysfunction",
-                                "Poor stress management",
-                                "Lack of quality sleep",
-                                "Overwork and burnout"
+                                "Chronic elevation of stress hormones suppressing testosterone",
+                                "Adrenal gland dysfunction (HPA-axis burnout)",
+                                "Poor sleep quality and lack of deep recovery",
+                                "Overwork and prolonged psychological stress"
                             ],
                             protocols: [
                                 {
-                                    title: "Cortisol-Calming Meal Plan",
+                                    title: "Cortisol-Calming Meal Timing",
                                     teaser: "Specific Nigerian recipes timed to your cortisol rhythm — eating the right foods at the right hours to force your adrenals to stand down.",
                                     locked: "Full meal plan inside portal"
                                 },
                                 {
-                                    title: "Adrenal Recovery Blend",
+                                    title: "Adaptogenic Recovery Herb Blend",
                                     teaser: "A potent adaptogenic herbal formula from West African traditions that rebuilds your stress resilience from the ground up.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
                                     title: "Sleep & Stress Reset System",
-                                    teaser: "A phase-based recovery protocol that retrains your nervous system — most women report deeper sleep within the first 5 days.",
+                                    teaser: "A phase-based recovery protocol that retrains your nervous system — most men report deeper sleep within the first 5 days.",
                                     locked: "Full system inside portal"
                                 }
                             ]
                         },
                         postPill: {
-                            name: "Post-Pill Vitality",
-                            description: "Your Vitality symptoms appeared or worsened after stopping hormonal birth control, indicating hormone rebound effects.",
+                            name: "Metabolic Burnout Vitality",
+                            description: "Your vitality decline is driven by metabolic burnout — the aftermath of extreme dieting, stimulant overuse, or overtraining that has shut down your body's energy production.",
                             symptoms: [
-                                "Absent periods after stopping birth control",
-                                "Hair loss or thinning",
-                                "Acne that appeared after stopping pills",
-                                "Mood changes and depression",
-                                "Weight gain",
-                                "Loss of libido"
+                                "Inability to shift body fat despite extreme restriction",
+                                "Loss of physical strength and stamina",
+                                "Constant feeling of cold or low body temp",
+                                "Low libido and morning erection frequency",
+                                "Muscle wastage and slow recovery"
                             ],
                             causes: [
-                                "Hormone rebound after birth control cessation",
-                                "Suppressed natural hormone production",
-                                "Nutrient depletion from birth control",
-                                "Disrupted gut microbiome",
-                                "Liver detoxification issues"
+                                "Severe metabolic adaptation from caloric restriction",
+                                "Thyroid hormone down-regulation (low T3)",
+                                "Overtraining syndrome depleting nervous system",
+                                "Nutrient depletion from stimulants or poor diet"
                             ],
                             protocols: [
                                 {
-                                    title: "Hormone Reactivation Diet",
+                                    title: "Metabolic Reactivation Nutrition",
                                     teaser: "A nutrient-dense meal plan using specific Nigerian superfoods that wake up your dormant hormone production pathways naturally.",
                                     locked: "Full meal plan inside portal"
                                 },
                                 {
-                                    title: "Liver Detox Herbal Blend",
-                                    teaser: "An African herbal protocol that clears synthetic hormone residue from your liver — the hidden reason your period hasn't returned.",
+                                    title: "Endocrine Support Herbal Blend",
+                                    teaser: "An African herbal protocol that clears synthetic hormone residue from your liver — the hidden reason your vitality hasn't returned.",
                                     locked: "Herbal protocol inside portal"
                                 },
                                 {
-                                    title: "Nutrient Replenishment System",
-                                    teaser: "A precise supplementation protocol targeting the 5 critical nutrients that birth control depleted from your body.",
+                                    title: "Restorative Recovery System",
+                                    teaser: "A precise supplementation protocol targeting the 5 critical nutrients that stress depleted from your body.",
                                     locked: "Full system inside portal"
                                 }
                             ]
                         }
                     };
-
                     return typeInfo[type] || typeInfo.insulin;
+                },
+
+                buildProfileInsights(a) {
+                    const map = {
+                        cycle:    { q:0,  label:'Menstrual Cycle',        icon:'🌙', values:{ regular:'Regular cycle — hormonal patterns are present but not severe', irregular:'Irregular cycle — a clear hormonal imbalance signal', absent:'Absent periods (3+ months) — significant hormonal disruption', heavy:'Heavy / prolonged bleeding — androgen and prostaglandin imbalance' }},
+                        hairGrowth:{ q:1, label:'Hair Growth Pattern',    icon:'💈', values:{ none:'No unwanted hair growth — androgens not a primary driver', mild:'Mild facial hair — mild androgen elevation', moderate:'Moderate body/face hair — moderate excess androgen signalling', severe:'Severe hair growth — significant androgen excess' }},
+                        weight:   { q:3,  label:'Weight Pattern',         icon:'⚖️', values:{ stable:'Stable weight — metabolic function is holding', gradual_gain:'Gradual weight gain — slow metabolic shift underway', rapid_gain:'Rapid weight gain — insulin resistance developing quickly', difficulty_losing:'Extreme difficulty losing weight — insulin resistance is entrenched' }},
+                        weightLoc:{ q:4,  label:'Where Weight Accumulates',icon:'📍', values:{ even:'Evenly distributed', belly:'Belly/waist — the insulin-resistance pattern', hips_thighs:'Hips and thighs — oestrogen-dominant pattern', upper_body:'Upper body — cortisol and androgen-driven' }},
+                        energy:   { q:6,  label:'Energy Levels',          icon:'⚡', values:{ high:'Good energy — metabolic function is relatively preserved', moderate:'Moderate fatigue — insulin or adrenal beginning to affect you', low:'Chronically low energy — cellular energy production is impaired', crashes:'Post-meal energy crashes — blood sugar regulation failure' }},
+                        stress:   { q:7,  label:'Stress Response',        icon:'🧠', values:{ well:'Good stress resilience — cortisol not a primary driver', moderate:'Sometimes overwhelmed — cortisol contributing to symptoms', poorly:'Often stressed and anxious — cortisol is actively worsening your hormones', chronic:'Chronic burnout — HPA-axis dysregulation driving your whole pattern' }},
+                        sleep:    { q:8,  label:'Sleep Quality',          icon:'😴', values:{ good:'Good sleep — recovery is happening', occasional:'Occasional sleep issues — cortisol occasionally disrupting you', frequent:'Frequent sleep problems — a significant hormonal aggravator', severe:'Severe insomnia — disrupting every hormonal recovery cycle' }},
+                        concern:  { q:11, label:'Your Primary Goal',      icon:'🎯', values:{ fertility:'Fertility and conception — the protocol directly supports ovulation', weight:'Weight management — metabolic reset is the centrepiece', appearance:'Physical appearance — hormonal balance reverses these changes', energy:'Energy and mood — the first things to improve on this protocol' }}
+                    };
+                    return Object.values(map)
+                        .map(m => { const val = a[m.q]; return val ? { icon:m.icon, label:m.label, value:m.values[val]||null } : null; })
+                        .filter(Boolean);
+                },
+
+                buildProfileSummary(a, type, name) {
+                    const cycle = { regular:'a regular but symptomatic cycle', irregular:'an irregular cycle', absent:'absent periods', heavy:'heavy, prolonged periods' }[a[0]] || 'hormonal irregularities';
+                    const energy = { high:'good energy', moderate:'moderate fatigue', low:'chronic low energy', crashes:'post-meal energy crashes' }[a[6]] || 'fluctuating energy';
+                    const concern = { fertility:'fertility', weight:'weight management', appearance:'physical appearance changes', energy:'energy and mood' }[a[11]] || 'overall vitality';
+                    const typeLabel = { insulin:'Insulin-Resistant', inflammatory:'Inflammatory', adrenal:'Adrenal', postPill:'Metabolic Burnout' }[type] || 'Vitality';
+                    const n = name ? name + ', your' : 'Your';
+                    return `${n} assessment reveals ${cycle} combined with ${energy} — and your primary concern is ${concern}. The specific combination of symptoms you described is consistent with ${typeLabel} Vitality, a pattern that responds decisively to targeted nutritional, herbal, and lifestyle correction. This protocol was built around exactly what you told us.`;
+                },
+
+                buildPersonalizedEmpathy(a, name) {
+                    const stress = a[7]; const energy = a[6]; const sleep = a[8];
+                    const n = name || '';
+                    const burned = stress === 'chronic' || sleep === 'severe';
+                    const drained = energy === 'low' || energy === 'crashes';
+                    if (burned && drained) {
+                        return { heading: `${n ? n + ', your' : 'Your'} body is running on empty — and you know it`, body: `You told us you're dealing with chronic stress, poor sleep, and ongoing fatigue. That's not laziness or weakness — it's a measurable physiological state called HPA-axis dysregulation. Your adrenal glands, hormones, and energy systems are locked in a stress response that won't switch off. The first thing this protocol does is give your body permission to recover.` };
+                    } else if (drained) {
+                        return { heading: `${n ? n + ', the' : 'The'} fatigue you're feeling has a very specific cause`, body: `You described low energy and fatigue that doesn't resolve with rest or willpower — and that's important data. This kind of fatigue is almost always hormonal in origin. Whether it's insulin resistance blocking your cells from using energy, or cortisol suppressing your recovery, the root can be identified and corrected. That's precisely what this protocol is designed to do.` };
+                    } else {
+                        return { heading: `${n ? n + ', these' : 'These'} symptoms are not random — they form a clear picture`, body: `Looking at everything you shared, your symptoms aren't separate problems — they're a single hormonal pattern expressing itself in multiple ways. The good news is that when you treat the pattern at its root, everything tends to shift: cycle, energy, weight, skin, mood. The protocol ahead addresses exactly that pattern, specific to what you described.` };
+                    }
                 },
 
                 viewSolution() {
@@ -751,7 +873,7 @@
                     }
 
                     // Redirect to sales page
-                    window.location.href = '90-day-plan.html';
+                    window.location.href = 'select-plan.html';
                 }
             }
         }

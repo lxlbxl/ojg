@@ -1,0 +1,31 @@
+{
+  "country": "Nigeria",
+  "country_code": "NG",
+  "climate_zone": "tropical",
+  "measurement_system": "metric",
+  "staple_foods": [
+    "rice (parboiled, ofada)", "yam", "plantain (ripe and unripe)", "beans (honey beans, black-eyed peas)",
+    "cassava (eba, garri, fufu)", "sweet potato", "cocoyam", "maize (corn)",
+    "leafy greens (efo, ugwu/pumpkin leaf, bitter leaf, waterleaf)", "okra"
+  ],
+  "common_proteins": [
+    "chicken", "goat meat", "beef", "tilapia", "mackerel (titus fish)",
+    "catfish", "stockfish (bakalao)", "eggs", "beans and lentils", "crayfish"
+  ],
+  "common_cooking_fats": ["palm oil", "groundnut (peanut) oil", "coconut oil"],
+  "locally_available_herbs": [
+    {"name": "Bitter Leaf",      "local_name": "Ewuro (Yoruba) / Onugbu (Igbo) / Shiwaka (Hausa)", "use": "blood sugar regulation, liver detox, digestive support"},
+    {"name": "Moringa",          "local_name": "Ewe Igbale (Yoruba) / Zogale (Hausa)",             "use": "nutritional powerhouse, anti-inflammatory, blood-sugar support"},
+    {"name": "Turmeric",         "local_name": "Ata-ile pupa (Yoruba) / Gangamau (Hausa)",         "use": "anti-inflammatory, liver support, antioxidant"},
+    {"name": "Ginger",           "local_name": "Ata-ile (Yoruba) / Citta (Hausa)",                 "use": "digestive, anti-inflammatory, nausea relief"},
+    {"name": "Scent Leaf (Basil)", "local_name": "Efirin (Yoruba) / Nchanwu (Igbo) / Daidoya (Hausa)", "use": "antibacterial, blood sugar, stress adaptogen"},
+    {"name": "Fenugreek Seeds",  "local_name": "Hulba (Hausa / Arabic) / Ewedu seed",             "use": "insulin sensitivity, hormonal support, milk production"},
+    {"name": "Bitter Kola",      "local_name": "Orogbo (Yoruba) / Namijin goro (Hausa)",           "use": "vitality, anti-inflammatory, traditional tonic"},
+    {"name": "Neem (Dongoyaro)", "local_name": "Dongoyaro (Yoruba/Hausa) / Ogwu afia (Igbo)",     "use": "antibacterial, antifungal, blood purifier — topical use primarily"}
+  ],
+  "where_to_source": "local open markets (Balogun, Mile 12, Eke, Oja), herbal medicine sellers (agbo sellers), pharmacies, and health food stores in urban areas",
+  "typical_cost_band": "low-medium",
+  "dietary_norms": "Pork is consumed in Christian communities; avoided in Muslim-majority North. Halal meat widely available. Beef and goat are most common red meats. Soup-and-starch is the traditional meal format. Rice increasingly common especially in cities.",
+  "language_for_local_names": "Yoruba / Igbo / Hausa",
+  "reviewed": true
+}

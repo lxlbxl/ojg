@@ -1,0 +1,31 @@
+{
+  "country": "Philippines",
+  "country_code": "PH",
+  "climate_zone": "tropical",
+  "measurement_system": "metric",
+  "staple_foods": [
+    "white rice", "sweet potato (kamote)", "cassava (kamoteng kahoy)", "banana (saging)",
+    "kangkong (water spinach)", "malunggay (moringa)", "ampalaya (bitter melon)",
+    "coconut (niyog)", "tilapia", "milkfish (bangus)"
+  ],
+  "common_proteins": [
+    "pork", "chicken", "bangus (milkfish)", "tilapia", "shrimp (hipon)",
+    "eggs", "tofu and tokwa", "beans (monggo/mung beans)"
+  ],
+  "common_cooking_fats": ["coconut oil", "vegetable oil", "lard"],
+  "locally_available_herbs": [
+    {"name": "Moringa",           "local_name": "Malunggay",                 "use": "nutritional powerhouse, blood-sugar support, anti-inflammatory, milk production"},
+    {"name": "Turmeric",          "local_name": "Luyang dilaw / Dilaw",      "use": "anti-inflammatory, liver support, skin"},
+    {"name": "Ginger",            "local_name": "Luya",                      "use": "digestive, anti-inflammatory, nausea"},
+    {"name": "Bitter Melon",      "local_name": "Ampalaya",                  "use": "blood-sugar regulation (clinical evidence for type 2 diabetes support)"},
+    {"name": "Pandan Leaf",       "local_name": "Pandan",                    "use": "calming, antioxidant, blood-sugar support"},
+    {"name": "Lagundi",           "local_name": "Lagundi (Vitex negundo)",   "use": "respiratory support, anti-inflammatory, pain relief — FDA-approved traditional medicine in PH"},
+    {"name": "Yerba Buena",       "local_name": "Yerba buena / Spearmint",   "use": "pain relief, digestive, calming — anti-androgen effect similar to spearmint"},
+    {"name": "Sambong",           "local_name": "Sambong",                   "use": "diuretic, kidney support — FDA-approved traditional medicine in PH"}
+  ],
+  "where_to_source": "public markets (palengke) in every barangay, Mercury Drug and Watsons pharmacies, Healthy Options health stores, community gardens (locally grown malunggay is ubiquitous)",
+  "typical_cost_band": "low",
+  "dietary_norms": "Predominantly Roman Catholic. No significant food taboos for most. Pork is the most common meat. Rice is eaten three times daily by most Filipinos. Vinegar (suka) and fish sauce (patis) are condiment staples. Coconut milk (gata) common in cooking.",
+  "language_for_local_names": "Filipino / Tagalog",
+  "reviewed": true
+}

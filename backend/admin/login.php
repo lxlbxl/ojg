@@ -57,13 +57,25 @@ if ($_POST) {
         $error = 'Please enter both username and password';
         log_debug("Failed: Empty username or password");
     } else {
-        try {
+        require_once __DIR__ . '/../classes/Database.php';
+        require_once __DIR__ . '/../classes/RateLimiter.php';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $rateLimiter = new RateLimiter();
+        
+        $check = $rateLimiter->checkLoginAttempt($username, $ip);
+        if (!$check['allowed']) {
+            $mins = ceil($check['remaining'] / 60);
+            $error = "Too many attempts. Try again in {$mins} minutes.";
+            log_debug("Failed: Rate limit exceeded for username $username from IP $ip");
+        } else {
+            try {
             $pdo = getDBConnection();
             $user = getAdminByUsername($pdo, $username);
 
             if ($user) {
                 $hash = $user['password_hash'] ?? ($user['password'] ?? null);
                 if ($hash && password_verify($password, $hash)) {
+                    $rateLimiter->recordLoginSuccess($username, $ip);
                     $_SESSION['admin_logged_in'] = true;
                     $_SESSION['admin_id'] = $user['id'];
                     $_SESSION['admin_username'] = $user['username'];
@@ -74,10 +86,12 @@ if ($_POST) {
                     header('Location: dashboard.php');
                     exit;
                 } else {
+                    $rateLimiter->recordLoginFailure($username, $ip);
                     $error = 'Invalid username or password';
                     log_debug("Failed: Invalid password for user $username");
                 }
             } else {
+                $rateLimiter->recordLoginFailure($username, $ip);
                 $error = 'Invalid username or password';
                 log_debug("Failed: User not found for username $username");
             }

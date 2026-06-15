@@ -24,6 +24,21 @@ if ($base_path !== '/') {
 $request_uri = strtok($request_uri, '?');
 
 // Route the request
+
+// Rate limiting for API routes
+if (strpos($request_uri, '/api/') === 0) {
+    require_once APP_ROOT . '/classes/Database.php';
+    require_once APP_ROOT . '/classes/RateLimiter.php';
+    
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    $rateLimiter = new RateLimiter();
+    if (!$rateLimiter->checkApiRateLimit($ip)) {
+        http_response_code(429);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Too many requests. Please try again later.']);
+        exit;
+    }
+}
 switch ($request_uri) {
     case '/':
     case '/admin':

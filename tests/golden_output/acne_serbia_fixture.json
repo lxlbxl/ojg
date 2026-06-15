@@ -1,0 +1,68 @@
+{
+  "_meta": {
+    "fixture": "acne_serbia",
+    "condition": "acne",
+    "region": "RS",
+    "country": "Serbia",
+    "description": "Acne plan for a Serbian user. Must have skincare_routine, no workout block, Serbian foods in meal_plan, Serbian herb names, no cycle_sync.",
+    "last_updated": "2026-06"
+  },
+
+  "required_keys": [
+    "summary",
+    "root_cause",
+    "goals",
+    "skincare_routine",
+    "flare_playbook",
+    "meal_plan",
+    "supplements",
+    "herbal_protocols",
+    "tracking_guidance",
+    "quick_win"
+  ],
+
+  "forbidden_keys": [
+    "workout",
+    "movement_plan",
+    "exercise_plan",
+    "strength_protocol",
+    "cycle_sync"
+  ],
+
+  "skincare_routine_assertions": {
+    "must_have_am": true,
+    "must_have_pm": true,
+    "am_min_steps": 3,
+    "pm_min_steps": 3
+  },
+
+  "tracking_required_keys": [
+    "skin_photo",
+    "skin_clarity",
+    "flare_count"
+  ],
+
+  "localisation_assertions": {
+    "meal_plan_days": 7,
+    "expected_local_foods": ["pasulj", "kupus", "paprika", "hleb", "krompir"],
+    "expected_local_herb_names": ["kopriva", "kamilica", "kantarion"],
+    "measurement_system": "metric",
+    "forbidden_food_markers": ["jollof", "eba", "egusi", "sukuma", "ugali", "kamote"]
+  },
+
+  "herb_safety_assertions": [
+    {
+      "herb": "st john's wort",
+      "expected_caution_present": true,
+      "reason": "St John's Wort (kantarion) is listed in Serbia region pack but flagged for drug interactions — must include caution in herbal_protocols"
+    }
+  ],
+
+  "structure_assertions": {
+    "phase_count": 3,
+    "weekly_actions_per_phase": 4,
+    "supplements_min": 4,
+    "herbal_protocols_min": 2,
+    "flare_playbook_min_entries": 3
+  }
+}

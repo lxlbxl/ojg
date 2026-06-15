@@ -1,0 +1,30 @@
+{
+  "country": "Kenya",
+  "country_code": "KE",
+  "climate_zone": "tropical highland (Nairobi) / arid (north)",
+  "measurement_system": "metric",
+  "staple_foods": [
+    "ugali (maize meal)", "sukuma wiki (kale/collard greens)", "beans (maharagwe)", "rice",
+    "sweet potato", "arrow root (nduma)", "banana (matoke)", "cassava",
+    "githeri (maize and beans)", "nyama choma (grilled meat)"
+  ],
+  "common_proteins": [
+    "chicken", "beef", "goat", "tilapia (from Lake Victoria)", "omena (dagaa/silver fish)",
+    "eggs", "beans and lentils", "fermented milk (mursik, maziwa lala)"
+  ],
+  "common_cooking_fats": ["vegetable oil", "cooking fat (kimbo)", "butter"],
+  "locally_available_herbs": [
+    {"name": "Moringa",       "local_name": "Mzinga (Swahili) / Mlonge",        "use": "nutritional powerhouse, blood sugar, anti-inflammatory"},
+    {"name": "Turmeric",      "local_name": "Manjano (Swahili)",                 "use": "anti-inflammatory, liver support, antioxidant"},
+    {"name": "Ginger",        "local_name": "Tangawizi (Swahili)",               "use": "digestive, anti-inflammatory, nausea"},
+    {"name": "Aloe Vera",     "local_name": "Msubaki / Gargacha (Maa)",          "use": "digestive support, skin healing, anti-inflammatory"},
+    {"name": "Neem",          "local_name": "Mwarobaini (Swahili — 'cures 40 diseases')", "use": "antibacterial, antimalarial, antifungal"},
+    {"name": "African Basil (Scent Leaf)", "local_name": "Mnyumbati / Baseli",  "use": "antibacterial, digestive, blood sugar"},
+    {"name": "Stinging Nettle", "local_name": "Thabai (Kikuyu) / Nakasi",       "use": "anti-inflammatory, mineral-rich, hormonal support"}
+  ],
+  "where_to_source": "local markets (Gikomba, Wakulima, Muthurwa in Nairobi), supermarkets (Naivas, Quickmart), herbal shops along River Road, pharmacy chains (Goodlife, Medisel)",
+  "typical_cost_band": "low-medium",
+  "dietary_norms": "Predominantly Christian nation. Halal meat available in coastal areas (Mombasa) and Muslim communities. Beef and goat common. Ugali is a daily staple for most households. Tilapia is the primary fish. Tea (chai with milk) is the national drink.",
+  "language_for_local_names": "Swahili / Kikuyu",
+  "reviewed": true
+}

@@ -17,13 +17,24 @@ class MemberAuth
         // Clean email
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        require_once __DIR__ . '/RateLimiter.php';
+        $rateLimiter = new RateLimiter();
+        
+        $check = $rateLimiter->checkLoginAttempt($email, $ip);
+        if (!$check['allowed']) {
+            $mins = ceil($check['remaining'] / 60);
+            return ['success' => false, 'message' => "Too many attempts. Try again in {$mins} minutes."];
+        }
+
         // Get user
         $sql = "SELECT * FROM users WHERE email = :email LIMIT 1";
         $user = $this->db->fetch($sql, [':email' => $email]);
 
         // Check if user exists
         if (!$user) {
-            return ['success' => false, 'message' => 'User not found.'];
+            $rateLimiter->recordLoginFailure($email, $ip);
+            return ['success' => false, 'message' => 'Invalid credentials.'];
         }
 
         // In a real scenario, we'd check password. 
@@ -42,14 +53,17 @@ class MemberAuth
         // Given constraints, I'll check if 'password_hash' exists in $user.
 
         if (!isset($user['password_hash']) || empty($user['password_hash'])) {
+            $rateLimiter->recordLoginFailure($email, $ip);
             return ['success' => false, 'message' => 'Account not activated. Please reset password.'];
         }
 
         if (isset($user['status']) && $user['status'] !== 'active') {
+            $rateLimiter->recordLoginFailure($email, $ip);
             return ['success' => false, 'message' => 'Account is suspended or inactive. Please contact support.'];
         }
 
         if (password_verify($password, $user['password_hash'])) {
+            $rateLimiter->recordLoginSuccess($email, $ip);
             // Set session
             $_SESSION[$this->sessionName] = [
                 'user_id' => $user['id'],
@@ -63,6 +77,7 @@ class MemberAuth
             return ['success' => true, 'redirect' => 'index.php'];
         }
 
+        $rateLimiter->recordLoginFailure($email, $ip);
         return ['success' => false, 'message' => 'Invalid credentials.'];
     }
 

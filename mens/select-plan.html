@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90-Day Vitality Complete Transformation - Select Your Plan</title>
+    <title>Your Vitality Protocol is Ready — Choose Your Access</title>
     <meta name="description"
-        content="Transform your Vitality in 90 days. Choose your preferred format: Instant PDF Download or Interactive Member Portal.">
+        content="Your personalized Vitality protocol is ready. Choose your preferred format and start your 90-day transformation today.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,6 +136,14 @@
         }
     </style>
 
+    <style>
+        .guarantee-centerpiece { background:linear-gradient(135deg,#f2f8f5,#dcece3); border:2px solid #166534; border-radius:2rem; }
+        .faq-item summary { cursor:pointer; list-style:none; }
+        .faq-item summary::-webkit-details-marker { display:none; }
+        .faq-item[open] summary svg { transform:rotate(180deg); }
+        .faq-item summary svg { transition:transform 0.3s; }
+    </style>
+
     <script src="../js/config.js"></script>
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/flutterwave-integration.js"></script>
@@ -158,32 +167,43 @@
                     <span class="text-lg font-serif font-bold tracking-tight text-forest-900 hidden md:block">Vitality
                         Transformation</span>
                 </div>
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-3 md:px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-forest-800 uppercase">
-                        <span class="w-2 h-2 rounded-full bg-terracotta-500 animate-pulse"></span>
-                        <span class="md:hidden">Offer Active</span>
-                        <span class="hidden md:inline">Assessment Offer Active</span>
+                <div class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-3 md:px-4 py-1.5 rounded-full text-xs font-medium text-forest-800 uppercase">
+                        🛡️ <span class="hidden md:inline">90-Day</span> Guarantee
                     </span>
-                </div>
             </div>
         </div>
     </header>
 
     <main class="pt-24 pb-16 px-4 md:px-6" x-data="selectPlanPage()">
 
+        <!-- Personalized profile callout — keeps the "known" thread alive from results page -->
+        <section class="max-w-3xl mx-auto mb-8 mt-4" x-show="profileHighlights.length > 0" x-cloak>
+            <div class="bg-forest-50 border border-forest-100 rounded-2xl p-6">
+                <p class="text-[10px] font-bold text-forest-800/50 uppercase tracking-widest mb-4">Built Around Your Assessment</p>
+                <div class="flex flex-wrap gap-3">
+                    <template x-for="h in profileHighlights" :key="h.label">
+                        <div class="flex items-center gap-2 bg-white border border-forest-100 rounded-full px-4 py-2 shadow-sm">
+                            <span x-text="h.icon"></span>
+                            <span class="font-medium text-forest-900 text-xs" x-text="h.label + ': '"></span>
+                            <span class="text-forest-800/70 text-xs" x-text="h.short"></span>
+                        </div>
+                    </template>
+                </div>
+                <p class="text-xs text-forest-800/60 mt-4 font-medium" x-text="profileNote"></p>
+            </div>
+        </section>
+
         <section class="max-w-6xl mx-auto mb-20 md:mb-32">
             <div class="grid md:grid-cols-12 gap-12 items-center">
 
                 <div class="md:col-span-7 space-y-8 relative">
+                    <!-- Personalization Header -->
                     <div class="inline-block border-b border-terracotta-500/30 pb-1">
-                        <span class="font-sans text-terracotta-600 font-medium tracking-widest text-sm uppercase">Choose
-                            Your Preferred Format</span>
+                        <span class="font-sans text-terracotta-600 font-medium tracking-widest text-sm uppercase">Your Protocol is Ready</span>
                     </div>
 
-                    <h1 class="text-4xl md:text-7xl font-serif font-medium leading-[1.1] text-forest-900 reveal-up">
-                        One Proven Protocol.<br>
-                        <span class="italic text-terracotta-600">Two Ways</span> to Heal.
+                    <h1 class="text-4xl md:text-7xl font-serif font-medium leading-[1.1] text-forest-900 reveal-up" data-exp="plan-headline">
+                        Your <span class="italic text-terracotta-600" x-text="mensType">Vitality</span> Protocol.
                     </h1>
 
                     <p class="text-xl text-gray-600 font-light leading-relaxed max-w-lg reveal-up delay-100">
@@ -208,12 +228,10 @@
                             <p class="text-xs text-gray-500 mb-4 h-10">Interactive dashboard with daily tracking,
                                 community features, and automated reminders.</p>
                             <ul class="text-xs space-y-2 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Daily Dynamic
-                                    Meal Plans</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Interactive
-                                    Symptom Tracker</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Community
-                                    Access</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Daily Dynamic Meal Plans</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Interactive Symptom Tracker</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Community Access</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> <strong>+ PDF guides as a bonus</strong></li>
                             </ul>
                             <div class="text-center mt-auto">
                                 <span class="block text-xs text-gray-400 line-through">₦<span
@@ -232,12 +250,10 @@
                             <p class="text-xs text-gray-500 mb-4 h-10">Beautifully designed, printer-friendly guides
                                 tailored to your needs. Yours to keep forever.</p>
                             <ul class="text-xs space-y-2 mb-6">
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Complete Meal
-                                    Plan PDF</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Printable
-                                    Trackers</li>
-                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> No Internet
-                                    Needed</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Complete Meal Plan PDF</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Printable Trackers</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> No Internet Needed</li>
+                                <li class="flex items-center gap-2"><span class="text-green-600">✓</span> Keep Forever</li>
                             </ul>
                             <div class="text-center mt-auto">
                                 <span class="block text-xs text-gray-400 line-through">₦<span
@@ -249,7 +265,7 @@
                     </div>
 
                     <div class="reveal-up delay-300 pt-6">
-                        <button @click="scrollToOrder()"
+                        <button @click="scrollToOrder()" id="plan-proceed-cta" data-exp="plan-cta"
                             class="group relative w-full md:w-auto overflow-hidden bg-forest-900 text-sand px-8 py-5 rounded-full font-sans font-medium transition-all hover:shadow-soft hover:-translate-y-1 text-center">
                             <span class="relative z-10 flex items-center justify-center gap-2">
                                 <span x-show="pricingLoaded" x-cloak
@@ -308,7 +324,7 @@
             <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
                 <div class="bg-forest-900 p-8 text-center">
                     <h2 class="text-2xl md:text-3xl font-serif text-white mb-2">Secure Your Spot</h2>
-                    <p class="text-forest-200 text-sm">Safe, encrypted, and guaranteed.</p>
+                    <p class="text-forest-200 text-sm" x-text="guarantee.shortLabel + ' · 256-bit SSL'"></p>
                 </div>
 
                 <div class="p-8 md:p-12">
@@ -406,12 +422,17 @@
                             </div>
                         </div>
 
-                        <button type="submit" :disabled="isProcessing || offerExpired"
+                        <!-- Guarantee adjacent to CTA -->
+                        <div class="guarantee-centerpiece p-5 text-center" data-exp="checkout-guarantee">
+                            <p class="text-sm font-semibold text-forest-900">🛡️ Protected by our <strong x-text="guarantee.label"></strong></p>
+                            <p class="text-xs text-forest-800 mt-1">Follow the protocol — see results or get a full refund. Zero risk.</p>
+                        </div>
+
+                        <button type="submit" id="pay-button" :disabled="isProcessing || !pricingLoaded"
                             class="w-full bg-forest-900 hover:bg-forest-800 text-sand font-medium text-lg py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed mt-4">
-                            <span x-show="!isProcessing && pricingLoaded && !offerExpired" x-cloak
+                            <span x-show="!isProcessing && pricingLoaded" x-cloak
                                 x-text="'Pay ₦' + price.toLocaleString() + ' — ' + (selectedPlan === 'web' ? 'Join Portal' : 'Download Now')"></span>
                             <span x-show="!isProcessing && !pricingLoaded" class="animate-pulse">Loading...</span>
-                            <span x-show="offerExpired && !isProcessing">Offer Expired — Contact Us</span>
                             <span x-show="isProcessing" class="flex items-center justify-center gap-2">
                                 <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="none" viewBox="0 0 24 24">
@@ -425,37 +446,45 @@
                             </span>
                         </button>
 
-                        <div class="space-y-3 pt-2">
-                            <div class="flex items-center justify-center gap-6 text-xs text-gray-500">
-                                <span class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    256-bit SSL Encrypted
-                                </span>
-                                <span class="flex items-center gap-1.5">
-                                    <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    30-Day Money-Back
-                                </span>
+                        <!-- Payment Trust Strip -->
+                        <div data-exp="payment-trust" class="bg-sage-100/60 border border-sage-200 rounded-xl p-4 mt-2">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                                <div class="flex flex-col items-center gap-1">
+                                    <svg class="w-6 h-6 text-forest-700" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">256-bit SSL Secured</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1">
+                                    <span class="text-xl">💳</span>
+                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">Card · Bank · Transfer</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1">
+                                    <span class="text-xl">⚡</span>
+                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide">Powered by Flutterwave</span>
+                                </div>
+                                <div class="flex flex-col items-center gap-1">
+                                    <span class="text-xl">🛡️</span>
+                                    <span class="text-[10px] font-bold text-forest-800 uppercase tracking-wide" x-text="guarantee.shortLabel"></span>
+                                </div>
                             </div>
-                            <p class="text-center text-xs text-gray-400">Join 500+ women who transformed their Vitality</p>
+                            <p class="text-center text-xs text-gray-500 mt-3">Need help? Email <a href="mailto:support@ojgherbal.com" class="text-forest-700 underline">support@ojgherbal.com</a></p>
                         </div>
+                        <p class="text-center text-xs text-gray-400 pt-2">Join <span x-text="socialProof.count + ' ' + socialProof.label"></span> who transformed their Vitality</p>
                     </form>
                 </div>
             </div>
         </section>
 
-        <section class="text-center py-12">
-            <div
-                class="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-sm border border-gray-100">
-                <span class="text-2xl">🛡️</span>
-                <span class="text-sm font-medium text-gray-600">30-Day Money Back Guarantee — No Questions Asked</span>
+        <!-- Guarantee Centerpiece -->
+        <section class="max-w-3xl mx-auto py-10" data-exp="pricing-guarantee">
+            <div class="guarantee-centerpiece p-8 md:p-12 text-center shadow-soft">
+                <div class="text-6xl mb-4">🛡️</div>
+                <h3 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-3" x-text="guarantee.label"></h3>
+                <p class="text-gray-700 font-light max-w-xl mx-auto leading-relaxed mb-4">Try the full 90-day protocol. If your symptoms haven't improved, email us for a full refund — and keep everything. <strong>The only risk is staying where you are.</strong></p>
+                <div class="flex flex-wrap justify-center gap-4 text-xs font-bold uppercase tracking-wide text-forest-700">
+                    <template x-for="bullet in guarantee.bullets" :key="bullet">
+                        <span class="flex items-center gap-1.5">✓ <span x-text="bullet"></span></span>
+                    </template>
+                </div>
             </div>
         </section>
 
@@ -484,14 +513,29 @@
                 pricingLoaded: false,
                 offerExpired: false,
                 customerPrefilled: false,
-                selectedPlan: 'web', // 'web' or 'pdf'
+                selectedPlan: 'web',
                 showOrderForm: false,
+                valueStackItems: [],
+                faqItems: [],
+                planTestimonials: [],
+                guarantee: { label:'90-Day Money-Back Guarantee', shortLabel:'90-Day Guarantee', bullets:['Full refund','Keep everything','5-minute process'] },
+                socialProof: { count:'500+', label:'men' },
+                profileHighlights: [],
+                profileNote: '',
 
                 init() {
+                    if (window.CONFIG) {
+                        this.guarantee = window.CONFIG.guarantee;
+                        this.socialProof = window.CONFIG.socialProof.mens;
+                        this.valueStackItems = window.CONFIG.valueStack.mens;
+                        this.faqItems = window.CONFIG.FUNNEL_CONFIG.mens.faq;
+                        this.planTestimonials = (window.CONFIG.testimonials.mens||[]).slice(0,4);
+                    }
                     this.loadVitalityType();
                     this.loadPricing();
                     this.trackPageView();
                     this.prefillCustomerData();
+                    this.buildProfileHighlights();
                 },
 
                 formatPrice(amount) {
@@ -562,6 +606,29 @@
                             }
                         }
                     }
+                },
+
+                buildProfileHighlights() {
+                    const raw = localStorage.getItem('mensAssessmentData');
+                    if (!raw) return;
+                    try {
+                        const d = JSON.parse(raw);
+                        const a = d.answers || {};
+                        const name = d.contactInfo?.name?.split(' ')[0] || '';
+                        const highlights = [];
+                        const cycle   = { regular:'Regular cycle', irregular:'Irregular cycle', absent:'Absent periods', heavy:'Heavy/prolonged periods' }[a[0]];
+                        const weight  = { stable:'Stable weight', gradual_gain:'Gradual weight gain', rapid_gain:'Rapid weight gain', difficulty_losing:'Difficulty losing weight' }[a[3]];
+                        const energy  = { high:'High energy', moderate:'Moderate fatigue', low:'Chronically low energy', crashes:'Post-meal energy crashes' }[a[6]];
+                        const concern = { fertility:'Fertility', weight:'Weight management', appearance:'Physical appearance', energy:'Energy & mood' }[a[11]];
+                        if (cycle)   highlights.push({ icon:'🌙', label:'Cycle',   short: cycle });
+                        if (weight)  highlights.push({ icon:'⚖️', label:'Weight',  short: weight });
+                        if (energy)  highlights.push({ icon:'⚡', label:'Energy',  short: energy });
+                        if (concern) highlights.push({ icon:'🎯', label:'Goal',    short: concern });
+                        this.profileHighlights = highlights;
+                        this.profileNote = name
+                            ? `${name}, this protocol is built around your specific ${this.mensType} pattern — not a generic wellness plan.`
+                            : `This protocol is built around your specific ${this.mensType} pattern — not a generic wellness plan.`;
+                    } catch (e) {}
                 },
 
                 trackPageView() {

@@ -234,10 +234,147 @@ class Database
             // Ensure AI Logs Columns
             $this->ensureAiLogsColumns();
 
-        } catch (Exception $e) {
+            // Create security and rate limiting tables if they don't exist
+            $isMySQL = $this->isMySQL();
+            if ($isMySQL) {
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS consumed_tokens (
+                    token VARCHAR(64) PRIMARY KEY,
+                    consumed_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )");
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS login_attempts (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    identifier VARCHAR(255) NOT NULL,
+                    ip_address VARCHAR(45) NOT NULL,
+                    attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_identifier (identifier),
+                    INDEX idx_ip (ip_address)
+                )");
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS rate_limits_bucket (
+                    ip_address VARCHAR(45) PRIMARY KEY,
+                    tokens DECIMAL(10, 4) NOT NULL,
+                    last_updated INT NOT NULL
+                )");
+            } else {
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS consumed_tokens (
+                    token TEXT PRIMARY KEY,
+                    consumed_at TEXT DEFAULT CURRENT_TIMESTAMP
+                )");
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS login_attempts (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    identifier TEXT NOT NULL,
+                    ip_address TEXT NOT NULL,
+                    attempted_at TEXT DEFAULT CURRENT_TIMESTAMP
+                )");
+                $this->connection->exec("CREATE INDEX IF NOT EXISTS idx_login_attempts_ident ON login_attempts(identifier)");
+                $this->connection->exec("CREATE INDEX IF NOT EXISTS idx_login_attempts_ip ON login_attempts(ip_address)");
+                
+                $this->connection->exec("CREATE TABLE IF NOT EXISTS rate_limits_bucket (
+                    ip_address TEXT PRIMARY KEY,
+                    tokens REAL NOT NULL,
+                    last_updated INTEGER NOT NULL
+                )");
+            }
+
+            // A/B Engine migrations (experiments, variants, assignments, etc.)
+            $this->ensureExperimentColumns();
 
         } catch (Exception $e) {
             error_log("Ensure schema error: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * A/B Engine schema bootstrap.
+     * Runs the migration file (idempotent CREATE TABLE IF NOT EXISTS),
+     * and adds new columns to funnel_tracking. Safe to call on every request.
+     */
+    private function ensureExperimentColumns()
+    {
+        try {
+            // 1. Run migration file (creates experiments, variants, assignments, etc.)
+            $migrationFile = $this->isMySQL()
+                ? APP_ROOT . '/database/migrations/001_ab_engine_mysql.sql'
+                : APP_ROOT . '/database/migrations/001_ab_engine_sqlite.sql';
+
+            if (file_exists($migrationFile)) {
+                $sql = file_get_contents($migrationFile);
+
+                // Split on semicolons; ignore comments and empty lines
+                $statements = array_filter(
+                    array_map('trim', explode(';', $sql)),
+                    function ($s) {
+                        return $s !== '' && strpos($s, '--') !== 0 && strpos($s, "\n--") !== 1;
+                    }
+                );
+
+                foreach ($statements as $stmt) {
+                    if (preg_match('/^\s*--/', $stmt))
+                        continue;
+                    if (trim($stmt) === '')
+                        continue;
+                    try {
+                        $this->connection->exec($stmt);
+                    } catch (PDOException $e) {
+                        // Ignore "already exists" so this is idempotent
+                        $msg = $e->getMessage();
+                        if (
+                            strpos($msg, 'already exists') === false &&
+                            strpos($msg, '1050') === false &&      // MySQL: table exists
+                            strpos($msg, '1060') === false &&      // MySQL: duplicate column
+                            strpos($msg, '1061') === false &&      // MySQL: duplicate key
+                            strpos($msg, '1062') === false &&      // MySQL: duplicate entry
+                            strpos($msg, 'duplicate column') === false &&
+                            strpos($msg, 'no such column') === false
+                        ) {
+                            if (DEBUG_MODE) {
+                                error_log("A/B migration stmt error: " . $msg . " | SQL: " . substr($stmt, 0, 120));
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 2. Add experiment_id / variant_id / revenue to funnel_tracking (defensive)
+            $this->addColumnIfMissing('funnel_tracking', 'experiment_id', $this->isMySQL() ? 'INT NULL' : 'INTEGER');
+            $this->addColumnIfMissing('funnel_tracking', 'variant_id', $this->isMySQL() ? 'INT NULL' : 'INTEGER');
+            $this->addColumnIfMissing('funnel_tracking', 'revenue', $this->isMySQL() ? 'DECIMAL(10,2) NULL' : 'REAL');
+
+        } catch (Exception $e) {
+            error_log("ensureExperimentColumns error: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Defensive helper: add a column to a table only if it doesn't already exist.
+     * Works for both MySQL and SQLite.
+     */
+    private function addColumnIfMissing($table, $column, $definition)
+    {
+        try {
+            $exists = false;
+            if ($this->isMySQL()) {
+                $stmt = $this->connection->prepare(
+                    "SELECT COUNT(*) AS c FROM information_schema.columns
+                     WHERE table_schema = ? AND table_name = ? AND column_name = ?"
+                );
+                $dbName = defined('DB_NAME') ? DB_NAME : '';
+                $stmt->execute([$dbName, $table, $column]);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $exists = ((int) ($row['c'] ?? 0)) > 0;
+            } else {
+                $cols = $this->fetchAll("PRAGMA table_info($table)");
+                foreach ($cols as $c) {
+                    if (($c['name'] ?? null) === $column) {
+                        $exists = true;
+                        break;
+                    }
+                }
+            }
+            if (!$exists) {
+                $this->connection->exec("ALTER TABLE $table ADD COLUMN $column $definition");
+            }
+        } catch (Exception $e) {
+            // Already exists or no permission — ignore
         }
     }
 

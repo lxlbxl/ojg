@@ -235,13 +235,15 @@
                 </div>
 
                 <!-- Contact Information Form (shown after assessment) -->
-                <div x-show="showContactForm" id="contactFormSection" class="reveal-up">
+                <div x-show="showContactForm" id="contactFormSection" class="reveal-up" data-exp="email-capture">
                     <div class="text-center mb-10">
                         <div
                             class="w-16 h-16 bg-forest-100 text-forest-800 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
                             🎉</div>
-                        <h3 class="text-3xl font-serif font-bold text-forest-900 mb-2">Analysis Complete</h3>
-                        <p class="text-gray-500">Enter your details to reveal your Vitality type and personalized plan.</p>
+                        <h3 class="text-3xl font-serif font-bold text-forest-900 mb-2">Your Vitality Type Analysis is
+                            Ready</h3>
+                        <p class="text-gray-500">You've answered all 12 questions. Enter your details to unlock your
+                            personalized plan and 90-day protocol.</p>
                     </div>
 
                     <form @submit.prevent="submitContactInfo()" class="space-y-6 max-w-lg mx-auto">
@@ -346,8 +348,9 @@
 
     <footer class="py-6 text-center text-forest-800/40 text-xs">
         <p>© 2024 Vitality Assessment. All rights reserved.</p>
-    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+        <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+                href="/backend/admin/" class="hover:underline">Admin</a></p>
+    </footer>
 
     <!-- Assessment Logic (Strictly Preserved) -->
     <script>
@@ -356,6 +359,7 @@
                 currentQuestion: 0,
                 totalQuestions: 12,
                 answers: {},
+                mensType: null,
                 isSubmitting: false,
                 showContactForm: false,
                 showResults: false,
@@ -367,6 +371,27 @@
                     ageRange: ''
                 },
                 contactError: '',
+
+                init() {
+                    // Hydrate from localStorage on resume
+                    try {
+                        const params = new URLSearchParams(window.location.search);
+                        if (params.get('resume') === '1') {
+                            const raw = localStorage.getItem('ojg_assess_mens');
+                            if (raw) {
+                                const data = JSON.parse(raw);
+                                if (data.answers) this.answers = data.answers;
+                                if (typeof data.currentQuestion === 'number') this.currentQuestion = data.currentQuestion;
+                                if (data.mensType) this.mensType = data.mensType;
+                            } else {
+                                const lastQ = parseInt(params.get('last_q') || '0', 10);
+                                if (!isNaN(lastQ) && lastQ > 0 && lastQ < this.totalQuestions) {
+                                    this.currentQuestion = Math.min(lastQ, this.totalQuestions - 1);
+                                }
+                            }
+                        }
+                    } catch (e) { console.warn('mens resume hydration failed', e); }
+                },
 
                 questions: [
                     {
@@ -507,6 +532,27 @@
                     // Set the answer for the current question
                     this.answers[this.currentQuestion] = value;
 
+                    // Persist progress for resume + sunk-cost framing
+                    try {
+                        localStorage.setItem('ojg_assess_mens', JSON.stringify({
+                            currentQuestion: this.currentQuestion,
+                            answers: this.answers,
+                            mensType: this.mensType
+                        }));
+                    } catch (e) { /* localStorage may be disabled */ }
+
+                    // Fire assessment_progress tracking event
+                    if (window.OJG && typeof window.OJG.track === 'function') {
+                        try {
+                            window.OJG.track('assessment_progress', {
+                                funnel: 'mens',
+                                question: this.currentQuestion,
+                                total_questions: this.totalQuestions,
+                                progress_pct: Math.round(((this.currentQuestion + 1) / this.totalQuestions) * 100)
+                            });
+                        } catch (e) { /* tracking non-fatal */ }
+                    }
+
                     // Auto-advance to next question after a brief delay
                     if (this.currentQuestion < this.totalQuestions - 1) {
                         setTimeout(() => {
@@ -573,6 +619,21 @@
 
                         // Store data in localStorage for results page
                         localStorage.setItem('mensAssessmentData', JSON.stringify(fullData));
+
+                        // Fire contact_captured tracking event (sunk-cost gate)
+                        if (window.OJG && typeof window.OJG.track === 'function') {
+                            try {
+                                window.OJG.track('contact_captured', {
+                                    funnel: 'mens',
+                                    mens_type: (fullData.mensType && fullData.mensType.primary) || null,
+                                    has_phone: !!this.contactInfo.phone,
+                                    has_age_range: !!this.contactInfo.ageRange
+                                });
+                            } catch (e) { /* tracking non-fatal */ }
+                        }
+
+                        // Clear sunk-cost progress storage (assessment journey complete)
+                        try { localStorage.removeItem('ojg_assess_mens'); } catch (e) { /* noop */ }
 
                         // Redirect to results
                         window.location.href = 'results.html';

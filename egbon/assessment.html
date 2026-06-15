@@ -158,10 +158,10 @@
 
         <!-- Contact Information Form (shown after assessment) -->
         <div x-show="showContactForm" id="contactFormSection" class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600 mt-8">
-            <h3 class="text-2xl font-bold text-white mb-4">Get Your Personalized Results</h3>
-            <p class="text-gray-400 mb-6">Enter your details to receive your comprehensive performance type analysis and personalized recommendations.</p>
+            <h3 class="text-2xl font-bold text-white mb-4">Your Performance Analysis Don Ready! 🔥</h3>
+            <p class="text-gray-400 mb-6">You don answer all 10 questions. Type your details sharp-sharp to unlock your personalized Egbon plan — wey go show you wetin to do take regain your vitality.</p>
             
-            <form @submit.prevent="submitContactInfo()" class="space-y-4">
+            <form @submit.prevent="submitContactInfo()" class="space-y-4" data-exp="email-capture">
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
@@ -238,7 +238,25 @@
                     ageRange: ''
                 },
                 contactError: '',
-                
+                performanceType: null,
+                assessmentData: null,
+
+                init() {
+                    try {
+                        var p = new URLSearchParams(window.location.search);
+                        if (p.get('resume') === '1') {
+                            var raw = localStorage.getItem('ojg_assess_egbon');
+                            if (raw) {
+                                var s = JSON.parse(raw);
+                                if (s && s.answers) {
+                                    this.answers = s.answers;
+                                    this.currentQuestion = Math.min(Math.max(parseInt(p.get('last_q')||'0',10),0), this.totalQuestions-1);
+                                }
+                            }
+                        }
+                    } catch(e) {}
+                },
+
                 questions: [
                     {
                         question: "How would you describe your current libido/sexual desire?",
@@ -356,7 +374,28 @@
 
                 selectAnswer(value) {
                     this.answers[this.currentQuestion] = value;
-                    
+
+                    // Persist progress for resume
+                    try {
+                        localStorage.setItem('ojg_assess_egbon', JSON.stringify({
+                            answers: this.answers,
+                            currentQuestion: this.currentQuestion,
+                            updatedAt: new Date().toISOString()
+                        }));
+                    } catch (e) {}
+
+                    // Fire assessment_progress event
+                    try {
+                        if (window.OJG && typeof window.OJG.track === 'function') {
+                            window.OJG.track('assessment_progress', {
+                                funnel: 'egbon',
+                                question_index: this.currentQuestion,
+                                total_questions: this.totalQuestions,
+                                progress_pct: Math.round(((this.currentQuestion + 1) / this.totalQuestions) * 100)
+                            });
+                        }
+                    } catch (e) {}
+
                     if (this.currentQuestion < this.totalQuestions - 1) {
                         setTimeout(() => {
                             this.nextQuestion();
@@ -413,7 +452,23 @@
                         }
                         
                         localStorage.setItem('egbonAssessmentData', JSON.stringify(fullData));
-                        
+
+                        // Fire contact_captured event
+                        try {
+                            if (window.OJG && typeof window.OJG.track === 'function') {
+                                window.OJG.track('contact_captured', {
+                                    funnel: 'egbon',
+                                    performance_type: (this.assessmentData && this.assessmentData.performanceType) ?
+                                        (this.assessmentData.performanceType.primary || null) : null,
+                                    has_phone: !!this.contactInfo.phone,
+                                    age_range: this.contactInfo.ageRange || null
+                                });
+                            }
+                        } catch (e) {}
+
+                        // Clear resume data once contact is captured
+                        try { localStorage.removeItem('ojg_assess_egbon'); } catch (e) {}
+
                         window.location.href = 'results.html';
                         
                     } catch (error) {

@@ -122,19 +122,19 @@
          * @param {string} eventName - e.g. 'Purchase', 'Lead', 'InitiateCheckout', 'ViewContent'
          * @param {object} params - event parameters
          */
-        trackEvent: function(eventName, params) {
+        trackEvent: function (eventName, params) {
             try {
                 if (typeof fbq === 'function') {
                     fbq('track', eventName, params || {});
                     console.log('[OJGTracking] Meta Pixel event:', eventName, params);
                 }
-            } catch(e) {
+            } catch (e) {
                 console.warn('[OJGTracking] Pixel error:', e);
             }
         },
 
         /** Track Purchase conversion */
-        trackPurchase: function(amount, currency, planName) {
+        trackPurchase: function (amount, currency, planName) {
             this.trackEvent('Purchase', {
                 value: parseFloat(amount) || 0,
                 currency: currency || 'NGN',
@@ -145,7 +145,7 @@
         },
 
         /** Track Lead (assessment completion) */
-        trackLead: function(assessmentType, pcosType) {
+        trackLead: function (assessmentType, pcosType) {
             this.trackEvent('Lead', {
                 content_name: (assessmentType || 'PCOS') + ' Assessment',
                 content_category: assessmentType || 'pcos',
@@ -154,7 +154,7 @@
         },
 
         /** Track when user views a sales/product page */
-        trackViewContent: function(planName, price, currency) {
+        trackViewContent: function (planName, price, currency) {
             this.trackEvent('ViewContent', {
                 content_name: planName || 'PCOS Plan',
                 content_type: 'product',
@@ -164,7 +164,7 @@
         },
 
         /** Track when user clicks "Buy Now" / starts checkout */
-        trackInitiateCheckout: function(planName, price, currency) {
+        trackInitiateCheckout: function (planName, price, currency) {
             this.trackEvent('InitiateCheckout', {
                 content_name: planName || 'PCOS Plan',
                 value: parseFloat(price) || 0,
@@ -174,12 +174,105 @@
         },
 
         /** Track assessment form completion (registration) */
-        trackCompleteRegistration: function(type) {
+        trackCompleteRegistration: function (type) {
             this.trackEvent('CompleteRegistration', {
                 content_name: (type || 'PCOS') + ' Assessment',
                 status: 'completed'
             });
+        },
+
+        /**
+         * Cookie helpers (shared with server-side router for ojg_sid)
+         */
+        getCookie: function (name) {
+            const match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        },
+
+        setCookie: function (name, value, days) {
+            const expires = new Date(Date.now() + (days || 365) * 86400000).toUTCString();
+            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/; SameSite=Lax';
+        },
+
+        newSessionId: function () {
+            return 'sess_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+        },
+
+        /**
+         * Send a structured event to the experiment tracker endpoint.
+         * Mirrors to funnel_tracking and (if a session has assignments) to experiment_events.
+         * @param {string} eventName - one of: view, assessment_start, assessment_complete, results_view, plan_select, checkout_init, purchase
+         * @param {object} params - { funnel, value, currency, metadata, transaction_id, product }
+         */
+        track: function (eventName, params) {
+            try {
+                params = params || {};
+                // Resolve session id (set by router.php on first hit; fall back to a local one)
+                let sessionId = this.getCookie('ojg_sid');
+                if (!sessionId) {
+                    sessionId = this.newSessionId();
+                    this.setCookie('ojg_sid', sessionId, 365);
+                }
+
+                // Resolve experiment assignments from ojg_exp cookie
+                const expRaw = this.getCookie('ojg_exp');
+                let experimentId = null, variantId = null;
+                if (expRaw) {
+                    try {
+                        const map = JSON.parse(expRaw);
+                        // The PHP server resolves the active experiment for the funnel,
+                        // but for client-side events we send the full map and let the server pick.
+                        // We still set the most recent single one as the primary context.
+                        const keys = Object.keys(map || {});
+                        if (keys.length > 0) {
+                            const last = keys[keys.length - 1];
+                            experimentId = last;
+                            variantId = (map[last] && (map[last].variant_id || map[last])) || null;
+                            if (typeof variantId === 'object') variantId = variantId.variant_id || null;
+                        }
+                    } catch (e) { /* ignore */ }
+                }
+
+                // Resolve funnel: prefer explicit, then window.OJG.funnel, then path-based heuristic
+                let funnel = params.funnel || (window.OJG && window.OJG.funnel) || null;
+                if (!funnel) {
+                    const p = window.location.pathname.toLowerCase();
+                    const m = p.match(/^\/?(pcos|acne|weight|mens|egbon)(?:__[a-z0-9_-]+)?\//);
+                    if (m) funnel = m[1];
+                }
+
+                const payload = {
+                    session_id: sessionId,
+                    funnel: funnel,
+                    event: eventName,
+                    experiment_id: experimentId,
+                    variant_id: variantId,
+                    value: params.value,
+                    currency: params.currency,
+                    transaction_id: params.transaction_id,
+                    product: params.product,
+                    metadata: params.metadata || {}
+                };
+
+                // Don't send empty optional fields
+                Object.keys(payload).forEach(k => { if (payload[k] === undefined || payload[k] === null || payload[k] === '') delete payload[k]; });
+
+                const url = (window.OJG && window.OJG.apiBase ? window.OJG.apiBase : '/backend/api') + '/track-event.php';
+                const body = JSON.stringify(payload);
+                if (navigator.sendBeacon) {
+                    const blob = new Blob([body], { type: 'application/json' });
+                    navigator.sendBeacon(url, blob);
+                } else {
+                    fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: body, keepalive: true }).catch(function () { });
+                }
+            } catch (e) {
+                console.warn('[OJGTracking] track error:', e);
+            }
         }
     };
+
+    // Convenience global
+    window.OJG = window.OJG || {};
+    window.OJG.track = function (eventName, params) { window.OJGTracking.track(eventName, params); };
 
 })();

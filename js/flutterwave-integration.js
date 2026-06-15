@@ -291,6 +291,13 @@ class FlutterwaveIntegration {
                     description: paymentData.description || this.getProductDescription(),
                     logo: this.getProductLogo()
                 },
+                meta: {
+                    funnel: this.getCurrentFunnel(),
+                    plan_duration: paymentData.plan_duration || (paymentData.plan && paymentData.plan.includes('90') ? 90 : 30),
+                    product: paymentData.plan,
+                    session_id: window.WebhookManager ? window.WebhookManager.sessionId : null,
+                    assessment: paymentData.meta ? paymentData.meta.assessment : null
+                },
                 callback: (response) => this.handlePaymentCallback(response, paymentData),
                 onclose: () => this.handlePaymentClose(paymentData)
             };
@@ -314,6 +321,7 @@ class FlutterwaveIntegration {
             console.log('✅ Payment successful! Transaction ID:', response.transaction_id);
 
             // Try to confirm purchase with webhook manager (BLOCKING for PCOS to get credentials)
+            let confirmResultData = null;
             if (window.WebhookManager) {
                 try {
                     const confirmResult = await window.WebhookManager.confirmPurchase({
@@ -326,6 +334,7 @@ class FlutterwaveIntegration {
                         status: 'completed'
                     });
                     console.log('✅ Purchase confirmation sent to backend');
+                    confirmResultData = confirmResult;
 
                     if (confirmResult && confirmResult.credentials) {
                         localStorage.setItem('ojg_new_user_creds', JSON.stringify(confirmResult.credentials));
@@ -360,6 +369,10 @@ class FlutterwaveIntegration {
                 thankYouUrl.searchParams.set('name', originalPaymentData.customer.name || '');
                 thankYouUrl.searchParams.set('email', originalPaymentData.customer.email || '');
                 thankYouUrl.searchParams.set('phone', originalPaymentData.customer.phone || originalPaymentData.customer.phone_number || '');
+            }
+
+            if (confirmResultData && confirmResultData.signed_token) {
+                thankYouUrl.searchParams.set('token', confirmResultData.signed_token);
             }
 
             console.log('🎉 Redirecting to thank you page:', thankYouUrl.toString());

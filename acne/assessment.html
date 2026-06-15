@@ -134,16 +134,17 @@
             </div>
         </div>
 
-        <!-- Contact Form -->
-        <div x-show="showContactForm" x-cloak class="glass-panel rounded-[2rem] p-8 md:p-12 shadow-soft reveal-up">
+        <!-- Contact Form (sunk-cost email capture, post-questions) -->
+        <div x-show="showContactForm" x-cloak data-exp="email-capture"
+            class="glass-panel rounded-[2rem] p-8 md:p-12 shadow-soft reveal-up">
             <div class="text-center mb-8">
                 <div
                     class="w-16 h-16 bg-forest-900 rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow">
                     <i class="fas fa-check text-sand text-2xl"></i>
                 </div>
-                <h2 class="text-3xl font-serif font-medium text-forest-900 mb-4">Assessment Complete</h2>
-                <p class="text-forest-800/60 leading-relaxed">Where should we send your personalized Clear Skin
-                    Protocol?</p>
+                <h2 class="text-3xl font-serif font-medium text-forest-900 mb-4">Your Acne Type Analysis is Ready</h2>
+                <p class="text-forest-800/60 leading-relaxed">You've invested 2 minutes answering 10 questions. Where
+                    should we deliver your personalized Clear Skin Protocol and root-cause analysis?</p>
             </div>
 
             <form @submit.prevent="submitContactInfo()" class="space-y-6">
@@ -208,6 +209,27 @@
                 showContactForm: false, showResults: false, isSubmittingContact: false,
                 contactInfo: { name: '', email: '', phone: '', ageRange: '' },
                 contactError: '',
+                acneType: null,
+
+                init() {
+                    // Resume from ?resume=1 deep link
+                    try {
+                        const params = new URLSearchParams(window.location.search);
+                        if (params.get('resume') === '1') {
+                            const lastQ = parseInt(params.get('last_q') || '0', 10);
+                            const saved = localStorage.getItem('ojg_assess_acne');
+                            if (saved) {
+                                const parsed = JSON.parse(saved);
+                                this.answers = parsed.answers || {};
+                                this.acneType = parsed.acneType || null;
+                                this.currentQuestion = Math.min(lastQ, this.totalQuestions - 1);
+                                if (parsed.contactInfo) {
+                                    this.contactInfo = { ...this.contactInfo, ...parsed.contactInfo };
+                                }
+                            }
+                        }
+                    } catch (e) { /* noop */ }
+                },
 
                 questions: [
                     { question: "How would you describe your current acne severity?", description: "Consider the past 3 months", options: [{ value: "mild", text: "Mild - Occasional breakouts", description: "Few pimples, mostly whiteheads/blackheads" }, { value: "moderate", text: "Moderate - Regular breakouts", description: "Several pimples, some inflamed" }, { value: "severe", text: "Severe - Frequent breakouts", description: "Many inflamed pimples, some cystic" }, { value: "very_severe", text: "Very Severe - Constant breakouts", description: "Widespread inflamed acne, cysts, nodules" }] },
@@ -226,6 +248,27 @@
                 previousQuestion() { if (this.currentQuestion > 0) this.currentQuestion--; },
                 selectAnswer(value) {
                     this.answers[this.currentQuestion] = value;
+                    // Persist progress for resume (P1.6 sunk-cost recovery)
+                    try {
+                        localStorage.setItem('ojg_assess_acne', JSON.stringify({
+                            answers: this.answers,
+                            acneType: this.acneType,
+                            contactInfo: this.contactInfo,
+                            lastUpdated: new Date().toISOString()
+                        }));
+                    } catch (e) { /* noop */ }
+                    // Fire assessment_progress event (recovery funnel signal)
+                    try {
+                        if (window.WebhookManager && typeof window.WebhookManager.trackEvent === 'function') {
+                            window.WebhookManager.trackEvent('assessment_progress', {
+                                category: 'acne',
+                                question_index: this.currentQuestion,
+                                question_number: this.currentQuestion + 1,
+                                total_questions: this.totalQuestions,
+                                last_answer: value
+                            });
+                        }
+                    } catch (e) { /* noop */ }
                     if (this.currentQuestion < this.totalQuestions - 1) {
                         setTimeout(() => this.nextQuestion(), 400);
                     } else {
@@ -249,7 +292,21 @@
                     try {
                         const fullData = { ...this.assessmentData, contactInfo: this.contactInfo };
                         if (window.WebhookManager) await window.WebhookManager.submitAssessment(fullData);
+                        // Fire contact_captured event (recovery funnel signal - sunk-cost captured)
+                        try {
+                            if (window.WebhookManager && typeof window.WebhookManager.trackEvent === 'function') {
+                                window.WebhookManager.trackEvent('contact_captured', {
+                                    category: 'acne',
+                                    acne_type: (this.acneType && this.acneType.primary) || null,
+                                    has_phone: !!this.contactInfo.phone,
+                                    has_name: !!this.contactInfo.name,
+                                    has_email: !!this.contactInfo.email
+                                });
+                            }
+                        } catch (e) { /* noop */ }
                         localStorage.setItem('acneAssessmentData', JSON.stringify(fullData));
+                        // Clear assessment-progress storage (flow complete)
+                        try { localStorage.removeItem('ojg_assess_acne'); } catch (e) { /* noop */ }
                         const resultsData = this.generateResultsData(fullData);
                         localStorage.setItem('acneResults', JSON.stringify(resultsData));
                         window.location.href = 'results.html';
@@ -283,7 +340,9 @@
             }
         }
     </script>
-<div class="privacy-footer text-center py-4 text-xs text-gray-500"><a href="/privacy-policy.html" class="hover:underline text-green-600">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></div>
+    <div class="privacy-footer text-center py-4 text-xs text-gray-500"><a href="/privacy-policy.html"
+            class="hover:underline text-green-600">Privacy Policy</a> | <a href="/backend/admin/"
+            class="hover:underline">Admin</a></div>
 </body>
 
 </html>

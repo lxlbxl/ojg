@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Weight Loss Assessment - Personalized Plan | Forest & Sage</title>
   <meta name="description"
-    content="Get your FREE personalized weight loss plan in 60 seconds. Science-backed method used by 5,000+ women. No crash diets, no gym required.">
+    content="Get your FREE personalized weight loss plan in 60 seconds. Science-backed method used by 500+ people. No crash diets, no gym required.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -130,8 +130,8 @@
       }
     }
   </style>
-    <!-- Cookie Consent Banner -->
-    <script src="/js/cookie-consent.js"></script>
+  <!-- Cookie Consent Banner -->
+  <script src="/js/cookie-consent.js"></script>
 </head>
 
 <body class="antialiased relative" x-data="landingPageApp()">
@@ -153,7 +153,7 @@
         <div class="hidden md:flex items-center gap-6">
           <span class="text-sm font-medium text-forest-800/70">Expert-Led Wellness</span>
           <div class="h-4 w-px bg-sage-200"></div>
-          <span class="text-sm font-medium text-forest-800">5,000+ Journeys Started</span>
+          <span class="text-sm font-medium text-forest-800">500+ Journeys Started</span>
         </div>
       </div>
     </div>
@@ -191,17 +191,11 @@
         </button>
       </div>
 
-      <!-- Urgency Banner -->
-      <div class="mt-8 flex items-center justify-center gap-6">
-        <div class="flex items-center gap-2 text-forest-800">
-          <i class="fas fa-clock text-terracotta-500"></i>
-          <span class="text-sm font-medium">Offer ends in <span class="font-mono text-forest-900 font-bold"
-              x-text="timeLeft">23:45:12</span></span>
-        </div>
-        <div class="h-4 w-px bg-sage-200"></div>
-        <div class="text-sm text-forest-800">
-          <span class="font-bold">42</span> spots left today
-        </div>
+      <!-- Hero Guarantee Badge -->
+      <div data-exp="hero-guarantee"
+        class="mt-6 inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-5 py-2.5 rounded-full">
+        <span class="text-base">🛡️</span>
+        <span class="text-sm font-bold text-forest-800">90-Day Money-Back Guarantee · No Questions Asked</span>
       </div>
 
       <!-- Trust Badges -->
@@ -222,7 +216,7 @@
           <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
             <i class="fas fa-shield-alt text-xl"></i>
           </div>
-          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">30-Day Guarantee</span>
+          <span class="text-xs font-bold text-forest-900/40 uppercase tracking-wider">90-Day Guarantee</span>
         </div>
         <div class="flex flex-col items-center gap-3">
           <div class="w-12 h-12 rounded-2xl bg-white shadow-soft flex items-center justify-center text-forest-800">
@@ -238,8 +232,8 @@
   <section class="py-24 px-6 bg-sand/30 relative">
     <div class="max-w-6xl mx-auto">
       <div class="text-center mb-16 reveal-up">
-        <h2 class="text-3xl md:text-5xl font-serif text-forest-900 mb-4">Real Women, Real Transformations</h2>
-        <p class="text-forest-800/60 font-medium">Join 5,000+ women who reclaimed their health and confidence.</p>
+        <h2 class="text-3xl md:text-5xl font-serif text-forest-900 mb-4">Real People, Real Transformations</h2>
+        <p class="text-forest-800/60 font-medium">Join 500+ people who reclaimed their health and confidence.</p>
       </div>
 
       <div class="grid md:grid-cols-3 gap-8 reveal-up" style="animation-delay: 0.2s">
@@ -302,20 +296,19 @@
       </div>
       <p class="text-sand/40 text-xs">© 2025 Forest & Sage Wellness. All rights reserved.</p>
     </div>
-  <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+        href="/backend/admin/" class="hover:underline">Admin</a></p>
+  </footer>
 
   <script>
     function landingPageApp() {
       return {
         showTyping: false,
-        timeLeft: '23:45:12',
 
         init() {
           setTimeout(() => {
             this.showTyping = true;
           }, 500);
-          this.startCountdown();
 
           // Track landing view
           if (window.WebhookManager) {
@@ -323,21 +316,6 @@
               timestamp: new Date().toISOString()
             });
           }
-        },
-
-        startCountdown() {
-          // Set to 24 hours from now for persistent urgency feel
-          let totalSeconds = 23 * 3600 + 45 * 60 + 12;
-
-          setInterval(() => {
-            if (totalSeconds > 0) {
-              totalSeconds--;
-              const h = Math.floor(totalSeconds / 3600);
-              const m = Math.floor((totalSeconds % 3600) / 60);
-              const s = totalSeconds % 60;
-              this.timeLeft = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            }
-          }, 1000);
         },
 
         startQuiz() {

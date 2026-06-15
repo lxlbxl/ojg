@@ -1,13 +1,14 @@
 <?php
 header('Content-Type: application/json');
-require_once '../admin/auth.php'; // Ensure database connection
-require_once '../classes/Database.php';
-require_once '../classes/User.php';
-require_once '../classes/Settings.php';
-require_once '../classes/Mailer.php';
-require_once '../classes/AIOrchestrator.php';
-require_once '../classes/MealPlanner.php';
-require_once '../classes/AutomationOrchestrator.php';
+require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../classes/Database.php';
+require_once __DIR__ . '/../classes/User.php';
+require_once __DIR__ . '/../classes/Settings.php';
+require_once __DIR__ . '/../classes/Mailer.php';
+require_once __DIR__ . '/../classes/AIOrchestrator.php';
+require_once __DIR__ . '/../classes/MealPlanner.php';
+require_once __DIR__ . '/../classes/AutomationOrchestrator.php';
+require_once __DIR__ . '/../classes/ExperimentTracker.php';
 
 // Allow CORS if needed
 header("Access-Control-Allow-Origin: *");
@@ -15,20 +16,37 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
     echo json_encode(['success' => false, 'error' => 'Method not allowed']);
     exit;
 }
 
 // Get JSON Input
-$input = json_decode(file_get_contents('php://input'), true);
+$rawBody = file_get_contents('php://input') ?: '';
+$input = json_decode($rawBody, true);
 
 if (!$input) {
     // Fallback to POST vars
     $input = $_POST;
 }
 
+// 1. Verify the signature (if a secret hash is configured).
+$expectedHash = Settings::getInstance()->get('flutterwave_webhook_secret', '')
+    ?: Settings::getInstance()->get('webhook_secret', '');
+
+if ($expectedHash !== '') {
+    $sent = $_SERVER['HTTP_VERIF_HASH']
+        ?? ($input['verif_hash'] ?? '');
+    if (!hash_equals($expectedHash, (string) $sent)) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Invalid signature']);
+        exit;
+    }
+}
+
 // Validate Input
 if (!isset($input['email']) || !isset($input['name'])) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'error' => 'Missing required fields (email, name)']);
     exit;
 }
@@ -52,6 +70,13 @@ try {
         }
     }
 
+    // Extract session_id from meta (Flutterwave stores it there) or top-level
+    $sessionId = $input['meta']['session_id']
+        ?? (is_array($input['meta'] ?? null) ? ($input['meta'][0]['session_id'] ?? null) : null)
+        ?? $input['session_id']
+        ?? $_COOKIE['ojg_sid']
+        ?? null;
+
     $orderData = [
         'email' => $input['email'],
         'name' => $input['name'],
@@ -60,7 +85,8 @@ try {
         'amount' => $input['amount'] ?? 0,
         'currency' => $input['currency'] ?? 'NGN',
         'product' => $product,
-        'plan_duration' => $planDuration
+        'plan_duration' => $planDuration,
+        'session_id' => $sessionId,
     ];
 
     // Prepare Assessment Data
@@ -72,10 +98,31 @@ try {
     ];
 
     // Handle Purchase (Creates/Updates User + Logs Sale + Activity)
-    $result = $orchestrator->handlePCOSPurchase($orderData, $assessmentData);
+    $result = $orchestrator->handlePurchase($orderData, $assessmentData, 'pcos');
+
+    // Emit server-side experiment purchase event (server-trusted revenue)
+    if (!empty($sessionId) && !empty($result['success'])) {
+        try {
+            $tracker = new ExperimentTracker();
+            $tracker->track([
+                'session_id' => $sessionId,
+                'funnel' => 'pcos',
+                'event' => 'purchase',
+                'revenue' => floatval($input['amount'] ?? 0),
+                'currency' => $input['currency'] ?? 'NGN',
+                'transaction_id' => $input['transaction_id'] ?? $input['order_id'] ?? null,
+                'product' => $product,
+                'plan_duration' => $planDuration,
+                'source' => 'webhook',
+            ]);
+        } catch (Exception $e) {
+            error_log("ExperimentTracker webhook error: " . $e->getMessage());
+        }
+    }
 
     echo json_encode($result);
 } catch (Exception $e) {
     error_log("Webhook Error: " . $e->getMessage());
+    http_response_code(500);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }

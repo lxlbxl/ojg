@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Your Clear Skin Journey!</title>
     <meta name="description"
@@ -96,8 +97,11 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
             </div>
-            <h1 class="text-4xl font-bold text-white mb-4 gradient-text">Welcome to Clear Skin!</h1>
-            <p class="text-xl text-gray-300">Your acne transformation journey starts now</p>
+            <h1 class="text-4xl font-bold text-white mb-4 gradient-text">
+                <span x-show="customerName">Welcome, <span x-text="customerName.split(' ')[0]"></span>!</span>
+                <span x-show="!customerName">Welcome!</span>
+            </h1>
+            <p class="text-xl text-gray-300">Your <span x-show="acneType" class="font-semibold text-[#9acd32]" x-text="acneType + ' Acne'"></span><span x-show="!acneType">acne</span> transformation journey starts now</p>
         </div>
 
         <!-- Order Confirmation -->
@@ -121,6 +125,23 @@
             <div class="bg-green-900/20 p-4 rounded-lg text-center">
                 <p class="text-green-400 font-semibold">✅ Payment Confirmed</p>
                 <p class="text-green-300 text-sm mt-1">Your products will be shipped within 24 hours</p>
+            </div>
+        </div>
+
+        <!-- Week 1 Focus: Type-Specific -->
+        <div class="glass-effect rounded-lg shadow-lg p-8 mb-8" x-show="week1Focus.length > 0" x-cloak>
+            <h2 class="text-xl font-bold text-white mb-1">Your First 7 Days</h2>
+            <p class="text-gray-400 text-sm mb-5">Specific to your <span class="text-[#9acd32] font-medium" x-text="acneType || 'Acne'"></span> type — start here before anything else.</p>
+            <div class="space-y-3">
+                <template x-for="(step, i) in week1Focus" :key="i">
+                    <div class="flex items-start gap-3 bg-white/5 rounded-lg p-4">
+                        <span class="flex-shrink-0 w-7 h-7 rounded-full bg-[#9acd32]/20 text-[#9acd32] text-xs font-bold flex items-center justify-center" x-text="i + 1"></span>
+                        <div>
+                            <p class="text-white text-sm font-semibold" x-text="step.title"></p>
+                            <p class="text-gray-400 text-sm" x-text="step.why"></p>
+                        </div>
+                    </div>
+                </template>
             </div>
         </div>
 
@@ -269,11 +290,11 @@
                         </path>
                     </svg>
                 </div>
-                <h4 class="font-semibold text-white mb-2">Chat Support</h4>
-                <p class="text-gray-300 text-sm mb-4">Get instant answers from our skincare specialists</p>
+                <h4 class="font-semibold text-white mb-2">Premium WhatsApp Welcome</h4>
+                <p class="text-gray-300 text-sm mb-4">Message our concierge team to set up your profile and get priority support</p>
                 <button @click="openChat()"
                     class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-                    Start Chat
+                    Message Concierge
                 </button>
             </div>
         </div>
@@ -299,6 +320,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- Guarantee Reminder -->
+        <div class="glass-effect rounded-lg shadow-lg p-8 mb-8 text-center mt-8 border border-[#9acd32]/30">
+            <h3 class="text-2xl font-bold text-white mb-2">🛡️ Your Investment is Protected</h3>
+            <p class="text-gray-300">Remember, you have our <span class="font-bold text-[#9acd32]">90-Day</span> money-back guarantee. We're confident you'll see amazing results!</p>
+        </div>
     </div>
 
     <!-- Footer -->
@@ -317,6 +344,9 @@
                 deliveryDate: '',
                 isProcessingOTO: false,
                 otoPurchased: false,
+                customerName: '',
+                acneType: '',
+                week1Focus: [],
 
                 formatPrice(amount) {
                     if (window.ConfigManager) {
@@ -342,6 +372,32 @@
                     }, 2000);
                 },
 
+                getWeek1Focus(type) {
+                    const plans = {
+                        hormonal: [
+                            { title: 'Cut refined sugar for 7 days', why: 'Insulin spikes drive androgen surges — the direct fuel for hormonal breakouts.' },
+                            { title: 'Start a spearmint tea ritual (2 cups daily)', why: 'Shown in studies to reduce androgen-driven sebum within 30 days.' },
+                            { title: 'Log your cycle day each morning', why: 'Hormonal acne has a cycle pattern — tracking it reveals your personal flare window.' }
+                        ],
+                        inflammatory: [
+                            { title: 'Remove dairy and gluten for 7 days', why: 'Both are common systemic inflammatory triggers — the first week reveals whether yours is diet-reactive.' },
+                            { title: 'Add omega-3 foods daily (walnuts, sardines, flaxseed)', why: 'Direct anti-inflammatory signal to sebaceous glands.' },
+                            { title: 'Use only a gentle fragrance-free cleanser, twice daily', why: 'Over-cleansing strips the barrier and worsens inflammatory responses.' }
+                        ],
+                        comedonal: [
+                            { title: 'Start niacinamide serum in your evening routine', why: 'Regulates sebum and tightens pores — the foundation of comedonal clearance.' },
+                            { title: 'Switch to non-comedogenic moisturizer and SPF', why: 'Product-clogging is the most overlooked comedonal trigger.' },
+                            { title: 'Never manually extract blackheads this week', why: 'Extraction without preparation pushes sebum deeper and widens pores.' }
+                        ],
+                        cystic: [
+                            { title: 'Begin zinc supplement (30mg with food)', why: 'Zinc reduces androgen activity and has direct antibacterial properties against C. acnes.' },
+                            { title: 'Ice active cysts for 2 minutes morning and evening', why: 'Reduces inflammation immediately without worsening the infection.' },
+                            { title: 'Stop all harsh actives (AHA, BHA, retinol) this week', why: 'Inflamed cystic skin cannot tolerate exfoliation — restoration comes first.' }
+                        ]
+                    };
+                    return plans[type] || plans.hormonal;
+                },
+
                 generateOrderDetails() {
                     // Generate order number from URL or create new one
                     const urlParams = new URLSearchParams(window.location.search);
@@ -357,6 +413,10 @@
                                 this.customerPhone = data.contactInfo.phone;
                                 this.customerName = data.contactInfo.name;
                             }
+                            const typeMap = { hormonal:'Hormonal', inflammatory:'Inflammatory', comedonal:'Comedonal', cystic:'Cystic' };
+                            const rawType = data.acneType?.primary || '';
+                            this.acneType = typeMap[rawType] || '';
+                            this.week1Focus = this.getWeek1Focus(rawType);
                         }
                     } catch (e) { }
 

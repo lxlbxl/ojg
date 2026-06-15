@@ -1,0 +1,69 @@
+{
+  "_meta": {
+    "fixture": "pcos_kenya",
+    "condition": "pcos",
+    "region": "KE",
+    "country": "Kenya",
+    "description": "PCOS plan for a Kenyan user. Must have movement, no skincare, Kenyan foods in meal_plan, Swahili herb names, cycle phase guidance.",
+    "last_updated": "2026-06"
+  },
+
+  "required_keys": [
+    "summary",
+    "root_cause",
+    "goals",
+    "meal_plan",
+    "supplements",
+    "herbal_protocols",
+    "tracking_guidance",
+    "quick_win",
+    "morning_routine",
+    "evening_routine",
+    "lifestyle_tips"
+  ],
+
+  "forbidden_keys": [
+    "skincare_routine",
+    "flare_playbook"
+  ],
+
+  "tracking_required_keys": [
+    "cycle_day",
+    "energy",
+    "mood"
+  ],
+
+  "localisation_assertions": {
+    "meal_plan_days": 7,
+    "expected_local_foods": ["ugali", "sukuma", "maharagwe", "tilapia", "nduma"],
+    "expected_local_herb_names": ["tangawizi", "mzinga", "mwarobaini"],
+    "measurement_system": "metric",
+    "forbidden_food_markers": ["jollof", "eba", "egusi", "pasulj", "sauerkraut", "kamote"]
+  },
+
+  "movement_assertions": {
+    "must_have_movement": true,
+    "movement_key_present": true,
+    "note": "PCOS always includes movement guidance — type must match pcos_type (no HIIT for adrenal type)"
+  },
+
+  "herb_safety_assertions": [
+    {
+      "herb": "berberine",
+      "max_dose_mg": 1500,
+      "must_flag_metformin_interaction": true
+    },
+    {
+      "herb": "vitex",
+      "must_flag_pregnancy": true
+    }
+  ],
+
+  "structure_assertions": {
+    "phase_count": 3,
+    "weekly_actions_per_phase": 4,
+    "supplements_min": 5,
+    "herbal_protocols_min": 3,
+    "goals_min": 4
+  }
+}

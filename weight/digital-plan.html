@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weight Loss Digital Guide - ₦5,000</title>
+    <title>Weight Loss Digital Guide | OJG Herbal</title>
     <meta name="description" content="Digital Meal Plan & Workout Guide to shed pounds effectively.">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -206,13 +206,90 @@
                                 placeholder="e.g., 08012345678">
                         </div>
 
+                        <!-- Order Bump (One-Time Offer) -->
+                        <div data-exp="order-bump"
+                            class="bg-orange-900/20 border-2 border-orange-500/40 rounded-xl p-4 cursor-pointer hover:border-orange-500/70 transition-colors"
+                            @click="bumpAdded = !bumpAdded">
+                            <label class="flex items-start gap-3 cursor-pointer">
+                                <input type="checkbox" x-model="bumpAdded"
+                                    class="mt-1 w-5 h-5 rounded border-orange-500 bg-gray-800 text-orange-500 focus:ring-orange-500 focus:ring-offset-0">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-bold text-orange-300">🎁 SPECIAL OFFER: Add 7-Day Metabolic
+                                            Detox
+                                            Plan</span>
+                                        <span class="text-orange-300 font-bold whitespace-nowrap">+₦<span
+                                                x-text="bumpPrice.toLocaleString()"></span></span>
+                                    </div>
+                                    <p class="text-sm text-gray-300">A targeted 7-day herbal detox + meal plan to
+                                        jumpstart
+                                        fat-burning. Usually ₦5,000, yours today for just ₦<span
+                                            x-text="bumpPrice.toLocaleString()"></span>. <span
+                                            class="text-orange-300 font-semibold">Save 80%</span> — only available on
+                                        this
+                                        page.</p>
+                                </div>
+                            </label>
+                        </div>
+
                         <button type="submit" :disabled="isProcessing"
                             :class="isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'btn-grad'"
                             class="w-full font-bold text-xl py-4 rounded-full transition-all duration-300 shadow-lg">
-                            <span x-show="!isProcessing">Complete Purchase - ₦5,000 →</span>
+                            <span x-show="!isProcessing">Complete Purchase - ₦<span
+                                    x-text="(baseAmount + (bumpAdded ? bumpPrice : 0)).toLocaleString()"></span>
+                                →</span>
                             <span x-show="isProcessing">Processing...</span>
                         </button>
                     </form>
+
+                    <!-- Payment Trust Strip -->
+                    <div data-exp="payment-trust" class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-3">
+                            <div class="text-2xl mb-1">🔒</div>
+                            <p class="text-xs text-gray-300 font-medium">SSL Encrypted</p>
+                        </div>
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-3">
+                            <div class="text-2xl mb-1">💳</div>
+                            <p class="text-xs text-gray-300 font-medium">All Cards Accepted</p>
+                        </div>
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-3">
+                            <div class="text-2xl mb-1">⚡</div>
+                            <p class="text-xs text-gray-300 font-medium">Powered by Flutterwave</p>
+                        </div>
+                        <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-3">
+                            <div class="text-2xl mb-1">🛡️</div>
+                            <p class="text-xs text-gray-300 font-medium">30-Day Refund</p>
+                        </div>
+                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-3">
+                        🔐 Questions? Email <a href="mailto:support@forestandsage.co"
+                            class="text-primary-500 hover:underline">support@forestandsage.co</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Guarantee -->
+        <section data-exp="pricing-guarantee" class="mb-12">
+            <div class="max-w-3xl mx-auto">
+                <div
+                    class="bg-gradient-to-br from-primary-900/40 to-primary-800/30 border-2 border-primary-500/30 rounded-2xl p-8 text-center">
+                    <div class="text-5xl mb-4">🛡️</div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">30-Day Money-Back Guarantee</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        Try the complete Weight Loss Digital Guide <strong>risk-free for 30 days</strong>. If you don't
+                        see real progress, <strong>no questions asked</strong> — we'll refund every naira. You have
+                        absolutely nothing to lose.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 text-sm text-primary-300 font-medium">
+                        <span class="flex items-center gap-1"><span class="text-primary-400">✓</span> Full Refund</span>
+                        <span class="flex items-center gap-1"><span class="text-primary-400">✓</span> No Questions
+                            Asked</span>
+                        <span class="flex items-center gap-1"><span class="text-primary-400">✓</span> Keep the
+                            Guide</span>
+                    </div>
+                    <p class="mt-6 text-xs text-gray-500">Join 5,000+ women who transformed their health with Forest &
+                        Sage.</p>
                 </div>
             </div>
         </section>
@@ -222,6 +299,9 @@
         function digitalPage() {
             return {
                 isProcessing: false,
+                bumpAdded: true,
+                bumpPrice: 0,
+                baseAmount: 5000,
                 customerData: {
                     name: '',
                     email: '',
@@ -229,6 +309,7 @@
                 },
 
                 init() {
+                    this.bumpPrice = Math.round(this.baseAmount * 0.20); // ₦1,000 order bump
                     this.prefillCustomerData();
                     this.trackPageView();
                 },
@@ -274,13 +355,20 @@
 
                         this.customerData.phone = window.FlutterwaveIntegration.formatNigerianPhone(this.customerData.phone);
 
+                        const totalAmount = this.baseAmount + (this.bumpAdded ? this.bumpPrice : 0);
+
                         const paymentData = {
                             plan: 'digital',
-                            amount: 5000,
+                            amount: totalAmount,
                             title: 'Weight Loss Digital Guide',
                             description: 'Digital Meal Plan & Workout Guide',
                             customer: this.customerData,
-                            category: 'weight'
+                            category: 'weight',
+                            metadata: {
+                                order_bump_added: this.bumpAdded,
+                                order_bump_price: this.bumpAdded ? this.bumpPrice : 0,
+                                base_amount: this.baseAmount
+                            }
                         };
 
                         await window.FlutterwaveIntegration.processPayment(paymentData);

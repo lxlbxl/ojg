@@ -1,0 +1,91 @@
+{
+  "_meta": {
+    "fixture": "mens_philippines",
+    "condition": "mens",
+    "region": "PH",
+    "country": "Philippines",
+    "description": "Men's plan for a Filipino user. Must have sleep_recovery_protocol, movement_plan, Filipino foods (rice, malunggay, ampalaya), Tagalog herb names, no skincare/cycle content.",
+    "last_updated": "2026-06"
+  },
+
+  "required_keys": [
+    "summary",
+    "root_cause",
+    "goals",
+    "meal_plan",
+    "movement_plan",
+    "sleep_recovery_protocol",
+    "supplements",
+    "herbal_protocols",
+    "tracking_guidance",
+    "quick_win"
+  ],
+
+  "forbidden_keys": [
+    "skincare_routine",
+    "flare_playbook",
+    "skin_photo",
+    "cycle_sync",
+    "cycle_day"
+  ],
+
+  "tracking_required_keys": [
+    "energy",
+    "libido",
+    "sleep_hours",
+    "sleep_quality",
+    "strength_done",
+    "mood"
+  ],
+
+  "localisation_assertions": {
+    "meal_plan_days": 7,
+    "expected_local_foods": ["rice", "malunggay", "ampalaya", "kangkong", "kamote", "tilapia", "bangus"],
+    "expected_local_herb_names": ["luyang dilaw", "luya", "malunggay"],
+    "measurement_system": "metric",
+    "forbidden_food_markers": ["jollof", "eba", "egusi", "ugali", "pasulj", "sauerkraut"]
+  },
+
+  "sleep_recovery_assertions": {
+    "must_be_present": true,
+    "min_steps": 5,
+    "must_mention_testosterone": true
+  },
+
+  "movement_assertions": {
+    "must_have_movement": true,
+    "movement_has_weeks_array": true,
+    "weeks_count_min": 4,
+    "core_movements_expected": ["squat", "deadlift", "bench", "row"]
+  },
+
+  "supplement_assertions": {
+    "body_composition_requires_creatine": true,
+    "low_t_requires_creatine": true,
+    "ashwagandha_max_mg": 600
+  },
+
+  "herb_safety_assertions": [
+    {
+      "herb": "bitter melon",
+      "local_name": "ampalaya",
+      "must_flag_diabetes_medications": true,
+      "must_flag_pregnancy_contraindication": true,
+      "note": "Ampalaya (bitter melon/Momordica charantia) is a potent blood-sugar lowerer — interaction flag required"
+    },
+    {
+      "herb": "lagundi",
+      "scientific_name": "Vitex negundo",
+      "must_flag_pregnancy": true,
+      "note": "Philippine FDA-approved but hormonal effects in pregnancy — flag required"
+    }
+  ],
+
+  "structure_assertions": {
+    "phase_count": 3,
+    "weekly_actions_per_phase": 4,
+    "supplements_min": 5,
+    "herbal_protocols_min": 3,
+    "sleep_recovery_steps_min": 5
+  }
+}

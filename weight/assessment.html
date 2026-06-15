@@ -198,11 +198,12 @@
         <!-- Contact Information Form -->
         <div x-show="showContactForm" id="contactFormSection"
             class="glass-panel rounded-[2rem] shadow-xl p-8 md:p-12 mt-8 border-t border-white/80">
-            <div class="text-center mb-8">
-                <h3 class="text-2xl md:text-3xl font-serif font-medium text-forest-900 mb-3">Your Analysis is Ready!
+            <div class="text-center mb-8" data-exp="email-capture">
+                <h3 class="text-2xl md:text-3xl font-serif font-medium text-forest-900 mb-3">Your Weight Loss Type
+                    Analysis is Ready
                 </h3>
-                <p class="text-gray-500">Enter your details to unlock your personalized weight loss profile and
-                    recommendations.</p>
+                <p class="text-gray-500">You've invested 2 minutes answering 10 questions. Where should we deliver your
+                    personalized metabolic restoration plan and root-cause analysis?</p>
             </div>
 
             <form @submit.prevent="submitContactInfo()" class="space-y-5">
@@ -263,8 +264,9 @@
     <!-- Footer -->
     <footer class="bg-forest-900 py-8 text-center">
         <p class="text-forest-200/60 text-sm">© 2025 Weight Loss Solutions. All rights reserved.</p>
-    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+        <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+                href="/backend/admin/" class="hover:underline">Admin</a></p>
+    </footer>
 
     <!-- Assessment Logic -->
     <script>
@@ -280,6 +282,25 @@
                 contactInfo: { name: '', email: '', phone: '', ageRange: '' },
                 contactError: '',
                 assessmentData: null,
+                weightType: null,
+
+                init() {
+                    // Resume from localStorage if present (P1.6 sunk-cost recovery)
+                    try {
+                        const raw = localStorage.getItem('ojg_assess_weight');
+                        if (raw) {
+                            const data = JSON.parse(raw);
+                            if (data && data.answers) {
+                                this.answers = data.answers;
+                                this.weightType = data.weightType || null;
+                                const params = new URLSearchParams(window.location.search);
+                                if (params.get('resume') === '1' && typeof data.last_q === 'number') {
+                                    this.currentQuestion = Math.min(data.last_q, this.totalQuestions - 1);
+                                }
+                            }
+                        }
+                    } catch (e) { /* noop */ }
+                },
 
                 questions: [
                     { question: "What's your primary weight loss goal?", description: "What matters most to you", options: [{ value: "lose_weight", text: "Lose weight", description: "Reduce overall body weight" }, { value: "belly_fat", text: "Target belly fat", description: "Focus on abdominal area" }, { value: "tone_body", text: "Tone and sculpt", description: "Shape and define muscles" }, { value: "boost_metabolism", text: "Boost metabolism", description: "Increase energy and fat burning" }, { value: "healthy_lifestyle", text: "Adopt healthy lifestyle", description: "Long-term wellness habits" }] },
@@ -298,6 +319,24 @@
                 previousQuestion() { if (this.currentQuestion > 0) this.currentQuestion--; },
                 selectAnswer(value) {
                     this.answers[this.currentQuestion] = value;
+                    // Persist progress for resume (P1.6 sunk-cost recovery)
+                    try {
+                        localStorage.setItem('ojg_assess_weight', JSON.stringify({
+                            answers: this.answers, weightType: this.weightType,
+                            contactInfo: this.contactInfo, last_q: this.currentQuestion,
+                            lastUpdated: new Date().toISOString()
+                        }));
+                    } catch (e) { /* noop */ }
+                    // Fire assessment_progress event (recovery funnel signal)
+                    try {
+                        if (window.WebhookManager && typeof window.WebhookManager.trackEvent === 'function') {
+                            window.WebhookManager.trackEvent('assessment_progress', {
+                                category: 'weight', question_index: this.currentQuestion,
+                                question_number: this.currentQuestion + 1,
+                                total_questions: this.totalQuestions, last_answer: value
+                            });
+                        }
+                    } catch (e) { /* noop */ }
                     if (this.currentQuestion < this.totalQuestions - 1) setTimeout(() => this.nextQuestion(), 600);
                     else setTimeout(() => this.submitAssessment(), 600);
                 },
@@ -320,7 +359,19 @@
                     try {
                         const fullData = { ...this.assessmentData, contactInfo: this.contactInfo };
                         if (window.WebhookManager) await window.WebhookManager.submitAssessment(fullData);
+                        try {
+                            if (window.WebhookManager && typeof window.WebhookManager.trackEvent === 'function') {
+                                window.WebhookManager.trackEvent('contact_captured', {
+                                    category: 'weight',
+                                    weight_type: (this.weightType && this.weightType.primary) || null,
+                                    has_phone: !!this.contactInfo.phone,
+                                    has_name: !!this.contactInfo.name,
+                                    has_email: !!this.contactInfo.email
+                                });
+                            }
+                        } catch (e) { /* noop */ }
                         localStorage.setItem('weightAssessmentData', JSON.stringify(fullData));
+                        try { localStorage.removeItem('ojg_assess_weight'); } catch (e) { /* noop */ }
                         window.location.href = 'results.html';
                     } catch (error) {
                         console.error('Contact submission error:', error);

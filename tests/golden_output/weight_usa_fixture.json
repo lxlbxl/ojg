@@ -1,0 +1,76 @@
+{
+  "_meta": {
+    "fixture": "weight_usa",
+    "condition": "weight",
+    "region": "US",
+    "country": "United States",
+    "description": "Weight plan for a US user. Must be in imperial units (lbs, inches), have movement_plan with weeks, plateau_protocol, US foods, no skincare.",
+    "last_updated": "2026-06"
+  },
+
+  "required_keys": [
+    "summary",
+    "root_cause",
+    "goals",
+    "meal_plan",
+    "movement_plan",
+    "plateau_protocol",
+    "supplements",
+    "herbal_protocols",
+    "tracking_guidance",
+    "quick_win"
+  ],
+
+  "forbidden_keys": [
+    "skincare_routine",
+    "flare_playbook",
+    "skin_photo",
+    "cycle_sync"
+  ],
+
+  "tracking_required_keys": [
+    "weight_daily",
+    "weight_7day",
+    "energy"
+  ],
+
+  "localisation_assertions": {
+    "meal_plan_days": 7,
+    "expected_local_foods": ["chicken breast", "salmon", "greek yogurt", "avocado", "oats", "broccoli"],
+    "measurement_system": "imperial",
+    "weight_unit": "lbs",
+    "height_unit": "inches",
+    "forbidden_food_markers": ["jollof", "eba", "egusi", "ugali", "tilapia omena", "pasulj"]
+  },
+
+  "movement_assertions": {
+    "must_have_movement": true,
+    "movement_has_weeks_array": true,
+    "weeks_count_min": 4,
+    "note": "Stress/Cortisol type must not include HIIT in any week block"
+  },
+
+  "plateau_protocol_assertions": {
+    "must_be_present": true,
+    "min_steps": 4
+  },
+
+  "herb_safety_assertions": [
+    {
+      "herb": "berberine",
+      "max_dose_mg": 1500,
+      "must_flag_metformin_interaction": true
+    },
+    {
+      "herb": "ashwagandha",
+      "max_dose_mg": 600
+    }
+  ],
+
+  "structure_assertions": {
+    "phase_count": 3,
+    "weekly_actions_per_phase": 4,
+    "supplements_min": 4,
+    "herbal_protocols_min": 2
+  }
+}

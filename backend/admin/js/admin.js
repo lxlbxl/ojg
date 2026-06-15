@@ -50,6 +50,12 @@ async function fetchData(action = 'dashboard') {
                 renderUsers(data.data);
             } else if (action === 'audit') {
                 renderAudit(data.data);
+            } else if (action === 'experiments') {
+                renderExperiments(data.data);
+            } else if (action === 'experiments_summary') {
+                renderExperimentsSummary(data.data);
+            } else if (action === 'experiments_insights') {
+                renderExperimentsInsights(data.data);
             }
         }
     } catch (err) {
@@ -104,6 +110,11 @@ function switchView(viewId) {
     if (viewId === 'tracking') fetchData('tracking');
     if (viewId === 'users') fetchData('users');
     if (viewId === 'audit') fetchData('audit');
+    if (viewId === 'experiments') {
+        fetchData('experiments');
+        fetchData('experiments_insights');
+        fetchData('experiments_summary');
+    }
 }
 
 async function viewDetails(id) {
@@ -701,6 +712,207 @@ function renderCharts() {
 
 function handleLogout() {
     window.location.href = 'logout.php';
+}
+
+/* =========================================================
+ *  A/B TESTING ENGINE  (Admin UI)
+ *  Renders the Experiments view, stat cards, and AI insights.
+ *  Hooks:  openCreateExperimentModal, forceDecideExperiment, stopExperiment
+ * ========================================================= */
+function renderExperiments(data) {
+    const container = document.getElementById('experiments-list');
+    if (!container) return;
+
+    if (!data || data.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" class="py-12 text-center text-sage-400">No experiments yet. Click "New Experiment" to launch your first A/B test.</td></tr>`;
+        return;
+    }
+
+    container.innerHTML = data.map(exp => {
+        const variantCount = (exp.variants || []).length;
+        const statusColor = exp.status === 'active' ? 'bg-green-400/10 text-green-500'
+            : exp.status === 'paused' ? 'bg-orange-400/10 text-orange-400'
+                : 'bg-sage-100 text-sage-400';
+        const decision = exp.decision;
+        const decisionLabel = decision && decision.winner_variant_id
+            ? `Variant #${decision.winner_variant_id}`
+            : (exp.status === 'concluded' ? 'Concluded' : 'Collecting data');
+        const decisionColor = decision && decision.winner_variant_id
+            ? 'text-green-600'
+            : 'text-sage-400';
+        return `
+            <tr class="hover:bg-sage-50/50 transition-colors">
+                <td class="px-6 py-4">
+                    <div class="text-sm font-semibold text-sage-900">${escapeHtml(exp.name || ('Experiment #' + exp.id))}</div>
+                    <div class="text-[10px] text-sage-400 font-mono uppercase tracking-tighter">ID: ${exp.id} • ${escapeHtml(exp.goal_metric || 'conversion')}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${getTypeStyle(exp.funnel)}">
+                        ${exp.funnel || '—'}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-sage-600">
+                    ${variantCount} variant${variantCount === 1 ? '' : 's'}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusColor}">
+                        ${exp.status || 'active'}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${decisionColor}">
+                    ${decisionLabel}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                    <div class="flex justify-end gap-1">
+                        <button onclick="forceDecideExperiment(${exp.id})" class="p-2 text-sage-400 hover:text-sage-600 transition-colors" title="Force decide">
+                            <i data-lucide="gavel" class="w-4 h-4"></i>
+                        </button>
+                        ${exp.status === 'active'
+                ? `<button onclick="stopExperiment(${exp.id})" class="p-2 text-sage-400 hover:text-red-500 transition-colors" title="Stop experiment">
+                                <i data-lucide="square" class="w-4 h-4"></i>
+                            </button>`
+                : ''
+            }
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    lucide.createIcons();
+}
+
+function renderExperimentsSummary(data) {
+    if (!data) return;
+    const setText = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+    setText('exp-stat-active', data.active ?? 0);
+    setText('exp-stat-decided', data.decided ?? 0);
+    setText('exp-stat-assignments', (data.assignments ?? 0).toLocaleString());
+    setText('exp-stat-conversions', (data.conversions ?? 0).toLocaleString());
+}
+
+function renderExperimentsInsights(data) {
+    const container = document.getElementById('experiments-insights');
+    if (!container) return;
+
+    if (!data || data.length === 0) {
+        container.innerHTML = `<p class="text-sm text-sage-400 italic">No AI insights yet. The diagnostics cron runs every 6 hours and will surface learnings here once enough data is collected.</p>`;
+        return;
+    }
+
+    container.innerHTML = data.map(insight => `
+        <div class="p-4 rounded-2xl bg-sage-50/50 border border-sage-100">
+            <div class="flex items-start justify-between gap-2">
+                <div class="text-sm font-semibold text-sage-900">${escapeHtml(insight.title || 'Insight')}</div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider ${insight.severity === 'high' ? 'bg-red-400/10 text-red-500' : insight.severity === 'medium' ? 'bg-orange-400/10 text-orange-400' : 'bg-sage-100 text-sage-400'}">
+                    ${insight.severity || 'low'}
+                </span>
+            </div>
+            <p class="mt-2 text-sm text-sage-600 leading-relaxed">${escapeHtml(insight.body || '')}</p>
+            <div class="mt-2 text-[10px] text-sage-400 uppercase tracking-widest font-bold">${escapeHtml(insight.funnel || 'global')} • ${insight.created_at ? new Date(insight.created_at).toLocaleString() : ''}</div>
+        </div>
+    `).join('');
+}
+
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    const A = String.fromCharCode(38);
+    return String(str)
+        .replace(/&/g, A + 'amp;')
+        .replace(/</g, A + 'lt;')
+        .replace(/>/g, A + 'gt;')
+        .replace(/"/g, A + 'quot;')
+        .replace(/'/g, A + '#39;');
+}
+
+function openCreateExperimentModal() {
+    const name = prompt('Experiment name (e.g. "PCOS Hero Headline v2")');
+    if (!name) return;
+    const funnel = prompt('Funnel (pcos / acne / weight / mens / egbon)');
+    if (!funnel) return;
+    const goal = prompt('Goal metric (purchase / checkout_init / assessment_complete)', 'purchase');
+    if (!goal) return;
+    const variantsRaw = prompt('Variant names comma-separated (first = control)', 'control, challenger');
+    if (!variantsRaw) return;
+    const variants = variantsRaw.split(',').map(s => s.trim()).filter(Boolean);
+    if (variants.length < 2) {
+        alert('At least 2 variants required (control + challenger).');
+        return;
+    }
+
+    const body = new URLSearchParams();
+    body.set('name', name);
+    body.set('funnel', funnel);
+    body.set('goal_metric', goal);
+    body.set('status', 'active');
+    body.set('type', 'element');
+    body.set('variants_json', JSON.stringify(
+        variants.map(v => ({ name: v, is_control: v === 'control' ? 1 : 0 }))
+    ));
+
+    fetch('api/admin_data.php?action=experiments&sub=create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                fetchData('experiments');
+                fetchData('experiments_summary');
+                alert('Experiment created. ID: ' + data.id);
+            } else {
+                alert('Failed: ' + (data.error || 'unknown'));
+            }
+        })
+        .catch(err => {
+            console.error('Create failed:', err);
+            alert('Create failed. See console.');
+        });
+}
+
+async function forceDecideExperiment(id) {
+    if (!confirm('Force a decision on experiment #' + id + '?')) return;
+    try {
+        const response = await fetch('api/admin_data.php?action=experiments&sub=force_decide', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'id=' + id
+        });
+        const data = await response.json();
+        if (data.success) {
+            alert('Decision: ' + JSON.stringify(data.decision, null, 2));
+            fetchData('experiments');
+        } else {
+            alert('Failed: ' + (data.error || 'unknown'));
+        }
+    } catch (err) {
+        console.error('Force decide failed:', err);
+    }
+}
+
+async function stopExperiment(id, winnerVariantId) {
+    if (!confirm('Stop experiment #' + id + '?  (No winner will be recorded.)')) return;
+    try {
+        const body = 'id=' + id + (winnerVariantId ? '&winner_variant_id=' + winnerVariantId : '');
+        const response = await fetch('api/admin_data.php?action=experiments&sub=stop', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body
+        });
+        const data = await response.json();
+        if (data.success) {
+            fetchData('experiments');
+            fetchData('experiments_summary');
+        } else {
+            alert('Failed: ' + (data.error || 'unknown'));
+        }
+    } catch (err) {
+        console.error('Stop failed:', err);
+    }
 }
 
 // Initial Run

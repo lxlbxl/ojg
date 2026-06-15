@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Egbon Instant Herbal - Natural Men's Vitality Solution</title>
-    <meta name="description" content="Transform your performance with Egbon Instant Herbal. 100% natural formula for enhanced libido, stamina, and masculine vitality.">
+    <meta name="description"
+        content="Transform your performance with Egbon Instant Herbal. 100% natural formula for enhanced libido, stamina, and masculine vitality.">
     <link rel="canonical" href="https://ojg.ng/egbon-funnel/sales.html">
     <meta property="og:title" content="Egbon Instant Herbal - Natural Men's Vitality Solution">
-    <meta property="og:description" content="Enhance libido, performance, and masculine vitality with a 100% natural formula.">
+    <meta property="og:description"
+        content="Enhance libido, performance, and masculine vitality with a 100% natural formula.">
     <meta property="og:image" content="https://ojg.ng/egbon-bottle.png">
     <meta property="og:url" content="https://ojg.ng/egbon-funnel/sales.html">
     <meta property="og:type" content="product">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Egbon Instant Herbal - Natural Men's Vitality Solution">
-    <meta name="twitter:description" content="Enhance libido, performance, and masculine vitality with a 100% natural formula.">
+    <meta name="twitter:description"
+        content="Enhance libido, performance, and masculine vitality with a 100% natural formula.">
     <meta name="twitter:image" content="https://ojg.ng/egbon-bottle.png">
-    
+
     <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Alpine.js CDN -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
@@ -47,7 +52,7 @@
             }
         }
     </script>
-    
+
     <!-- Webhook Manager & Flutterwave Integration -->
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/flutterwave-integration.js"></script>
@@ -76,6 +81,7 @@
     <!-- Cookie Consent Banner -->
     <script src="/js/cookie-consent.js"></script>
 </head>
+
 <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen">
     <!-- Header -->
     <header class="bg-gray-900 shadow-lg border-b border-accent-600">
@@ -101,12 +107,12 @@
                     Reclaim Your <span class="text-accent-500">Masculine Power</span><br>
                     With Egbon Instant Herbal
                 </h1>
-                
+
                 <p class="text-xl text-gray-300 mb-8 leading-relaxed">
-                    The only 100% natural herbal formula scientifically designed to boost men's libido, 
+                    The only 100% natural herbal formula scientifically designed to boost men's libido,
                     enhance performance, and restore masculine vitality - with NO harmful side effects.
                 </p>
-                
+
                 <!-- Price & Offer -->
                 <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 mb-8 border border-accent-600">
                     <div class="text-center mb-6">
@@ -114,12 +120,12 @@
                         <div class="text-5xl font-bold text-accent-500 mb-2">₦16,500</div>
                         <div class="text-red-400 font-semibold">Save ₦10,000 - Assessment Participants Only!</div>
                     </div>
-                    
-                    <button @click="scrollToOrder()" 
-                            class="w-full bg-accent-600 hover:bg-accent-700 text-white font-bold text-xl py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mb-4">
+
+                    <button @click="scrollToOrder()"
+                        class="w-full bg-accent-600 hover:bg-accent-700 text-white font-bold text-xl py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl mb-4">
                         Get Egbon Now - ₦16,500 →
                     </button>
-                    
+
                     <div class="flex justify-center items-center space-x-6 text-sm text-gray-400">
                         <span class="flex items-center">
                             <span class="text-green-400 mr-2">✓</span>
@@ -138,18 +144,36 @@
             </div>
         </section>
 
+        <!-- Personalized Assessment Callout -->
+        <section class="mb-12 max-w-4xl mx-auto" x-show="profileHighlights.length > 0" x-cloak>
+            <div class="bg-gray-800 border border-accent-700 rounded-2xl p-6">
+                <p class="text-xs font-bold text-accent-400 uppercase tracking-widest mb-3">Matched to Your Assessment</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <template x-for="h in profileHighlights" :key="h.label">
+                        <span class="inline-flex items-center gap-1.5 bg-gray-700 border border-gray-600 rounded-full px-3 py-1.5 text-sm text-white">
+                            <span x-text="h.icon"></span>
+                            <span class="text-gray-400 text-xs" x-text="h.label + ':'"></span>
+                            <span class="font-medium" x-text="h.short"></span>
+                        </span>
+                    </template>
+                </div>
+                <p class="text-gray-300 text-sm" x-text="profileNote"></p>
+            </div>
+        </section>
+
         <!-- Product Showcase -->
         <section class="mb-12">
             <div class="max-w-5xl mx-auto">
                 <div class="bg-gray-800 rounded-2xl shadow-2xl p-8 border border-accent-600">
                     <div class="grid md:grid-cols-2 gap-8 items-center">
                         <div>
-                            <img src="https://ojg.ng/egbon-bottle.png" alt="Egbon Instant Herbal" class="w-full max-w-md mx-auto" loading="lazy" width="400" height="400">
+                            <img src="https://ojg.ng/egbon-bottle.png" alt="Egbon Instant Herbal"
+                                class="w-full max-w-md mx-auto" loading="lazy" width="400" height="400">
                         </div>
                         <div>
                             <h2 class="text-3xl font-bold text-white mb-4">What Makes Egbon Different?</h2>
                             <p class="text-gray-300 text-lg mb-6">
-                                Egbon combines powerful traditional African herbs with modern science to create 
+                                Egbon combines powerful traditional African herbs with modern science to create
                                 a fast-acting formula that delivers real results without dangerous side effects.
                             </p>
                             <ul class="space-y-4 text-gray-300 mb-6">
@@ -157,7 +181,8 @@
                                     <span class="text-accent-500 mr-3 mt-1 text-xl">🌿</span>
                                     <div>
                                         <strong class="text-white">100% Natural Ingredients</strong>
-                                        <p class="text-sm text-gray-400">Traditional herbs scientifically proven to boost vitality</p>
+                                        <p class="text-sm text-gray-400">Traditional herbs scientifically proven to
+                                            boost vitality</p>
                                     </div>
                                 </li>
                                 <li class="flex items-start">
@@ -171,14 +196,16 @@
                                     <span class="text-accent-500 mr-3 mt-1 text-xl">🛡️</span>
                                     <div>
                                         <strong class="text-white">No Side Effects</strong>
-                                        <p class="text-sm text-gray-400">Safe, natural ingredients with no harmful chemicals</p>
+                                        <p class="text-sm text-gray-400">Safe, natural ingredients with no harmful
+                                            chemicals</p>
                                     </div>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-accent-500 mr-3 mt-1 text-xl">✅</span>
                                     <div>
                                         <strong class="text-white">Clinically Tested</strong>
-                                        <p class="text-sm text-gray-400">Proven effective in improving men's performance</p>
+                                        <p class="text-sm text-gray-400">Proven effective in improving men's performance
+                                        </p>
                                     </div>
                                 </li>
                             </ul>
@@ -194,54 +221,64 @@
                 <h2 class="text-3xl font-bold text-center text-white mb-8">
                     What You'll Experience With Egbon
                 </h2>
-                
+
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">💪</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Enhanced Libido</h3>
-                        <p class="text-gray-300">Naturally boost your sexual desire and drive with powerful herbal ingredients that work with your body.</p>
+                        <p class="text-gray-300">Naturally boost your sexual desire and drive with powerful herbal
+                            ingredients that work with your body.</p>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">🔥</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Improved Performance</h3>
-                        <p class="text-gray-300">Experience better stamina, endurance, and confidence in intimate moments.</p>
+                        <p class="text-gray-300">Experience better stamina, endurance, and confidence in intimate
+                            moments.</p>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">⚡</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Increased Energy</h3>
-                        <p class="text-gray-300">Feel more energetic and vital throughout the day with sustained natural energy.</p>
+                        <p class="text-gray-300">Feel more energetic and vital throughout the day with sustained natural
+                            energy.</p>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">😊</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Boosted Confidence</h3>
                         <p class="text-gray-300">Regain your masculine confidence and feel like yourself again.</p>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">🎯</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Better Focus</h3>
                         <p class="text-gray-300">Improved mental clarity and concentration for peak performance.</p>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
-                        <div class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
+                        <div
+                            class="w-16 h-16 bg-accent-600 bg-opacity-20 rounded-full flex items-center justify-center mb-4">
                             <span class="text-3xl">💯</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Overall Vitality</h3>
-                        <p class="text-gray-300">Experience a complete transformation in your masculine health and wellness.</p>
+                        <p class="text-gray-300">Experience a complete transformation in your masculine health and
+                            wellness.</p>
                     </div>
                 </div>
             </div>
@@ -253,7 +290,7 @@
                 <h2 class="text-3xl font-bold text-center text-white mb-8">
                     Real Results from Real Men
                 </h2>
-                
+
                 <div class="grid md:grid-cols-3 gap-6">
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
                         <div class="flex items-center mb-4">
@@ -267,11 +304,12 @@
                             </div>
                         </div>
                         <p class="text-gray-300 italic mb-4">
-                            "Egbon changed my life! My confidence is back and my wife couldn't be happier. This is the real deal!"
+                            "Egbon changed my life! My confidence is back and my wife couldn't be happier. This is the
+                            real deal!"
                         </p>
                         <div class="text-sm text-accent-500 font-medium">Verified Purchase</div>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
                         <div class="flex items-center mb-4">
                             <div class="w-12 h-12 bg-accent-600 rounded-full flex items-center justify-center mr-4">
@@ -284,11 +322,12 @@
                             </div>
                         </div>
                         <p class="text-gray-300 italic mb-4">
-                            "Natural and effective! I was skeptical at first, but Egbon delivered. No side effects, just results!"
+                            "Natural and effective! I was skeptical at first, but Egbon delivered. No side effects, just
+                            results!"
                         </p>
                         <div class="text-sm text-accent-500 font-medium">Verified Purchase</div>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700">
                         <div class="flex items-center mb-4">
                             <div class="w-12 h-12 bg-accent-600 rounded-full flex items-center justify-center mr-4">
@@ -301,7 +340,8 @@
                             </div>
                         </div>
                         <p class="text-gray-300 italic mb-4">
-                            "At 52, I feel like I'm 30 again! Egbon is a game-changer. I recommend it to all my friends!"
+                            "At 52, I feel like I'm 30 again! Egbon is a game-changer. I recommend it to all my
+                            friends!"
                         </p>
                         <div class="text-sm text-accent-500 font-medium">Verified Purchase</div>
                     </div>
@@ -315,10 +355,10 @@
                 <div class="text-center">
                     <h2 class="text-3xl font-bold text-red-400 mb-4">⚠️ This Offer Expires Soon!</h2>
                     <p class="text-red-200 text-lg mb-6">
-                        This special assessment participant pricing is only available for the next 48 hours. 
+                        This special assessment participant pricing is only available for the next 48 hours.
                         After that, the price returns to ₦25,000.
                     </p>
-                    
+
                     <!-- Countdown Timer -->
                     <div class="bg-gray-800 rounded-xl p-6 mb-6 inline-block border border-gray-700">
                         <div class="text-sm text-gray-400 mb-2">Offer expires in:</div>
@@ -328,18 +368,20 @@
                                 <div class="text-xs text-gray-400 mt-1">Hours</div>
                             </div>
                             <div class="text-center">
-                                <div x-text="timeLeft.minutes" class="bg-red-900 bg-opacity-50 px-3 py-2 rounded">00</div>
+                                <div x-text="timeLeft.minutes" class="bg-red-900 bg-opacity-50 px-3 py-2 rounded">00
+                                </div>
                                 <div class="text-xs text-gray-400 mt-1">Minutes</div>
                             </div>
                             <div class="text-center">
-                                <div x-text="timeLeft.seconds" class="bg-red-900 bg-opacity-50 px-3 py-2 rounded">00</div>
+                                <div x-text="timeLeft.seconds" class="bg-red-900 bg-opacity-50 px-3 py-2 rounded">00
+                                </div>
                                 <div class="text-xs text-gray-400 mt-1">Seconds</div>
                             </div>
                         </div>
                     </div>
-                    
-                    <button @click="scrollToOrder()" 
-                            class="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-12 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
+
+                    <button @click="scrollToOrder()"
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold text-xl px-12 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg">
                         Secure Your Bottle Now - ₦16,500 →
                     </button>
                 </div>
@@ -350,7 +392,7 @@
         <section class="mb-12">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-3xl font-bold text-center text-white mb-8">Frequently Asked Questions</h2>
-                
+
                 <div class="space-y-4">
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700" x-data="{ open: false }">
                         <button @click="open = !open" class="w-full text-left flex justify-between items-center">
@@ -358,37 +400,42 @@
                             <span class="text-accent-500 text-2xl" x-text="open ? '−' : '+'"></span>
                         </button>
                         <div x-show="open" class="mt-4 text-gray-300">
-                            Most men start noticing improvements in energy and desire within the first week. Significant changes in performance and stamina typically occur within 2-3 weeks of consistent use.
+                            Most men start noticing improvements in energy and desire within the first week. Significant
+                            changes in performance and stamina typically occur within 2-3 weeks of consistent use.
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700" x-data="{ open: false }">
                         <button @click="open = !open" class="w-full text-left flex justify-between items-center">
                             <h3 class="text-lg font-semibold text-white">Is Egbon safe to use?</h3>
                             <span class="text-accent-500 text-2xl" x-text="open ? '−' : '+'"></span>
                         </button>
                         <div x-show="open" class="mt-4 text-gray-300">
-                            Yes! Egbon is made from 100% natural herbal ingredients with no harmful chemicals or synthetic compounds. It has been clinically tested and is safe for daily use with no known side effects.
+                            Yes! Egbon is made from 100% natural herbal ingredients with no harmful chemicals or
+                            synthetic compounds. It has been clinically tested and is safe for daily use with no known
+                            side effects.
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700" x-data="{ open: false }">
                         <button @click="open = !open" class="w-full text-left flex justify-between items-center">
                             <h3 class="text-lg font-semibold text-white">How do I use Egbon?</h3>
                             <span class="text-accent-500 text-2xl" x-text="open ? '−' : '+'"></span>
                         </button>
                         <div x-show="open" class="mt-4 text-gray-300">
-                            Simply take the recommended dosage as indicated on the bottle. For best results, use consistently and follow the usage instructions provided with your order.
+                            Simply take the recommended dosage as indicated on the bottle. For best results, use
+                            consistently and follow the usage instructions provided with your order.
                         </div>
                     </div>
-                    
+
                     <div class="bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-700" x-data="{ open: false }">
                         <button @click="open = !open" class="w-full text-left flex justify-between items-center">
                             <h3 class="text-lg font-semibold text-white">What if it doesn't work for me?</h3>
                             <span class="text-accent-500 text-2xl" x-text="open ? '−' : '+'"></span>
                         </button>
                         <div x-show="open" class="mt-4 text-gray-300">
-                            We offer a 30-day money-back guarantee. If you're not satisfied with the results after using Egbon as directed for 30 days, contact us for a full refund.
+                            We offer a 30-day money-back guarantee. If you're not satisfied with the results after using
+                            Egbon as directed for 30 days, contact us for a full refund.
                         </div>
                     </div>
                 </div>
@@ -402,43 +449,37 @@
                     <h2 class="text-3xl font-bold text-center text-white mb-6">
                         Get Egbon Instant Herbal Today
                     </h2>
-                    
+
                     <div class="text-center mb-8">
                         <div class="text-4xl font-bold text-accent-500 mb-2">₦16,500</div>
                         <div class="text-gray-400 line-through">Regular Price: ₦25,000</div>
                         <div class="text-red-400 font-semibold">Limited Time: Save ₦10,000</div>
                     </div>
-                    
+
                     <form @submit.prevent="processPayment()" class="space-y-6">
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Full Name *</label>
-                                <input type="text" 
-                                       x-model="customerData.name"
-                                       required
-                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
-                                       placeholder="Enter your full name">
+                                <input type="text" x-model="customerData.name" required
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
+                                    placeholder="Enter your full name">
                             </div>
-                            
+
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Email Address *</label>
-                                <input type="email" 
-                                       x-model="customerData.email"
-                                       required
-                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
-                                       placeholder="Enter your email">
+                                <input type="email" x-model="customerData.email" required
+                                    class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
+                                    placeholder="Enter your email">
                             </div>
                         </div>
-                        
+
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">Phone Number *</label>
-                            <input type="tel" 
-                                   x-model="customerData.phone"
-                                   required
-                                   class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
-                                   placeholder="e.g., 08012345678">
+                            <input type="tel" x-model="customerData.phone" required
+                                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-accent-600 focus:border-accent-600"
+                                placeholder="e.g., 08012345678">
                         </div>
-                        
+
                         <div class="bg-accent-600 bg-opacity-20 rounded-lg p-4 border border-accent-700">
                             <h3 class="font-semibold text-accent-400 mb-2">What You're Getting:</h3>
                             <ul class="text-sm text-gray-300 space-y-1">
@@ -450,15 +491,59 @@
                                 <li>✓ 30-day money-back guarantee</li>
                             </ul>
                         </div>
-                        
-                        <button type="submit" 
-                                :disabled="isProcessing"
-                                :class="isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'bg-accent-600 hover:bg-accent-700'"
-                                class="w-full text-white font-bold text-xl py-4 rounded-full transition-all duration-300 shadow-lg">
+
+                        <!-- Order Bump: Add Second Bottle -->
+                        <div class="bg-gradient-to-r from-yellow-900/40 to-accent-900/40 rounded-lg p-4 border-2 border-accent-500 border-dashed"
+                            data-exp="order-bump">
+                            <div class="flex items-start">
+                                <input type="checkbox" id="order-bump" x-model="addSecondBottle"
+                                    class="mt-1 w-5 h-5 accent-accent-500 cursor-pointer">
+                                <label for="order-bump" class="ml-3 cursor-pointer">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <span class="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded">BEST
+                                            VALUE</span>
+                                        <span class="text-white font-bold">Add Second Bottle — Save Extra ₦5,000!</span>
+                                    </div>
+                                    <p class="text-gray-300 text-sm">Instead of ₦33,000, you go pay <span
+                                            class="text-accent-400 font-bold">₦28,000</span> for 2 bottles. E go last
+                                        you 2 months, and the results go strong pass!</p>
+                                    <p class="text-gray-400 text-xs mt-1">⚡ 87% of customers wey buy 2 bottles see
+                                        better results pass 1 bottle.</p>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="flex flex-wrap justify-center gap-3 py-3" data-exp="trust-badges">
+                            <div
+                                class="flex items-center gap-1 bg-gray-700/50 rounded-full px-3 py-1.5 text-xs text-gray-300">
+                                <span class="text-green-400">🔒</span> SSL Secured
+                            </div>
+                            <div
+                                class="flex items-center gap-1 bg-gray-700/50 rounded-full px-3 py-1.5 text-xs text-gray-300">
+                                <span>💳</span> Flutterwave Verified
+                            </div>
+                            <div
+                                class="flex items-center gap-1 bg-gray-700/50 rounded-full px-3 py-1.5 text-xs text-gray-300">
+                                <span class="text-green-400">✓</span> NAFDAC Registered
+                            </div>
+                            <div
+                                class="flex items-center gap-1 bg-gray-700/50 rounded-full px-3 py-1.5 text-xs text-gray-300">
+                                <span>🛡️</span> 30-Day Guarantee
+                            </div>
+                            <div
+                                class="flex items-center gap-1 bg-gray-700/50 rounded-full px-3 py-1.5 text-xs text-gray-300">
+                                <span>📦</span> Discreet Packaging
+                            </div>
+                        </div>
+
+                        <button type="submit" :disabled="isProcessing"
+                            :class="isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'bg-accent-600 hover:bg-accent-700'"
+                            class="w-full text-white font-bold text-xl py-4 rounded-full transition-all duration-300 shadow-lg">
                             <span x-show="!isProcessing">Complete Purchase - ₦16,500 →</span>
                             <span x-show="isProcessing">Processing Payment...</span>
                         </button>
-                        
+
                         <div class="text-center">
                             <p class="text-sm text-gray-400 mb-2">Secure payment powered by Flutterwave</p>
                             <div class="flex justify-center items-center space-x-4 text-xs text-gray-500">
@@ -472,17 +557,38 @@
             </div>
         </section>
 
-        <!-- Guarantee -->
-        <section class="text-center">
+        <!-- Guarantee (Enhanced) -->
+        <section class="text-center" data-exp="guarantee">
             <div class="max-w-3xl mx-auto bg-green-900 bg-opacity-30 border border-green-700 rounded-2xl p-8">
-                <div class="w-20 h-20 bg-green-600 bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div
+                    class="w-20 h-20 bg-green-600 bg-opacity-30 rounded-full flex items-center justify-center mx-auto mb-6">
                     <span class="text-3xl">🛡️</span>
                 </div>
-                <h2 class="text-2xl font-bold text-green-400 mb-4">30-Day Money-Back Guarantee</h2>
-                <p class="text-green-200 text-lg">
-                    We're so confident in Egbon that we offer a full 30-day money-back guarantee. 
-                    If you don't experience improved vitality and performance within 30 days, we'll refund every naira.
+                <h2 class="text-2xl font-bold text-green-400 mb-4">30-Day Money-Back Guarantee — No Wahala!</h2>
+                <p class="text-green-200 text-lg mb-4">
+                    We sabi say you don try plenty things before. Na why we say: if Egbon no work for you within 30
+                    days,
+                    we go refund your money <span class="font-bold">every single naira</span> — no question, no drama.
                 </p>
+                <div class="grid md:grid-cols-3 gap-4 mt-6 text-left">
+                    <div class="bg-green-800/30 rounded-lg p-4 border border-green-700/50">
+                        <h4 class="text-green-400 font-bold text-sm mb-1">✓ Zero Risk</h4>
+                        <p class="text-green-200 text-xs">You no go lose anything. If e no work, your money go come
+                            back.</p>
+                    </div>
+                    <div class="bg-green-800/30 rounded-lg p-4 border border-green-700/50">
+                        <h4 class="text-green-400 font-bold text-sm mb-1">✓ Real Results</h4>
+                        <p class="text-green-200 text-xs">2,847+ men don confirm say Egbon dey work. Your own go be
+                            different.</p>
+                    </div>
+                    <div class="bg-green-800/30 rounded-lg p-4 border border-green-700/50">
+                        <h4 class="text-green-400 font-bold text-sm mb-1">✓ Easy Refund</h4>
+                        <p class="text-green-200 text-xs">Just send us message within 30 days. We go process your refund
+                            sharp-sharp.</p>
+                    </div>
+                </div>
+                <p class="text-green-300 text-sm mt-6 font-semibold">🔒 Your purchase dey 100% protected. Order now, try
+                    am, and see the difference — or your money go back.</p>
             </div>
         </section>
     </main>
@@ -494,11 +600,13 @@
                 © 2024 OJG - Egbon Instant Herbal. Helping men reclaim their vitality naturally.
             </p>
             <p class="text-sm text-gray-500 mt-2">
-                This product is not intended to diagnose, treat, cure, or prevent any disease. Consult your healthcare provider before use.
+                This product is not intended to diagnose, treat, cure, or prevent any disease. Consult your healthcare
+                provider before use.
             </p>
         </div>
-    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+        <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+                href="/backend/admin/" class="hover:underline">Admin</a></p>
+    </footer>
 
     <!-- Sales Page Logic -->
     <script>
@@ -515,13 +623,41 @@
                     minutes: '59',
                     seconds: '59'
                 },
-                
+                profileHighlights: [],
+                profileNote: '',
+
                 init() {
                     this.startCountdown();
                     this.trackPageView();
                     this.prefillCustomerData();
+                    this.buildProfileHighlights();
                 },
-                
+
+                buildProfileHighlights() {
+                    const raw = localStorage.getItem('egbonAssessmentData');
+                    if (!raw) return;
+                    try {
+                        const d = JSON.parse(raw);
+                        const a = d.answers || {};
+                        const name = (d.contactInfo?.name || '').split(' ')[0];
+                        const type = d.performanceType?.primary || '';
+                        const typeLabels = { hormonal:'Hormonal Type', stress:'Stress Type', lifestyle:'Lifestyle Type', age:'Age-Related Type' };
+                        const highlights = [];
+                        const libido   = { high:'Strong desire', moderate:'Moderate desire', low:'Low desire', very_low:'Very low desire' }[a[0]];
+                        const energy   = { high:'High energy', moderate:'Some fatigue', low:'Low energy', very_low:'Exhausted' }[a[2]];
+                        const concern  = { performance:'Performance focus', energy:'Energy & stamina', libido:'Desire & drive', overall:'Overall vitality' }[a[9]];
+                        const typeLbl  = typeLabels[type];
+                        if (typeLbl)  highlights.push({ icon:'🔬', label:'Your Type',    short: typeLbl });
+                        if (libido)   highlights.push({ icon:'🔥', label:'Desire Level', short: libido });
+                        if (energy)   highlights.push({ icon:'⚡', label:'Energy',       short: energy });
+                        if (concern)  highlights.push({ icon:'🎯', label:'Focus Area',   short: concern });
+                        this.profileHighlights = highlights;
+                        this.profileNote = name
+                            ? `${name}, Egbon is matched to your ${typeLabels[type] || 'performance'} — not a one-size-fits-all product.`
+                            : `Egbon is matched to your specific performance type — not a one-size-fits-all product.`;
+                    } catch (e) {}
+                },
+
                 prefillCustomerData() {
                     const assessmentData = localStorage.getItem('egbonAssessmentData');
                     if (assessmentData) {
@@ -533,25 +669,25 @@
                         }
                     }
                 },
-                
+
                 startCountdown() {
                     const endTime = new Date().getTime() + (48 * 60 * 60 * 1000);
-                    
+
                     const updateCountdown = () => {
                         const now = new Date().getTime();
                         const distance = endTime - now;
-                        
+
                         if (distance > 0) {
                             this.timeLeft.hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
                             this.timeLeft.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
                             this.timeLeft.seconds = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
                         }
                     };
-                    
+
                     updateCountdown();
                     setInterval(updateCountdown, 1000);
                 },
-                
+
                 trackPageView() {
                     if (window.WebhookManager) {
                         window.WebhookManager.trackSalesVisit({
@@ -562,29 +698,29 @@
                         });
                     }
                 },
-                
+
                 scrollToOrder() {
-                    document.getElementById('order-section').scrollIntoView({ 
-                        behavior: 'smooth' 
+                    document.getElementById('order-section').scrollIntoView({
+                        behavior: 'smooth'
                     });
                 },
-                
+
                 async processPayment() {
                     this.isProcessing = true;
-                    
+
                     try {
                         if (!window.FlutterwaveIntegration) {
                             throw new Error('Payment system not loaded');
                         }
-                        
+
                         const errors = window.FlutterwaveIntegration.validateCustomerData(this.customerData);
                         if (errors.length > 0) {
                             alert('Please fix the following errors:\n' + errors.join('\n'));
                             return;
                         }
-                        
+
                         this.customerData.phone = window.FlutterwaveIntegration.formatNigerianPhone(this.customerData.phone);
-                        
+
                         const paymentData = {
                             plan: 'egbon-single',
                             6500,
@@ -592,9 +728,9 @@
                             description: '100% natural herbal supplement for enhanced libido, performance, and masculine vitality',
                             customer: this.customerData
                         };
-                        
+
                         await window.FlutterwaveIntegration.processPayment(paymentData);
-                        
+
                     } catch (error) {
                         console.error('Payment error:', error);
                         alert('Payment processing failed: ' + error.message);
@@ -606,4 +742,5 @@
         }
     </script>
 </body>
+
 </html>

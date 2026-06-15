@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" class="scroll-smooth overflow-x-hidden">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Welcome to Your Vitality Transformation Journey!</title>
     <meta name="description"
@@ -148,14 +149,13 @@
                 </div>
 
                 <h1 class="text-3xl md:text-5xl font-serif font-bold text-forest-900 mb-6 leading-[1.1]">
-                    Your <span class="italic text-terracotta-600">Private Healing Portal</span> is Ready.<br>
+                    <span x-show="orderDetails.name"><span x-text="orderDetails.name.split(' ')[0]"></span>, your </span><span x-show="!orderDetails.name">Your </span><span class="italic text-terracotta-600">Private Healing Portal</span> is Ready.<br>
                     Step Inside.
                 </h1>
 
                 <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed font-light">
                     Forget generic diets and static PDFs. You just unlocked a <strong>living, smart-personalized
-                        dashboard</strong> that adapts to your cycle, your Vitality type, and your progress — every single
-                    day.
+                        dashboard</strong> built for your <strong x-show="vitalityType" x-text="vitalityType"></strong><strong x-show="!vitalityType">Vitality</strong> type — adapting to your cycle and your progress every single day.
                 </p>
 
                 <!-- Order Summary -->
@@ -232,6 +232,26 @@
                             A confirmation email has been sent to <span class="font-bold text-forest-900"
                                 x-text="orderDetails.email"></span>
                         </p>
+                    </div>
+                </div>
+
+                <!-- Week 1 Focus: Type-Specific -->
+                <div class="max-w-3xl mx-auto mt-12 mb-4" x-show="week1Focus.length > 0" x-cloak>
+                    <div class="glass-panel rounded-2xl p-6 md:p-8 border border-terracotta-100/40">
+                        <p class="text-xs font-bold text-terracotta-600 uppercase tracking-widest mb-1">Matched to Your Type</p>
+                        <h3 class="text-xl font-serif font-bold text-forest-900 mb-1">Your First 7 Days</h3>
+                        <p class="text-sm text-gray-500 mb-5">Specific to your <span class="font-semibold text-forest-800" x-text="vitalityType || 'Vitality'"></span> pattern — start here before you do anything else.</p>
+                        <div class="space-y-3">
+                            <template x-for="(step, i) in week1Focus" :key="i">
+                                <div class="flex items-start gap-3 bg-forest-50/60 rounded-xl p-4 border border-forest-100/60">
+                                    <span class="flex-shrink-0 w-7 h-7 rounded-full bg-terracotta-100 text-terracotta-700 text-xs font-bold flex items-center justify-center" x-text="i + 1"></span>
+                                    <div>
+                                        <p class="text-forest-900 text-sm font-semibold" x-text="step.title"></p>
+                                        <p class="text-gray-500 text-sm font-light" x-text="step.why"></p>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
                     </div>
                 </div>
 
@@ -360,13 +380,13 @@
                         class="w-16 h-16 bg-forest-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-serif font-bold text-forest-800 shadow-sm group-hover:bg-forest-900 group-hover:text-sand transition-colors">
                         2
                     </div>
-                    <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">WhatsApp Expert Access</h3>
+                    <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">Premium WhatsApp Welcome</h3>
                     <p class="text-gray-500 font-light text-sm mb-6 leading-relaxed">
-                        Direct 1-on-1 access to our Vitality specialists for questions, guidance, and daily motivation.
+                        Message our concierge team to set up your profile and get priority support from your dedicated specialist.
                     </p>
                     <button @click="contactWhatsApp()"
                         class="bg-forest-600 hover:bg-forest-700 text-sand px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md active:scale-95">
-                        Consult an Expert →
+                        Message Concierge →
                     </button>
                 </div>
 
@@ -528,6 +548,8 @@
                 otoPurchased: false,
                 isProcessingOTO: false,
                 userCreationTriggered: false,
+                vitalityType: '',
+                week1Focus: [],
 
                 async testFlutterwaveInit() {
                     console.log('Testing Flutterwave initialization...');
@@ -568,14 +590,43 @@
                         this.orderDetails.amount = '₦' + numAmount.toLocaleString();
                     }
 
+                    // Load vitality type and week 1 focus
+                    const rawType = assessmentData.mensType?.primary || '';
+                    const typeLabels = { insulin:'Insulin-Resistant Vitality', inflammatory:'Inflammatory Vitality', adrenal:'Adrenal Vitality', postPill:'Post-Pill Vitality' };
+                    this.vitalityType = typeLabels[rawType] || '';
+                    this.week1Focus = this.getWeek1FocusMens(rawType);
+
                     console.log('Order details loaded:', this.orderDetails);
                 },
 
+                getWeek1FocusMens(type) {
+                    const plans = {
+                        insulin: [
+                            { title: 'Remove liquid sugar for 7 days (juice, soft drinks, sweetened tea)', why: 'Rapid glucose spikes are the primary insulin-resistance driver — the fastest first lever.' },
+                            { title: 'Walk 20 minutes after your two largest meals', why: 'Post-meal movement is the single most effective glucose-disposal tool without medication.' },
+                            { title: 'Add 1–2 tablespoons of apple cider vinegar in water before meals', why: 'Shown to blunt post-meal glucose spikes by up to 30%.' }
+                        ],
+                        inflammatory: [
+                            { title: 'Start a morning anti-inflammatory tea (ginger + turmeric)', why: 'Systemic inflammation suppresses ovarian function — addressing it is the root intervention.' },
+                            { title: 'Eliminate vegetable seed oils this week (swap for coconut oil or olive oil)', why: 'High omega-6 vegetable oils are a direct pro-inflammatory dietary driver.' },
+                            { title: 'Log any skin, joint, or bloating symptoms daily', why: 'Inflammatory Vitality has flare patterns — tracking reveals your personal triggers within 2 weeks.' }
+                        ],
+                        adrenal: [
+                            { title: 'Set a hard stop for all screens at 9:30 pm', why: 'Adrenal recovery depends on cortisol declining after sunset — blue light blocks this signal.' },
+                            { title: 'Do not skip breakfast — eat within 60 minutes of waking', why: 'Fasting amplifies cortisol in adrenal-dominant types and worsens the stress hormone loop.' },
+                            { title: 'Start ashwagandha (500mg with dinner)', why: 'The most evidence-backed adaptogen for cortisol reduction — effects begin within 1–2 weeks.' }
+                        ],
+                        postPill: [
+                            { title: 'Add zinc (30mg) and B6 (50mg) daily with food', why: 'Oral contraceptives deplete both — replenishing is the foundation of post-pill hormone recovery.' },
+                            { title: 'Do not start any new hormonal intervention for 90 days', why: 'Your body needs a clean recalibration window — interference resets the clock.' },
+                            { title: 'Track your cycle from day one, even if irregular', why: 'The return and regularization of your cycle is the clearest marker of recovery — baseline data is essential.' }
+                        ]
+                    };
+                    return plans[type] || [];
+                },
+
                 getGuarantee(plan) {
-                    if (plan && plan.includes('90')) {
-                        return '90-Day';
-                    }
-                    return '30-Day';
+                    return '90-Day';
                 },
 
                 // Load any existing credentials from localStorage

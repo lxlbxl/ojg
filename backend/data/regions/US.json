@@ -1,0 +1,31 @@
+{
+  "country": "United States",
+  "country_code": "US",
+  "climate_zone": "varied (temperate to subtropical, continental interior)",
+  "measurement_system": "imperial",
+  "staple_foods": [
+    "chicken breast", "ground beef", "eggs", "sweet potato", "brown rice",
+    "oats", "broccoli", "spinach and leafy greens", "avocado", "beans (black, pinto, kidney)"
+  ],
+  "common_proteins": [
+    "chicken", "turkey", "beef", "salmon and tuna", "eggs",
+    "Greek yoghurt", "beans and legumes", "tofu and tempeh", "cottage cheese"
+  ],
+  "common_cooking_fats": ["olive oil", "avocado oil", "butter", "coconut oil"],
+  "locally_available_herbs": [
+    {"name": "Spearmint",       "local_name": "Spearmint / Garden Mint",  "use": "anti-androgen (reduces free testosterone), PCOS hormonal acne"},
+    {"name": "Ashwagandha",     "local_name": "Ashwagandha / Indian ginseng", "use": "stress/cortisol reduction, testosterone support, sleep"},
+    {"name": "Chamomile",       "local_name": "Chamomile",                "use": "calming, anti-inflammatory, sleep, digestive"},
+    {"name": "Turmeric",        "local_name": "Turmeric / Curcumin",      "use": "anti-inflammatory, liver support, antioxidant"},
+    {"name": "Ginger",          "local_name": "Ginger root",              "use": "digestive, anti-inflammatory, blood-sugar support"},
+    {"name": "Milk Thistle",    "local_name": "Milk Thistle (Silybum marianum)", "use": "liver support, oestrogen detox, PCOS post-pill"},
+    {"name": "Vitex (Chaste Tree)", "local_name": "Vitex / Chaste Tree Berry", "use": "hormonal cycle regulation, PMS, progesterone support"},
+    {"name": "Valerian Root",   "local_name": "Valerian",                 "use": "sleep, anxiety, cortisol management"},
+    {"name": "Berberine",       "local_name": "Berberine (supplement)",   "use": "insulin sensitivity, blood-sugar regulation, PCOS metabolic support"}
+  ],
+  "where_to_source": "Whole Foods Market, Sprouts Farmers Market, iHerb.com, Amazon, Target and CVS (basic herbal teas), Vitamin Shoppe and GNC for supplements, local farmers markets",
+  "typical_cost_band": "medium-high",
+  "dietary_norms": "Highly varied by region and ethnicity. Portions are large by global standards. Convenience and processed foods are widely available and frequently consumed. Gluten-free, dairy-free, and vegan options are widely available in most areas. Imperial measurements (lbs, inches, °F, oz, cups) used throughout.",
+  "language_for_local_names": "English",
+  "reviewed": true
+}

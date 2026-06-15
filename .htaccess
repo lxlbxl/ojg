@@ -1,0 +1,27 @@
+# OJG Herbal — root .htaccess
+# Front controller + structural variant routing
+
+# Enable URL rewriting
+RewriteEngine On
+
+# If the request is for a real file/dir, serve it directly.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Structural variants: /pcos__b/... -> funnel + variant hint
+# (router.php inspects REQUEST_URI and serves the sibling directory)
+RewriteRule ^([a-z0-9]+)__([a-z0-9]+)/(.*)$ router.php [L,QSA]
+
+# Funnel HTML pages: emit server-side view event via router.php
+# (the tracker fires; router.php returns false to let Apache serve the file)
+RewriteRule ^(pcos|acne|weight|mens|egbon)/(.*)$ router.php [L,QSA]
+
+# Admin SPA entry
+RewriteRule ^admin/?$ backend/admin/index.php [L,QSA]
+
+# API entry points: pass through as-is
+RewriteRule ^backend/api/(.*)$ backend/api/$1 [L,QSA]
+
+# Default: serve static files
+RewriteRule ^ - [L]

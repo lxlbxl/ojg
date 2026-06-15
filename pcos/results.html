@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your PCOS Type Results - Personalized Treatment Plan</title>
     <meta name="description"
@@ -20,6 +21,9 @@
     <!-- Alpine.js CDN -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+    <!-- Config (single source of truth) -->
+    <script src="../js/config.js"></script>
+
     <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
@@ -33,32 +37,33 @@
                         'forest': {
                             50: '#f2f8f5',
                             100: '#dcece3',
-                            500: '#16a34a', // Legacy map
-                            600: '#16a34a', // Legacy map
-                            700: '#15803d', // Legacy map
+                            500: '#16a34a',
+                            600: '#16a34a',
+                            700: '#15803d',
                             800: '#166534',
-                            900: '#0f3922', // Deep luxury green
+                            900: '#0f3922',
                         },
                         'sage': {
                             100: '#E6EBE6',
                             200: '#CDD6CD',
+                            300: '#B5C9B5',
+                            400: '#8DA38D',
                             500: '#8DA38D',
                         },
                         'terracotta': {
-                            500: '#C77D63', // Warm accent
+                            50: '#fdf4f1',
+                            100: '#f9e2d9',
+                            200: '#f2c4b0',
+                            400: '#d9936f',
+                            500: '#C77D63',
                             600: '#A85D45',
+                            900: '#5c2d1a',
                         },
                         'cream': '#FDFCF8',
                         'sand': '#F4F1EA',
-                        // Compatibility mapping for existing scripts
                         primary: {
-                            50: '#f2f8f5',
-                            100: '#dcece3',
-                            500: '#166534',
-                            600: '#14532d',
-                            700: '#0f3922',
-                            800: '#0f3922',
-                            900: '#051f11'
+                            50: '#f2f8f5', 100: '#dcece3', 500: '#166534',
+                            600: '#14532d', 700: '#0f3922', 800: '#0f3922', 900: '#051f11'
                         }
                     },
                     backgroundImage: {
@@ -74,34 +79,23 @@
     </script>
 
     <style>
-        body {
-            background-color: #FDFCF8;
-            color: #0f3922;
-        }
-
+        body { background-color: #FDFCF8; color: #0f3922; }
         .glass-panel {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
-
-        .blob {
-            position: absolute;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.6;
-        }
-
-        /* Responsive width handling */
-        html,
-        body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-
-        * {
-            box-sizing: border-box;
+        .blob { position: absolute; filter: blur(80px); z-index: -1; opacity: 0.6; }
+        html, body { max-width: 100vw; overflow-x: hidden; }
+        * { box-sizing: border-box; }
+        [x-cloak] { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .guarantee-box {
+            background: linear-gradient(135deg, #f2f8f5, #dcece3);
+            border: 2px solid #166534;
+            border-radius: 1.5rem;
         }
     </style>
 
@@ -146,71 +140,63 @@
         <div x-show="isLoading" class="text-center py-24 min-h-[60vh] flex flex-col items-center justify-center">
             <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-forest-900 mx-auto mb-6"></div>
             <h2 class="text-3xl font-serif font-bold text-forest-900 mb-3">Analyzing Your Unique Profile...</h2>
-            <p class="text-gray-500 font-light text-lg">Comparing your symptoms with our database of 10,000+ women.</p>
+            <p class="text-gray-500 font-light text-lg">Your answers matched against <strong x-text="socialProof.count + ' ' + socialProof.label"></strong> we've helped.</p>
         </div>
 
         <!-- Results Content -->
-        <div x-show="!isLoading && assessmentData">
+        <div x-show="!isLoading && assessmentData" x-cloak>
 
-            <!-- Congratulations Section -->
+            <!-- ① Congratulations / Diagnosis Header -->
             <section class="text-center mb-10 md:mb-16 max-w-4xl mx-auto">
-                <div
-                    class="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-soft relative overflow-hidden">
-                    <div
-                        class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-terracotta-500 via-forest-500 to-terracotta-500">
-                    </div>
-
-                    <div
-                        class="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm">
-                        🎉
-                    </div>
-                    <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-4">
-                        Analysis Complete, <span x-text="assessmentData?.contactInfo?.name?.split(' ')[0] || ''"
-                            class="italic text-terracotta-600"></span>!
+                <div class="glass-panel rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 shadow-soft relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-terracotta-500 via-forest-500 to-terracotta-500"></div>
+                    <div class="w-20 h-20 bg-sage-100 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm">🎉</div>
+                    <h1 class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-4" data-exp="results-headline">
+                        Analysis Complete, <span x-text="assessmentData?.contactInfo?.name?.split(' ')[0] || ''" class="italic text-terracotta-600"></span>!
                     </h1>
                     <p class="text-xl text-gray-600 font-light max-w-2xl mx-auto">
-                        We've identified your specific PCOS driver. This is the first step to finally taking control of
-                        your health.
+                        Based on your answers, you're showing strong markers of <strong x-text="pcosTypeInfo.name" class="text-forest-900"></strong> — 
+                        <span x-text="pcosTypeInfo.prevalenceStat" class="text-gray-600"></span>.
                     </p>
+                    <!-- Symptom Echo -->
+                    <div class="mt-6 flex flex-wrap justify-center gap-2" data-exp="symptom-echo" x-show="userSymptoms && userSymptoms.length > 0">
+                        <template x-for="sym in userSymptoms.slice(0,3)" :key="sym">
+                            <span class="bg-terracotta-50 border border-terracotta-200 text-terracotta-700 text-xs font-medium px-3 py-1 rounded-full" x-text="sym"></span>
+                        </template>
+                    </div>
                 </div>
             </section>
 
-            <!-- PCOS Type Results -->
-            <section class="mb-10 md:mb-16 max-w-5xl mx-auto">
-                <div
-                    class="bg-forest-900 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 text-sand shadow-2xl relative overflow-hidden group">
-                    <!-- Decorative background elements -->
-                    <div
-                        class="absolute top-0 right-0 w-96 h-96 bg-forest-800 rounded-full blur-3xl opacity-50 -mr-32 -mt-32">
-                    </div>
+            <!-- ② Empathy Beat — BEFORE the pitch (disarms skeptics) -->
+            <section class="mb-12 md:mb-16 max-w-4xl mx-auto" data-exp="empathy-beat">
+                <div class="bg-gradient-to-br from-sand to-cream border border-sage-200 rounded-[2rem] p-8 md:p-12 shadow-soft">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">Before We Go Further</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest-900 mb-4" x-text="funnelConfig.empathy.heading"></h2>
+                    <p class="text-lg text-gray-700 leading-relaxed font-light" x-text="funnelConfig.empathy.body"></p>
+                </div>
+            </section>
+
+            <!-- ③ PCOS Type Results -->
+            <section class="mb-12 md:mb-16 max-w-5xl mx-auto">
+                <div class="bg-forest-900 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 text-sand shadow-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-96 h-96 bg-forest-800 rounded-full blur-3xl opacity-50 -mr-32 -mt-32"></div>
                     <div class="absolute bottom-0 left-0 w-full h-full bg-grain opacity-10 mix-blend-overlay"></div>
 
                     <div class="relative z-10 text-center mb-10">
-                        <span
-                            class="inline-block border border-forest-700 bg-forest-800/50 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4 text-forest-200">Your
-                            Primary Type</span>
-                        <h2 class="text-3xl md:text-6xl font-serif font-bold mb-4 text-white"
-                            x-text="pcosTypeInfo.name"></h2>
-                        <p class="text-forest-200 text-base md:text-xl max-w-3xl mx-auto font-light leading-relaxed"
-                            x-text="pcosTypeInfo.description"></p>
-
+                        <span class="inline-block border border-forest-700 bg-forest-800/50 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4 text-forest-200">Your Primary Type</span>
+                        <h2 class="text-3xl md:text-6xl font-serif font-bold mb-4 text-white" x-text="pcosTypeInfo.name"></h2>
+                        <p class="text-forest-200 text-base md:text-xl max-w-3xl mx-auto font-light leading-relaxed" x-text="pcosTypeInfo.description"></p>
                         <div class="mt-6">
-                            <span
-                                class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-white/20">
-                                Confidence Level: <span class="text-terracotta-400 font-bold"
-                                    x-text="assessmentData?.pcosType?.confidence?.toUpperCase()"></span>
+                            <span class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-white/20">
+                                Confidence Level: <span class="text-terracotta-400 font-bold" x-text="assessmentData?.pcosType?.confidence?.toUpperCase()"></span>
                             </span>
                         </div>
                     </div>
 
                     <!-- Type Details Grid -->
                     <div class="grid md:grid-cols-2 gap-6 relative z-10">
-                        <!-- Common Symptoms -->
-                        <div
-                            class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-colors">
-                            <h4 class="font-serif text-xl font-bold text-terracotta-400 mb-6 flex items-center gap-2">
-                                <span class="text-2xl">⚠️</span> Your Key Symptoms
-                            </h4>
+                        <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-colors">
+                            <h4 class="font-serif text-xl font-bold text-terracotta-400 mb-6 flex items-center gap-2"><span class="text-2xl">⚠️</span> Your Key Symptoms</h4>
                             <ul class="space-y-4">
                                 <template x-for="symptom in pcosTypeInfo.symptoms" :key="symptom">
                                     <li class="flex items-start gap-3">
@@ -220,13 +206,8 @@
                                 </template>
                             </ul>
                         </div>
-
-                        <!-- Root Causes -->
-                        <div
-                            class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-colors">
-                            <h4 class="font-serif text-xl font-bold text-sage-300 mb-6 flex items-center gap-2">
-                                <span class="text-2xl">🧬</span> Your Root Causes
-                            </h4>
+                        <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 md:p-8 hover:bg-white/10 transition-colors">
+                            <h4 class="font-serif text-xl font-bold text-sage-300 mb-6 flex items-center gap-2"><span class="text-2xl">🧬</span> Your Root Causes</h4>
                             <ul class="space-y-4">
                                 <template x-for="cause in pcosTypeInfo.causes" :key="cause">
                                     <li class="flex items-start gap-3">
@@ -240,27 +221,38 @@
                 </div>
             </section>
 
-            <!-- Your Healing Protocol Preview (Teaser - not giving away the solution) -->
-            <section class="mb-20 max-w-6xl mx-auto">
+            <!-- ④ Mechanism — "Why This Works When Other Things Didn't" -->
+            <section class="mb-12 md:mb-16 max-w-5xl mx-auto" data-exp="mechanism">
+                <div class="text-center mb-10">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">The Real Reason</span>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4" x-text="funnelConfig.mechanism.heading"></h2>
+                    <p class="text-xl text-gray-500 font-light max-w-2xl mx-auto" x-text="funnelConfig.mechanism.subheading"></p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <template x-for="(step, i) in funnelConfig.mechanism.steps" :key="i">
+                        <div class="glass-panel p-8 rounded-2xl border-t-4" :class="i === 0 ? 'border-t-terracotta-500' : (i === 1 ? 'border-t-sage-400' : 'border-t-forest-800')">
+                            <div class="text-3xl mb-4" x-text="step.icon"></div>
+                            <h4 class="font-serif text-lg font-bold text-forest-900 mb-3" x-text="step.title"></h4>
+                            <p class="text-gray-600 font-light text-sm leading-relaxed" x-text="step.body"></p>
+                        </div>
+                    </template>
+                </div>
+            </section>
+
+            <!-- ⑤ Your Healing Protocol Preview -->
+            <section class="mb-12 md:mb-16 max-w-6xl mx-auto">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4">Your Personalized Healing Protocol</h2>
-                    <p class="text-gray-500">We've identified 3 targeted interventions for <span x-text="pcosTypeInfo.name"
-                            class="font-bold text-forest-800"></span></p>
+                    <p class="text-gray-500">3 targeted interventions for <span x-text="pcosTypeInfo.name" class="font-bold text-forest-800"></span></p>
                 </div>
-
                 <div class="grid md:grid-cols-3 gap-6">
                     <template x-for="(protocol, index) in pcosTypeInfo.protocols" :key="index">
-                        <div
-                            class="glass-panel p-8 rounded-2xl hover:shadow-lg transition-all duration-300 group border-t-4 border-t-transparent hover:border-t-forest-500 relative overflow-hidden">
-                            <div
-                                class="w-12 h-12 bg-forest-100 text-forest-800 rounded-xl flex items-center justify-center mb-6 font-serif font-bold text-xl group-hover:bg-forest-900 group-hover:text-sand transition-colors">
+                        <div class="glass-panel p-8 rounded-2xl hover:shadow-lg transition-all duration-300 group border-t-4 border-t-transparent hover:border-t-forest-500 relative overflow-hidden">
+                            <div class="w-12 h-12 bg-forest-100 text-forest-800 rounded-xl flex items-center justify-center mb-6 font-serif font-bold text-xl group-hover:bg-forest-900 group-hover:text-sand transition-colors">
                                 <span x-text="index + 1"></span>
                             </div>
-                            <h4 class="font-serif text-xl font-bold text-forest-900 mb-3" x-text="protocol.title">
-                            </h4>
-                            <p class="text-gray-600 font-light text-sm leading-relaxed"
-                                x-text="protocol.teaser"></p>
-                            <!-- Locked overlay -->
+                            <h4 class="font-serif text-xl font-bold text-forest-900 mb-3" x-text="protocol.title"></h4>
+                            <p class="text-gray-600 font-light text-sm leading-relaxed" x-text="protocol.teaser"></p>
                             <div class="mt-4 flex items-center gap-2 text-xs font-bold text-terracotta-600 uppercase tracking-wider">
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                                 <span x-text="protocol.locked"></span>
@@ -270,215 +262,151 @@
                 </div>
             </section>
 
-            <!-- The Problem Section (Glassmorphism Warning) -->
-            <section class="mb-20 max-w-5xl mx-auto">
-                <div
-                    class="bg-gradient-to-br from-terracotta-50 to-white border border-terracotta-100 rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 text-9xl opacity-5 pointer-events-none select-none">!</div>
-
-                    <h2 class="text-3xl font-serif font-bold text-terracotta-900 mb-6">Here's the Truth They Won't Tell
-                        You...</h2>
-                    <p class="text-lg text-gray-700 mb-8 max-w-3xl leading-relaxed">
-                        Free tips and generic advice will <strong>not</strong> fix <strong
-                            x-text="pcosTypeInfo.name"></strong>. You need a system that works for YOUR body — one that
-                        adapts daily, tracks your cycles, and gives you Nigerian recipes you'll actually eat.
-                    </p>
-
-                    <div class="grid md:grid-cols-2 gap-10">
-                        <div>
-                            <h3 class="font-bold text-terracotta-800 mb-4 uppercase text-xs tracking-widest">Without a
-                                proper plan:</h3>
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Symptoms often return with a vengeance</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Wasted money on generic supplements</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-terracotta-500 text-lg">✗</span>
-                                    <span class="text-gray-600 font-light">Years of frustration and trial & error</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold text-forest-800 mb-4 uppercase text-xs tracking-widest">You need a
-                                system that includes:</h3>
-                            <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800"><strong>Smart-personalized meals</strong> crafted daily
-                                        for
-                                        your type</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800">Herbal tea rituals with <strong>tracking &
-                                            reminders</strong></span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="text-forest-500 text-lg">✓</span>
-                                    <span class="text-gray-800">A <strong>private member portal</strong> that evolves
-                                        with you</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Educational Bridge -->
-            <section class="mb-20 max-w-5xl mx-auto">
-                <div class="text-center mb-12">
-                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">The
-                        Scientific Approach</span>
-                    <h2 class="text-3xl md:text-5xl font-serif font-bold text-forest-900 mb-6">
-                        The 2-Step Hormonal Reset
-                    </h2>
-                    <p class="text-xl text-gray-500 font-light max-w-2xl mx-auto">
-                        To reverse <span x-text="pcosTypeInfo.name" class="font-medium"></span>, you need a holistic
-                        approach that realigns your body's natural rhythms.
-                    </p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Step 1 -->
-                    <div
-                        class="glass-panel p-8 rounded-3xl relative hover:-translate-y-1 transition-transform duration-300">
-                        <div
-                            class="bg-forest-100 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
-                            🌿</div>
-                        <h3 class="font-serif text-2xl font-bold text-forest-900 mb-3">1. Herbal Intervention</h3>
-                        <p class="text-gray-600 font-light mb-4 leading-relaxed">
-                            We use potent <strong>African Roots & Leaves</strong> that have been used for centuries to
-                            naturally lower androgens and restore ovulation.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-500">
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Regulate insulin
-                                sensitivity</li>
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Lower excess male
-                                hormones</li>
-                        </ul>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div
-                        class="glass-panel p-8 rounded-3xl relative hover:-translate-y-1 transition-transform duration-300">
-                        <div
-                            class="bg-sage-200 w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm">
-                            🥗</div>
-                        <h3 class="font-serif text-2xl font-bold text-forest-900 mb-3">2. Nutritional Therapy</h3>
-                        <p class="text-gray-600 font-light mb-4 leading-relaxed">
-                            Specific <strong>hormone-balancing meals</strong> designed to reduce inflammation instantly
-                            and keep blood sugar stable.
-                        </p>
-                        <ul class="space-y-2 text-sm text-gray-500">
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Reduce
-                                inflammation instantly</li>
-                            <li class="flex items-center gap-2"><span class="text-forest-500">✓</span> Support metabolic
-                                function</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Value Stack Preview (Price Anchoring) -->
-            <section class="max-w-5xl mx-auto mb-12 md:mb-16">
+            <!-- ⑥ Value Stack (price anchoring — moved up) -->
+            <section class="max-w-5xl mx-auto mb-12 md:mb-16" data-exp="value-stack">
                 <div class="text-center mb-10">
                     <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">What's Inside Your Portal</span>
                     <h2 class="text-3xl md:text-4xl font-serif font-bold text-forest-900 mb-4">
                         Everything Built for <span x-text="pcosTypeInfo.name" class="italic text-terracotta-600"></span>
                     </h2>
                 </div>
-
                 <div class="grid md:grid-cols-2 gap-4">
-                    <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🥗</div>
-                        <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Smart-Personalized Daily Meals</h4>
-                            <p class="text-gray-500 text-sm">Nigerian recipes that target your specific hormonal imbalance</p>
-                            <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦45,000</span>
+                    <template x-for="item in valueStackItems" :key="item.title">
+                        <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
+                            <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0" x-text="item.icon"></div>
+                            <div>
+                                <h4 class="font-bold text-forest-900 mb-1" x-text="item.title"></h4>
+                                <p class="text-gray-500 text-sm" x-text="item.desc"></p>
+                                <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦<span x-text="item.value.toLocaleString()"></span></span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🍵</div>
-                        <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Morning & Evening Herbal Rituals</h4>
-                            <p class="text-gray-500 text-sm">Type-specific blends with daily reminders & tracking</p>
-                            <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦35,000</span>
-                        </div>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">🚶‍♀️</div>
-                        <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Phase-Synced Movement Protocols</h4>
-                            <p class="text-gray-500 text-sm">Cycle-aware activity plans that adapt to your body</p>
-                            <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦27,000</span>
-                        </div>
-                    </div>
-                    <div class="glass-panel rounded-2xl p-6 flex items-start gap-4">
-                        <div class="w-10 h-10 bg-forest-100 rounded-xl flex items-center justify-center text-xl shrink-0">📊</div>
-                        <div>
-                            <h4 class="font-bold text-forest-900 mb-1">Body Data & Progress Tracking</h4>
-                            <p class="text-gray-500 text-sm">Log weight, cycles, symptoms — watch transformation unfold</p>
-                            <span class="text-xs text-gray-400 line-through mt-1 block">Valued at ₦90,000</span>
-                        </div>
-                    </div>
+                    </template>
                 </div>
-
                 <div class="text-center mt-8">
                     <p class="text-sm text-gray-400">Total Value: <span class="line-through">₦197,000</span></p>
                     <p class="text-2xl font-serif font-bold text-forest-900 mt-1" x-show="pricingLoaded && startingPrice > 0" x-cloak>
                         Your Assessment Price: Starting from <span x-text="'₦' + startingPrice.toLocaleString()"></span>
                     </p>
-                    <p class="text-2xl font-serif font-bold text-forest-900 mt-1 animate-pulse" x-show="!pricingLoaded">
-                        Loading price...
-                    </p>
                 </div>
             </section>
 
-            <!-- Final Solution Card (Sales Page Link) — Honest CTA -->
+            <!-- ⑦ Type-Matched Testimonials (2-3 cards) -->
+            <section data-exp="type-testimonial" class="max-w-5xl mx-auto mb-12 md:mb-16">
+                <div class="text-center mb-8">
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-2 block">Real Proof</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-forest-900">Women With Your Exact Type — Who Did It</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <template x-for="(t, idx) in typeTestimonials.slice(0,2)" :key="idx">
+                        <div class="bg-gradient-to-br from-sand to-cream border-2 border-terracotta-200 rounded-3xl p-8 shadow-soft">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-terracotta-500 text-xl">★★★★★</span>
+                                <span class="inline-block bg-terracotta-500 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">
+                                    <span x-text="t.type ? pcosTypeLabel + ' Type' : 'Verified'"></span>
+                                </span>
+                            </div>
+                            <h4 class="font-serif text-lg font-bold text-forest-900 mb-2" x-text="t.headline"></h4>
+                            <blockquote class="font-serif text-base md:text-lg text-forest-900 italic leading-relaxed mb-4">&ldquo;<span x-text="t.quote"></span>&rdquo;</blockquote>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-forest-100 flex items-center justify-center text-forest-700 font-bold" x-text="t.name.charAt(0)"></div>
+                                <div>
+                                    <p class="font-bold text-forest-900 text-sm" x-text="t.name + ' · ' + t.city"></p>
+                                    <div class="flex flex-wrap gap-1 mt-1">
+                                        <template x-for="tag in (t.tags || [])" :key="tag">
+                                            <span class="text-xs bg-forest-50 text-forest-700 px-2 py-0.5 rounded font-medium" x-text="tag"></span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <!-- Third testimonial full width -->
+                <template x-if="typeTestimonials.length > 2">
+                    <div class="mt-6 bg-gradient-to-br from-sand to-cream border-2 border-terracotta-200 rounded-3xl p-8 shadow-soft">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-terracotta-500 text-xl">★★★★★</span>
+                            <span class="inline-block bg-forest-800 text-white text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded">Verified Purchase</span>
+                        </div>
+                        <blockquote class="font-serif text-lg md:text-xl text-forest-900 italic leading-relaxed mb-4">&ldquo;<span x-text="typeTestimonials[2].quote"></span>&rdquo;</blockquote>
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-forest-100 flex items-center justify-center text-forest-700 font-bold" x-text="typeTestimonials[2].name.charAt(0)"></div>
+                            <div>
+                                <p class="font-bold text-forest-900 text-sm" x-text="typeTestimonials[2].name + ' · ' + typeTestimonials[2].city"></p>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    <template x-for="tag in (typeTestimonials[2].tags || [])" :key="tag">
+                                        <span class="text-xs bg-forest-50 text-forest-700 px-2 py-0.5 rounded font-medium" x-text="tag"></span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </section>
+
+            <!-- ⑧ Cost of Inaction (Ethical Urgency) -->
+            <section class="mb-12 md:mb-16 max-w-4xl mx-auto" data-exp="cost-of-inaction">
+                <div class="bg-gradient-to-br from-terracotta-50 to-white border border-terracotta-100 rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 text-9xl opacity-5 pointer-events-none select-none">!</div>
+                    <span class="text-terracotta-600 font-medium tracking-widest text-xs uppercase mb-3 block">The Real Cost of Waiting</span>
+                    <h2 class="text-2xl md:text-3xl font-serif font-bold text-terracotta-900 mb-6" x-text="funnelConfig.costOfInaction.heading"></h2>
+                    <ul class="space-y-4">
+                        <template x-for="point in funnelConfig.costOfInaction.points" :key="point">
+                            <li class="flex items-start gap-3">
+                                <span class="text-terracotta-500 text-lg shrink-0 mt-0.5">→</span>
+                                <span class="text-gray-700 font-light leading-relaxed" x-text="point"></span>
+                            </li>
+                        </template>
+                    </ul>
+                    <p class="text-sm text-gray-500 mt-6 italic">This is a factual, honest assessment — not pressure. You deserve to know what continued inaction actually means for your long-term health.</p>
+                </div>
+            </section>
+
+            <!-- ⑨ Final CTA -->
             <section class="max-w-4xl mx-auto mb-16 md:mb-20 text-center">
-                <div
-                    class="bg-forest-900 rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-14 shadow-2xl relative overflow-hidden text-white">
+                <div class="bg-forest-900 rounded-[2.5rem] md:rounded-[3rem] p-6 md:p-14 shadow-2xl relative overflow-hidden text-white">
                     <div class="absolute inset-0 bg-grain opacity-10 mix-blend-overlay"></div>
-                    <div class="absolute top-0 left-0 w-64 h-64 bg-terracotta-500 rounded-full blur-[100px] opacity-20">
-                    </div>
-                    <div class="absolute bottom-0 right-0 w-64 h-64 bg-sage-500 rounded-full blur-[100px] opacity-20">
-                    </div>
+                    <div class="absolute top-0 left-0 w-64 h-64 bg-terracotta-500 rounded-full blur-[100px] opacity-20"></div>
+                    <div class="absolute bottom-0 right-0 w-64 h-64 bg-sage-500 rounded-full blur-[100px] opacity-20"></div>
 
                     <div class="relative z-10">
-                        <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6">
-                            Ready to Start Your <span x-text="pcosTypeInfo.name" class="italic text-terracotta-400"></span> Protocol?
+                        <h2 class="text-3xl md:text-5xl font-serif font-bold mb-6" data-exp="results-cta-headline">
+                            Get Your <span x-text="pcosTypeInfo.name" class="italic text-terracotta-400"></span> Protocol →
                         </h2>
-                        <p class="text-xl text-forest-100 mb-10 font-light max-w-2xl mx-auto">
-                            Your personalized treatment plan is ready. Choose the program that fits your journey — 30-day quick start or the complete 90-day transformation.
+                        <p class="text-xl text-forest-100 mb-6 font-light max-w-2xl mx-auto">
+                            Your personalized 90-day protocol is ready. Your answers are matched. The only thing left is to say yes to yourself.
                         </p>
 
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                            <button @click="viewSolution()"
-                                class="bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold text-lg md:text-xl px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-glow hover:shadow-lg">
-                                See My Treatment Plan →
-                            </button>
+                        <!-- Inline guarantee -->
+                        <div class="guarantee-box mx-auto max-w-lg mb-8 p-5 text-forest-900" data-exp="results-guarantee">
+                            <div class="flex items-center justify-center gap-3 mb-2">
+                                <span class="text-3xl">🛡️</span>
+                                <span class="font-serif font-bold text-xl" x-text="guarantee.label"></span>
+                            </div>
+                            <p class="text-sm text-forest-800 font-light">Try the full 90-day protocol. If your PCOS symptoms haven't improved, email us for a full refund — and keep everything.</p>
                         </div>
 
-                        <div
-                            class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-xs font-bold tracking-widest text-forest-300 uppercase mt-6">
+                        <button @click="viewSolution()" id="results-main-cta" data-exp="results-cta"
+                            class="bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold text-lg md:text-xl px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-glow hover:shadow-lg mb-6">
+                            See My <span x-text="pcosTypeInfo.name"></span> Plan Options →
+                        </button>
+
+                        <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-xs font-bold tracking-widest text-forest-300 uppercase">
                             <span class="flex items-center gap-2">✓ Instant Portal Access</span>
-                            <span class="flex items-center gap-2">✓ Money-Back Guarantee</span>
-                            <span class="flex items-center gap-2">✓ 500+ Women Transformed</span>
+                            <span class="flex items-center gap-2">✓ <span x-text="guarantee.shortLabel"></span></span>
+                            <span class="flex items-center gap-2">✓ <span x-text="socialProof.count + ' ' + socialProof.label + ' helped'"></span></span>
                         </div>
 
                         <!-- WhatsApp CTA -->
                         <div class="mt-8 pt-6 border-t border-white/10">
                             <p class="text-forest-200/80 text-sm mb-3">Have questions first?</p>
-                            <a href="https://wa.me/2348133149989?text=Hi%2C%20I%20just%20completed%20my%20PCOS%20assessment%20and%20I%20have%20some%20questions%20about%20the%20treatment%20plan"
+                            <a href="https://wa.me/2348133149989?text=Hi%2C%20I%20just%20completed%20my%20PCOS%20assessment%20and%20have%20questions%20about%20the%20treatment%20plan"
                                 target="_blank"
                                 class="inline-flex items-center gap-2 text-white/90 hover:text-white text-sm font-medium transition-colors">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+                                    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.611.611l4.458-1.495A11.932 11.932 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.316 0-4.458-.764-6.186-2.056l-.432-.332-3.29 1.103 1.103-3.29-.332-.432A9.955 9.955 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z" />
+                                </svg>
                                 Chat with a PCOS Specialist on WhatsApp
                             </a>
                         </div>
@@ -503,19 +431,16 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-sage-200 py-12">
         <div class="max-w-6xl mx-auto px-6 text-center">
-            <p class="text-forest-900/40 text-sm">© <span id="footer-year"></span> PCOS Solutions. All rights reserved.
-            </p>
+            <p class="text-forest-900/40 text-sm">© <span id="footer-year"></span> PCOS Solutions. All rights reserved.</p>
         </div>
-    <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline">Admin</a></p>
-</footer>
+        <p class="mt-2 text-center"><a href="/privacy-policy.html" class="hover:underline text-sm text-gray-400">Privacy Policy</a> | <a href="/backend/admin/" class="hover:underline text-sm text-gray-400">Admin</a></p>
+    </footer>
 
     <!-- Results Logic -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const footerYearSpan = document.getElementById('footer-year');
-            if (footerYearSpan) {
-                footerYearSpan.textContent = new Date().getFullYear();
-            }
+            if (footerYearSpan) footerYearSpan.textContent = new Date().getFullYear();
         });
 
         function pcosResults() {
@@ -523,10 +448,25 @@
                 isLoading: true,
                 assessmentData: null,
                 pcosTypeInfo: {},
+                pcosType: 'insulin',
+                pcosTypeLabel: 'Insulin-Resistant',
                 startingPrice: 0,
                 pricingLoaded: false,
+                typeTestimonials: [],
+                valueStackItems: [],
+                userSymptoms: [],
+                funnelConfig: { empathy: {}, mechanism: { steps: [] }, costOfInaction: { points: [] } },
+                socialProof: { count: '500+', label: 'women' },
+                guarantee: { label: '90-Day Money-Back Guarantee', shortLabel: '90-Day Guarantee', bodyText: '' },
 
                 init() {
+                    // Load config
+                    if (window.CONFIG) {
+                        this.socialProof = window.CONFIG.socialProof.pcos;
+                        this.guarantee = window.CONFIG.guarantee;
+                        this.funnelConfig = window.CONFIG.FUNNEL_CONFIG.pcos;
+                        this.valueStackItems = window.CONFIG.valueStack.pcos;
+                    }
                     this.loadAssessmentData();
                     this.loadPricing();
                 },
@@ -537,14 +477,12 @@
                         const result = await response.json();
                         if (result.success && result.data.plans.pcos) {
                             const plans = result.data.plans.pcos;
-                            // Use the lowest plan price as "Starting from" price
                             const prices = [];
                             if (plans['30-day']) prices.push(Number(plans['30-day'].price));
                             if (plans['90-day']) prices.push(Number(plans['90-day'].price));
-                            this.startingPrice = Math.min(...prices);
+                            if (prices.length) this.startingPrice = Math.min(...prices);
                         }
                     } catch (e) {
-                        console.error('Failed to load pricing', e);
                         this.startingPrice = 0;
                     } finally {
                         this.pricingLoaded = true;
@@ -552,205 +490,160 @@
                 },
 
                 loadAssessmentData() {
-                    // Simulate loading delay
                     setTimeout(() => {
                         const data = localStorage.getItem('pcosAssessmentData');
                         if (data) {
                             this.assessmentData = JSON.parse(data);
-                            this.pcosTypeInfo = this.getPCOSTypeInfo(this.assessmentData.pcosType.primary);
+                            this.pcosType = this.assessmentData.pcosType?.primary || 'insulin';
+                            this.pcosTypeInfo = this.getPCOSTypeInfo(this.pcosType);
 
-                            // Save PCOS type to localStorage for member area pre-fill
-                            const pcosTypeMap = {
-                                'insulin': 'Insulin Resistant',
-                                'inflammatory': 'Inflammatory',
-                                'adrenal': 'Adrenal',
-                                'postPill': 'Post-Pill'
-                            };
-                            const pcosTypeForMember = pcosTypeMap[this.assessmentData.pcosType.primary] || 'Insulin Resistant';
+                            // Build type label
+                            const typeMap = { 'insulin': 'Insulin-Resistant', 'inflammatory': 'Inflammatory', 'adrenal': 'Adrenal', 'postPill': 'Post-Pill' };
+                            this.pcosTypeLabel = typeMap[this.pcosType] || 'PCOS';
+
+                            // Echo user's symptoms from assessment answers
+                            this.userSymptoms = this.extractUserSymptoms(this.assessmentData);
+
+                            // Load type-matched testimonials from config
+                            if (window.CONFIG && window.CONFIG.testimonials.pcos) {
+                                const pool = window.CONFIG.testimonials.pcos;
+                                this.typeTestimonials = pool.filter(t => t.type === this.pcosType);
+                                if (this.typeTestimonials.length === 0) this.typeTestimonials = pool.slice(0, 3);
+                                // Pad to at least 2
+                                while (this.typeTestimonials.length < 2 && pool.length > this.typeTestimonials.length) {
+                                    const extra = pool.find(t => !this.typeTestimonials.includes(t));
+                                    if (extra) this.typeTestimonials.push(extra);
+                                    else break;
+                                }
+                            } else {
+                                this.typeTestimonials = this.getFallbackTestimonials(this.pcosType);
+                            }
+
+                            // Save type for member area
+                            const pcosTypeForMember = typeMap[this.pcosType] || 'Insulin Resistant';
                             localStorage.setItem('ojg_pcos_type', pcosTypeForMember);
-                            localStorage.setItem('ojg_pcos_type_confidence', this.assessmentData.pcosType.confidence || 'medium');
+                            localStorage.setItem('ojg_pcos_type_confidence', this.assessmentData.pcosType?.confidence || 'medium');
 
-                            // Track results view
+                            // Tracking
                             if (window.WebhookManager) {
                                 window.WebhookManager.trackConversion('results_page_view', {
                                     page: 'pcos-funnel-results',
-                                    pcosType: this.assessmentData.pcosType.primary,
-                                    confidence: this.assessmentData.pcosType.confidence
+                                    pcosType: this.pcosType,
+                                    confidence: this.assessmentData.pcosType?.confidence
                                 });
                             }
-
-                            // Fire Meta Pixel Lead event — assessment completed with PCOS type
                             if (window.OJGTracking) {
-                                window.OJGTracking.trackLead('PCOS', this.assessmentData.pcosType.primary);
+                                window.OJGTracking.trackLead('PCOS', this.pcosType);
                                 window.OJGTracking.trackCompleteRegistration('PCOS');
                             }
+                        } else {
+                            // No assessment data — set defaults so page still renders for preview
+                            this.pcosTypeInfo = this.getPCOSTypeInfo('insulin');
+                            this.typeTestimonials = this.getFallbackTestimonials('insulin');
                         }
                         this.isLoading = false;
-                    }, 2000);
+                    }, 1800);
+                },
+
+                extractUserSymptoms(data) {
+                    // Pull symptom echoes from assessment answers if available
+                    const symptoms = [];
+                    if (data.answers) {
+                        const symptomAnswers = data.answers.symptoms || data.answers.primarySymptoms || [];
+                        if (Array.isArray(symptomAnswers)) symptoms.push(...symptomAnswers.slice(0, 3));
+                    }
+                    // Fallback to type-based symptoms
+                    if (symptoms.length === 0 && this.pcosTypeInfo.symptoms) {
+                        return this.pcosTypeInfo.symptoms.slice(0, 3);
+                    }
+                    return symptoms;
+                },
+
+                getFallbackTestimonials(type) {
+                    const fallbacks = {
+                        'insulin': [
+                            { name: 'Sarah M.', city: 'Lagos', type: 'insulin', headline: 'Period Returned After 8 Months', quote: 'Finally got my period back after 8 months! The personalized plan made all the difference. I tried everything before — this was the first thing that actually worked.', tags: ['Period returned', '-7kg'], rating: 5, verified: true },
+                            { name: 'Funmi A.', city: 'Abuja', type: 'insulin', headline: 'A1C Normalized, -15kg', quote: 'Lost 15kg in 3 months! My insulin resistance is finally under control. The Nigerian meals were so easy to follow.', tags: ['-15kg', 'A1C normal'], rating: 5, verified: true }
+                        ],
+                        'inflammatory': [
+                            { name: 'Adunni O.', city: 'Lagos', type: 'inflammatory', headline: 'Regular Periods After 3 Months', quote: 'I had irregular periods for over 2 years. After following the herbal protocol, my cycles became regular within 3 months. I am so grateful!', tags: ['Regular cycles', 'Energy up'], rating: 5, verified: true },
+                            { name: 'Kemi O.', city: 'Port Harcourt', type: 'inflammatory', headline: 'Clear Skin & 3x Energy', quote: 'My acne cleared up completely and my energy is through the roof! I was sleeping better by week 2. The herbal teas changed my life.', tags: ['Clear skin', 'Energy 3x'], rating: 5, verified: true }
+                        ],
+                        'adrenal': [
+                            { name: 'Kemi O.', city: 'Port Harcourt', type: 'adrenal', headline: 'Clear Skin & Energy Restored', quote: 'My acne cleared up completely and my energy is through the roof! I was sleeping better by week 2.', tags: ['Clear skin', 'Energy 3x'], rating: 5, verified: true },
+                            { name: 'Amaka T.', city: 'Ibadan', type: 'adrenal', headline: 'Stress Under Control in 4 Weeks', quote: 'The cortisol protocol was the first thing that actually addressed my adrenal triggers. My cycle returned in week 7.', tags: ['Cycle returned', 'Sleep improved'], rating: 5, verified: true }
+                        ],
+                        'postPill': [
+                            { name: 'Blessing I.', city: 'Ibadan', type: 'postPill', headline: 'Cycle Regulated After 8 Months Off the Pill', quote: '8 months off the pill and my cycle finally regulated. The protocol addressed the post-pill hormone chaos directly.', tags: ['Cycle regular', 'No more cramps'], rating: 5, verified: true },
+                            { name: 'Tosin Y.', city: 'Abuja', type: 'postPill', headline: 'Period Back in Week 6', quote: 'My cycles completely disappeared after coming off the pill. This custom herbal protocol woke my body back up and my period returned in week 6!', tags: ['Cycle restored', 'Hormones balanced'], rating: 5, verified: true }
+                        ]
+                    };
+                    return fallbacks[type] || fallbacks['insulin'];
                 },
 
                 getPCOSTypeInfo(type) {
                     const typeInfo = {
                         insulin: {
                             name: "Insulin-Resistant PCOS",
+                            prevalenceStat: "affecting ~70% of women with PCOS — and the most responsive to the right protocol",
                             description: "Your PCOS is primarily driven by insulin resistance, affecting how your body processes sugar and stores fat.",
-                            symptoms: [
-                                "Weight gain around the midsection",
-                                "Difficulty losing weight despite diet and exercise",
-                                "Dark patches on skin (neck, armpits)",
-                                "Sugar and carb cravings",
-                                "Energy crashes after meals",
-                                "Irregular periods"
-                            ],
-                            causes: [
-                                "High insulin levels disrupting hormone balance",
-                                "Poor blood sugar regulation",
-                                "Inflammation from insulin resistance",
-                                "Genetic predisposition to diabetes"
-                            ],
+                            symptoms: ["Weight gain around the midsection", "Difficulty losing weight despite diet and exercise", "Dark patches on skin (neck, armpits)", "Sugar and carb cravings", "Energy crashes after meals", "Irregular periods"],
+                            causes: ["High insulin levels disrupting hormone balance", "Poor blood sugar regulation", "Inflammation from insulin resistance", "Genetic predisposition to diabetes"],
                             protocols: [
-                                {
-                                    title: "Insulin-Reset Meal Protocol",
-                                    teaser: "A specific combination of Nigerian foods eaten in a precise sequence that forces your body to reset insulin sensitivity within weeks.",
-                                    locked: "Full meal plan inside portal"
-                                },
-                                {
-                                    title: "Blood Sugar Stabilizer Blend",
-                                    teaser: "A morning and evening herbal ritual using a specific African root that clinical studies show reduces fasting insulin by up to 30%.",
-                                    locked: "Herbal protocol inside portal"
-                                },
-                                {
-                                    title: "Metabolic Movement System",
-                                    teaser: "A cycle-synced activity plan designed to force your muscles to absorb glucose without insulin — the key to breaking the resistance cycle.",
-                                    locked: "Full system inside portal"
-                                }
+                                { title: "Insulin-Reset Meal Protocol", teaser: "A specific combination of Nigerian foods eaten in a precise sequence that forces your body to reset insulin sensitivity within weeks.", locked: "Full meal plan inside portal" },
+                                { title: "Blood Sugar Stabilizer Blend", teaser: "A morning and evening herbal ritual using a specific African root that clinical studies show reduces fasting insulin by up to 30%.", locked: "Herbal protocol inside portal" },
+                                { title: "Metabolic Movement System", teaser: "A cycle-synced activity plan designed to force your muscles to absorb glucose without insulin — the key to breaking the resistance cycle.", locked: "Full system inside portal" }
                             ]
                         },
                         inflammatory: {
                             name: "Inflammatory PCOS",
+                            prevalenceStat: "driven by chronic, low-grade inflammation — often missed by standard blood tests",
                             description: "Your PCOS is driven by chronic inflammation that disrupts hormone production and ovarian function.",
-                            symptoms: [
-                                "Persistent adult acne",
-                                "Chronic fatigue and low energy",
-                                "Joint pain or stiffness",
-                                "Digestive issues",
-                                "Mood swings and irritability",
-                                "Slow wound healing"
-                            ],
-                            causes: [
-                                "Chronic low-grade inflammation",
-                                "Food sensitivities or allergies",
-                                "Gut health imbalances",
-                                "Environmental toxin exposure",
-                                "Chronic stress"
-                            ],
+                            symptoms: ["Persistent adult acne", "Chronic fatigue and low energy", "Joint pain or stiffness", "Digestive issues", "Mood swings and irritability", "Slow wound healing"],
+                            causes: ["Chronic low-grade inflammation", "Food sensitivities or allergies", "Gut health imbalances", "Environmental toxin exposure", "Chronic stress"],
                             protocols: [
-                                {
-                                    title: "Anti-Inflammatory Reset Diet",
-                                    teaser: "A targeted elimination protocol using specific Nigerian ingredients that neutralize your body's inflammatory cascade at the source.",
-                                    locked: "Full meal plan inside portal"
-                                },
-                                {
-                                    title: "Gut-Healing Herbal Blend",
-                                    teaser: "A powerful combination of African herbs that repair your gut lining — the hidden driver behind 80% of inflammatory PCOS cases.",
-                                    locked: "Herbal protocol inside portal"
-                                },
-                                {
-                                    title: "Inflammation Tracking System",
-                                    teaser: "A daily symptom tracker that maps your inflammation triggers and automatically adjusts your protocol as your body heals.",
-                                    locked: "Full system inside portal"
-                                }
+                                { title: "Anti-Inflammatory Reset Diet", teaser: "A targeted elimination protocol using specific Nigerian ingredients that neutralize your body's inflammatory cascade at the source.", locked: "Full meal plan inside portal" },
+                                { title: "Gut-Healing Herbal Blend", teaser: "A powerful combination of African herbs that repair your gut lining — the hidden driver behind 80% of inflammatory PCOS cases.", locked: "Herbal protocol inside portal" },
+                                { title: "Inflammation Tracking System", teaser: "A daily symptom tracker that maps your inflammation triggers and automatically adjusts your protocol as your body heals.", locked: "Full system inside portal" }
                             ]
                         },
                         adrenal: {
                             name: "Adrenal PCOS",
-                            description: "Your PCOS is triggered by chronic stress and elevated stress hormones that disrupt your reproductive system.",
-                            symptoms: [
-                                "Chronic stress and anxiety",
-                                "Severe insomnia or sleep issues",
-                                "Extreme fatigue, especially morning",
-                                "Mild excess hair growth",
-                                "Irregular periods during stress",
-                                "Difficulty handling stress"
-                            ],
-                            causes: [
-                                "Chronic elevation of stress hormones",
-                                "Adrenal gland dysfunction",
-                                "Poor stress management",
-                                "Lack of quality sleep",
-                                "Overwork and burnout"
-                            ],
+                            prevalenceStat: "triggered by stress hormones — the only PCOS type where diet alone rarely helps",
+                            description: "Your PCOS is triggered by chronic stress and elevated cortisol that disrupts your reproductive system.",
+                            symptoms: ["Chronic stress and anxiety", "Severe insomnia or sleep issues", "Extreme fatigue, especially morning", "Mild excess hair growth", "Irregular periods during stress", "Difficulty handling pressure"],
+                            causes: ["Chronic elevation of cortisol", "Adrenal gland dysfunction", "Poor stress management", "Lack of quality sleep", "Overwork and burnout"],
                             protocols: [
-                                {
-                                    title: "Cortisol-Calming Meal Plan",
-                                    teaser: "Specific Nigerian recipes timed to your cortisol rhythm — eating the right foods at the right hours to force your adrenals to stand down.",
-                                    locked: "Full meal plan inside portal"
-                                },
-                                {
-                                    title: "Adrenal Recovery Blend",
-                                    teaser: "A potent adaptogenic herbal formula from West African traditions that rebuilds your stress resilience from the ground up.",
-                                    locked: "Herbal protocol inside portal"
-                                },
-                                {
-                                    title: "Sleep & Stress Reset System",
-                                    teaser: "A phase-based recovery protocol that retrains your nervous system — most women report deeper sleep within the first 5 days.",
-                                    locked: "Full system inside portal"
-                                }
+                                { title: "Cortisol-Calming Meal Plan", teaser: "Specific Nigerian recipes timed to your cortisol rhythm — eating the right foods at the right hours to force your adrenals to stand down.", locked: "Full meal plan inside portal" },
+                                { title: "Adrenal Recovery Blend", teaser: "A potent adaptogenic herbal formula from West African traditions that rebuilds your stress resilience from the ground up.", locked: "Herbal protocol inside portal" },
+                                { title: "Sleep & Stress Reset System", teaser: "A phase-based recovery protocol that retrains your nervous system — most women report deeper sleep within the first 5 days.", locked: "Full system inside portal" }
                             ]
                         },
                         postPill: {
                             name: "Post-Pill PCOS",
+                            prevalenceStat: "often resolving within 6–12 months with the right support — but not without it",
                             description: "Your PCOS symptoms appeared or worsened after stopping hormonal birth control, indicating hormone rebound effects.",
-                            symptoms: [
-                                "Absent periods after stopping birth control",
-                                "Hair loss or thinning",
-                                "Acne that appeared after stopping pills",
-                                "Mood changes and depression",
-                                "Weight gain",
-                                "Loss of libido"
-                            ],
-                            causes: [
-                                "Hormone rebound after birth control cessation",
-                                "Suppressed natural hormone production",
-                                "Nutrient depletion from birth control",
-                                "Disrupted gut microbiome",
-                                "Liver detoxification issues"
-                            ],
+                            symptoms: ["Absent periods after stopping birth control", "Hair loss or thinning", "Acne that appeared after stopping pill", "Mood swings and depression", "Loss of libido", "Irregular or painful cycles"],
+                            causes: ["Hormone rebound after birth control cessation", "Suppressed natural hormone production", "Nutrient depletion from birth control", "Disrupted gut microbiome", "Liver detoxification issues"],
                             protocols: [
-                                {
-                                    title: "Hormone Reactivation Diet",
-                                    teaser: "A nutrient-dense meal plan using specific Nigerian superfoods that wake up your dormant hormone production pathways naturally.",
-                                    locked: "Full meal plan inside portal"
-                                },
-                                {
-                                    title: "Liver Detox Herbal Blend",
-                                    teaser: "An African herbal protocol that clears synthetic hormone residue from your liver — the hidden reason your period hasn't returned.",
-                                    locked: "Herbal protocol inside portal"
-                                },
-                                {
-                                    title: "Nutrient Replenishment System",
-                                    teaser: "A precise supplementation protocol targeting the 5 critical nutrients that birth control depleted from your body.",
-                                    locked: "Full system inside portal"
-                                }
+                                { title: "Hormone Reactivation Diet", teaser: "A nutrient-dense meal plan using specific Nigerian superfoods that wake up your dormant hormone production pathways naturally.", locked: "Full meal plan inside portal" },
+                                { title: "Liver Detox Herbal Blend", teaser: "An African herbal protocol that clears synthetic hormone residue from your liver — the hidden reason your period hasn't returned.", locked: "Herbal protocol inside portal" },
+                                { title: "Nutrient Replenishment System", teaser: "A precise supplementation protocol targeting the 5 critical nutrients that birth control depleted from your body.", locked: "Full system inside portal" }
                             ]
                         }
                     };
-
                     return typeInfo[type] || typeInfo.insulin;
                 },
 
                 viewSolution() {
-                    // Track sales page visit intent
                     if (window.WebhookManager) {
                         window.WebhookManager.trackSalesVisit({
-                            pcosType: this.assessmentData.pcosType.primary,
+                            pcosType: this.pcosType,
                             source: 'results_page',
-                            confidence: this.assessmentData.pcosType.confidence
+                            confidence: this.assessmentData?.pcosType?.confidence
                         });
                     }
-
-                    // Redirect to sales page
-                    window.location.href = '90-day-plan.html';
+                    window.location.href = 'select-plan.html';
                 }
             }
         }

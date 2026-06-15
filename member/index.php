@@ -16,6 +16,15 @@ if (!$auth->isLoggedIn()) {
 }
 
 $currentUser = $auth->getCurrentUser();
+
+// Load Conditions Registry
+$registry = require __DIR__ . '/config/conditions.php';
+$userCondition = $currentUser['condition_name'] ?? 'pcos';
+if (!isset($registry[$userCondition])) {
+    $userCondition = 'pcos'; // fallback
+}
+$conditionConfig = $registry[$userCondition];
+$terms = $conditionConfig['terminology'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +32,7 @@ $currentUser = $auth->getCurrentUser();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Area | OJG Herbal</title>
+    <title>Member Area | <?php echo htmlspecialchars($conditionConfig['brand_name']); ?> by OJG</title>
     
     <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>

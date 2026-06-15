@@ -4,10 +4,11 @@ header('Content-Type: application/json');
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../classes/Database.php';
 
-function setSecureCorsHeaders() {
+function setSecureCorsHeaders()
+{
     $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
     $allowedOrigins = defined('CORS_ALLOWED_ORIGINS') ? CORS_ALLOWED_ORIGINS : [];
-    
+
     if (in_array($origin, $allowedOrigins)) {
         header('Access-Control-Allow-Origin: ' . $origin);
         header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -25,97 +26,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-function validateCsrfToken($token) {
+function validateCsrfToken($token)
+{
     // Allow bypass for local development if defined
     if (defined('APP_ENV') && APP_ENV === 'development') {
         return true;
     }
-    
+
     if (empty($token)) {
         return false;
     }
     return hash_equals($_SESSION[CSRF_TOKEN_NAME] ?? '', $token);
 }
 
-function sanitizeInput($data) {
+function sanitizeInput($data)
+{
     if (is_array($data)) {
         return array_map('sanitizeInput', $data);
     }
     return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
-function validateEmail($email) {
+function validateEmail($email)
+{
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-function checkRateLimit($ip, $limit = 100, $window = 3600) {
-    try {
-        $db = Database::getInstance();
-        
-        if ($db->isFileStorage()) {
-            return true;
-        }
-        
-        $pdo = $db->getConnection();
-        if (!$pdo) {
-            return true;
-        }
-
-        $isMySQL = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql';
-        
-        if ($isMySQL) {
-            $tableExists = $db->fetch("SELECT TABLE_NAME as name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'rate_limits'");
-        } else {
-            $tableExists = $db->fetch("SELECT name FROM sqlite_master WHERE type='table' AND name='rate_limits'");
-        }
-        
-        if (!$tableExists) {
-            if ($isMySQL) {
-                $db->exec("CREATE TABLE IF NOT EXISTS rate_limits (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    ip_address VARCHAR(45) NOT NULL,
-                    request_count INT DEFAULT 0,
-                    window_start INT NOT NULL,
-                    INDEX idx_ip (ip_address),
-                    INDEX idx_window (window_start)
-                )");
-            } else {
-                $db->exec("CREATE TABLE IF NOT EXISTS rate_limits (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    ip_address TEXT NOT NULL,
-                    request_count INTEGER DEFAULT 0,
-                    window_start INTEGER NOT NULL
-                )");
-                $db->exec("CREATE INDEX IF NOT EXISTS idx_ip ON rate_limits(ip_address)");
-                $db->exec("CREATE INDEX IF NOT EXISTS idx_window ON rate_limits(window_start)");
-            }
-        }
-        
-        $now = time();
-        $windowStart = $now - $window;
-        
-        $existing = $db->fetch("SELECT * FROM rate_limits WHERE ip_address = ? AND window_start > ?", 
-            [$ip, $windowStart]);
-        
-        if ($existing) {
-            if ($existing['request_count'] >= $limit) {
-                return false;
-            }
-            $db->exec("UPDATE rate_limits SET request_count = request_count + 1 WHERE id = ?", [$existing['id']]);
-        } else {
-            $db->insert('rate_limits', [
-                'ip_address' => $ip,
-                'request_count' => 1,
-                'window_start' => $now
-            ]);
-        }
-        
-        return true;
-    } catch (Exception $e) {
-        error_log("Rate limiting error: " . $e->getMessage());
-        return true;
-    }
-}
+// checkRateLimit function removed in favor of RateLimiter class
 
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
@@ -134,7 +71,10 @@ if (!validateCsrfToken($clientToken)) {
 }
 
 $clientIp = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-if (!checkRateLimit($clientIp, API_RATE_LIMIT ?? 100, 3600)) {
+require_once __DIR__ . '/../classes/RateLimiter.php';
+$rateLimiter = new RateLimiter();
+$limit = defined('API_RATE_LIMIT') ? API_RATE_LIMIT : 60;
+if (!$rateLimiter->checkApiRateLimit($clientIp, $limit)) {
     http_response_code(429);
     echo json_encode(['error' => 'Rate limit exceeded. Please try again later.']);
     exit();
@@ -183,11 +123,11 @@ function handleAssessment($data, $db)
     }
 
     $assessmentType = sanitizeInput($data['assessment_type'] ?? 'general');
-    $allowedTypes = ['general', 'pcos', 'weight', 'acne'];
+    $allowedTypes = ['general', 'pcos', 'weight', 'acne', 'mens', 'egbon'];
     if (!in_array($assessmentType, $allowedTypes)) {
         $assessmentType = 'general';
     }
-    
+
     $name = sanitizeInput($data['name'] ?? explode('@', $email)[0]);
     $phone = sanitizeInput($data['phone'] ?? '');
 
@@ -364,14 +304,14 @@ function handleTracking($data, $db)
         if ($emailInput && !validateEmail($emailInput)) {
             $emailInput = null;
         }
-        
-        $allowedFunnels = ['pcos', 'weight', 'acne', 'sales', 'nurture'];
+
+        $allowedFunnels = ['pcos', 'weight', 'acne', 'mens', 'egbon', 'sales', 'nurture'];
         $funnelName = sanitizeInput($data['funnel_name'] ?? 'unknown');
         if (!in_array($funnelName, $allowedFunnels)) {
             $funnelName = 'unknown';
         }
-        
-        $allowedEvents = ['view', 'click', 'submit', 'purchase', 'exit'];
+
+        $allowedEvents = ['view', 'assessment_start', 'assessment_complete', 'results_view', 'plan_select', 'checkout_init', 'purchase', 'click', 'submit', 'exit'];
         $eventType = sanitizeInput($data['event_type'] ?? 'view');
         if (!in_array($eventType, $allowedEvents)) {
             $eventType = 'view';

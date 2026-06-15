@@ -11,6 +11,16 @@ class SqliteDB
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    /**
+     * Public accessor for the underlying PDO connection.
+     * Used by A/B engine repos (ExperimentRepository, Bandit) that need
+     * direct PDO access while still sharing the same SqliteDB connection.
+     */
+    public function getPdo(): PDO
+    {
+        return $this->pdo;
+    }
+
     // User methods
     public function createUser($data)
     {

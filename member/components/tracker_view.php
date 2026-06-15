@@ -8,7 +8,7 @@
         <div class="space-y-4 max-w-2xl">
             <h2 class="text-4xl font-serif text-sage-600">Vitals Sync</h2>
             <p class="text-sage-400 text-sm leading-relaxed">
-                Connect your body's biometric data to your PCOS protocol for a truly tailored experience.
+                Connect your body's biometric data to your <?php echo htmlspecialchars($terms['condition_name']); ?> protocol for a truly tailored experience.
             </p>
         </div>
         <div class="flex gap-4">
@@ -141,7 +141,7 @@
                 </div>
                 <h4 class="text-xl font-serif text-sage-600 mb-4">Why track vitals?</h4>
                 <p class="text-sage-400 text-xs leading-relaxed max-w-sm">
-                    Biometric data helps us adjust your protocol based on actual physiological responses. Tracking your weight and BMI provides insights into metabolic health markers relevant to PCOS management.
+                    Biometric data helps us adjust your protocol based on actual physiological responses. Tracking your weight and BMI provides insights into health markers relevant to <?php echo htmlspecialchars($terms['condition_name']); ?> management.
                 </p>
             </div>
         </div>

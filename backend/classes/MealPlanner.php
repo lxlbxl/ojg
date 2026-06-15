@@ -40,7 +40,7 @@ class MealPlanner
     {
         $lastPeriod = new DateTime($lastPeriodDate ?? 'now');
         $now = new DateTime($targetDate ?? 'now');
-        $dayOfCycle = ($now->diff($lastPeriod)->days % $cycleLength) + 1;
+        $dayOfCycle = $now->diff($lastPeriod)->days % $cycleLength + 1;
 
         if ($dayOfCycle <= 5)
             return ['phase' => 'Menstrual', 'day' => $dayOfCycle];
@@ -103,116 +103,63 @@ class MealPlanner
                 'DATE' => $date
             ];
 
-            // Specific context for PCOS
-            if ($conditionType === 'pcos') {
-                $cycleData = $this->calculateCyclePhase($profile['last_period_date'] ?? 'now', $profile['cycle_length'] ?? 28);
-                $vars['CYCLE_PHASE'] = $cycleData['phase'];
-                $vars['PCOS_TYPE'] = !empty($profile['pcos_type']) ? $profile['pcos_type'] : 'General';
+            // Condition-specific context
+            $regionProfile = [];
+            try {
+                if (class_exists('RegionProfile')) {
+                    $regionResolver = new RegionProfile();
+                    $regionProfile  = $regionResolver->resolveForUser($userId);
+                }
+            } catch (Exception $re) {
+                // Non-fatal — fall back to defaults
             }
+
+            $country = $regionProfile['country'] ?? 'Nigeria';
+            $staplefoods = !empty($regionProfile['staple_foods'])
+                ? implode(', ', array_slice($regionProfile['staple_foods'], 0, 6))
+                : 'rice, beans, yam, plantain, fish, leafy greens';
+            $sourcing = $regionProfile['where_to_source'] ?? 'local markets';
+            $units    = $regionProfile['measurement_system'] ?? 'metric';
+
+            if ($conditionType === 'pcos') {
+                $cycleData = $this->calculateCyclePhase(
+                    $profile['last_period_date'] ?? 'now',
+                    $profile['cycle_length'] ?? 28
+                );
+                $vars['CYCLE_PHASE'] = $cycleData['phase'];
+                $vars['PCOS_TYPE']   = !empty($profile['pcos_type']) ? $profile['pcos_type'] : 'General';
+            }
+
+            // ── Module manifest: which blocks to generate per condition ──────
+            // Acne does NOT get a workout block.
+            $includeMovement = !in_array($conditionType, ['acne']);
+            $includeSkincareRoutine = in_array($conditionType, ['acne']);
+            $includeFruitRitual = in_array($conditionType, ['pcos']);
+            $includeHerbalTea   = in_array($conditionType, ['pcos', 'acne', 'weight']);
 
             // 3. Prepare Prompt
             $promptKey = $conditionType . '_meal_planner';
 
             // Try to get specific prompt, fallback to pcos_meal_planner
-            $systemPrompt = $this->db->fetch("SELECT prompt_text FROM system_prompts WHERE prompt_key = ?", [$promptKey]);
-            if (!$systemPrompt) {
+            $systemPromptRow = $this->db->fetch("SELECT prompt_text FROM system_prompts WHERE prompt_key = ?", [$promptKey]);
+            if (!$systemPromptRow) {
                 $promptKey = 'pcos_meal_planner';
             }
 
-            // Prepare personal context string
-            $contextStr = "Profile Context:\n";
-            $contextStr .= "- Condition: " . ($vars['CONDITION_TYPE'] ?? 'General') . "\n";
-            if (isset($vars['PCOS_TYPE']))
-                $contextStr .= "- PCOS Type: " . $vars['PCOS_TYPE'] . "\n";
-            if (isset($vars['CYCLE_PHASE']))
-                $contextStr .= "- Cycle Phase: " . $vars['CYCLE_PHASE'] . "\n";
-            $contextStr .= "- Allergies: " . ($vars['ALLERGIES'] ?? 'None') . "\n";
-            $contextStr .= "- Preferences: " . ($vars['PREFERENCES'] ?? 'None') . "\n";
-            $contextStr .= "- Program Week: " . ($vars['PROGRAM_WEEK'] ?? '1') . "\n";
-            $contextStr .= "- Location/Cuisine: Nigerian (unless preferences state otherwise)\n";
-
-            $pcosTypeStr = $vars['PCOS_TYPE'] ?? 'General';
-            $cyclePhaseStr = $vars['CYCLE_PHASE'] ?? 'Follicular';
-            $cycleDayStr = isset($cycleData['day']) ? $cycleData['day'] . "/28" : "Day 1";
-
-            $userPrompt = "
-            Generate a personalized daily PCOS meal plan for this user:
-            - Profile: {$pcosTypeStr} Type PCOS
-            - Cycle Phase: {$cyclePhaseStr} ({$cycleDayStr})
-            - Goal: Support hormonal balance
-            
-            CRITICAL REQUIREMENTS:
-            1. MEALS: All meals MUST be Nigerian/West African dishes (e.g., Moi Moi, Egusi, Jollof with brown rice, Pepper Soup).
-            2. FRUIT PROTOCOL: Instead of supplements, recommend ONE specific Nigerian fruit for the day (e.g., Garden Egg, Udara, African Star Apple, Papaya, Guava).
-               - Include 'why_it_works' explaining the hormonal benefit.
-               - Include nutritional benefits (vitamins/minerals).
-            3. HERBAL TEA: You must include 2 herbal tea recommendations (Morning & Evening).
-            4. MOVEMENT: Suggest a walking-based routine. NO YOGA. Include step counts (min 6000 steps).
-            5. TIME RANGES: You MUST provide a 'time_start' and 'time_end' for EVERY meal and activity.
-               Example: Breakfast 07:00 - 08:00.
-
-            Required JSON Structure:
-            {
-              \"meals\": {
-                \"breakfast\": { 
-                  \"name\": \"Dishe Name\", 
-                  \"description\": \"Short desc\", 
-                  \"calories\": 500, 
-                  \"time_start\": \"06:30\",
-                  \"time_end\": \"08:00\",
-                  \"ingredients\": [{\"item\": \"Name\", \"quantity\": \"Qty\"}], 
-                  \"instructions\": [\"Step 1\", \"Step 2\"] 
-                },
-                \"lunch\": { ...same structure with time_start: \"12:30\", time_end: \"14:00\"... },
-                \"dinner\": { ...same structure with time_start: \"18:30\", \"time_end\": \"20:00\"... },
-                \"snack\": { 
-                  \"name\": \"Healthy Nigerian snack\", 
-                  \"description\": \"...\", 
-                  \"time_start\": \"15:30\", 
-                  \"time_end\": \"16:30\" 
-                }
-              },
-              \"fruit_ritual\": {
-                \"name\": \"Garden Egg (Solanum aethiopicum)\",
-                \"portion\": \"2 medium fruits\",
-                \"benefits\": \"Rich in Potassium, Fiber, and B-Vitamins\",
-                \"why_it_works\": \"Garden egg is excellent for weight management and sugar regulation due to its high fiber and low glycemic index.\",
-                \"time_start\": \"10:00\",
-                \"time_end\": \"11:00\"
-              },
-              \"herbal_tea\": {
-                \"morning\": {
-                  \"name\": \"PCOS Morning Harmony Blend or Morning Detox Green Blend\",
-                  \"time_start\": \"10:00\",
-                  \"time_end\": \"10:30\",
-                  \"benefits\": \"Brief benefit description\",
-                  \"product_key\": \"pcos_morning_blend\"
-                },
-                \"evening\": {
-                  \"name\": \"PCOS Evening Calm Blend\",
-                  \"time_start\": \"20:30\",
-                  \"time_end\": \"21:00\",
-                  \"benefits\": \"Brief benefit description\",
-                  \"product_key\": \"pcos_evening_blend\"
-                }
-              },
-              \"workout\": {
-                \"name\": \"Morning and Evening Walk\",
-                \"description\": \"Brisk walking routine for hormonal balance\",
-                \"intensity\": \"Moderate\",
-                \"duration\": \"30-45 mins total\",
-                \"time_start\": \"06:00\",
-                \"time_end\": \"06:30\",
-                \"steps_target\": 6000,
-                \"activities\": [
-                  {\"name\": \"Morning Walk\", \"steps\": 3000, \"duration\": \"20 mins\", \"time\": \"06:00 - 06:30\"},
-                  {\"name\": \"Evening Walk\", \"steps\": 3000, \"duration\": \"20 mins\", \"time\": \"18:00 - 18:30\"}
-                ]
-              },
-              \"shopping_list\": [{ \"item\": \"Nigerian Ingredient\", \"quantity\": \"Qty\", \"category\": \"Produce/Meat/Pantry\" }],
-              \"hydration_goal\": \"8 glasses (2 liters)\",
-              \"daily_quote\": \"Motivational quote for the day\"
-            }";
+            // Build condition-specific user prompt
+            $userPrompt = $this->buildMealPlannerPrompt(
+                $conditionType,
+                $vars,
+                $country,
+                $staplefoods,
+                $sourcing,
+                $units,
+                $includeMovement,
+                $includeSkincareRoutine,
+                $includeFruitRitual,
+                $includeHerbalTea,
+                $regionProfile
+            );
 
 
             $maxRetries = 1;
@@ -228,6 +175,8 @@ class MealPlanner
                 }
 
                 if ($planData && isset($planData['meals']) && !empty($planData['meals'])) {
+                    // Enforce module manifest: strip forbidden blocks per condition
+                    $planData = $this->enforceManifest($planData, $conditionType);
                     $planData['generated_at'] = date('Y-m-d H:i:s');
                     $planData['retries'] = $attempt;
                     break;
@@ -294,6 +243,137 @@ class MealPlanner
             return trim($matches[1]);
         }
         return $text;
+    }
+
+    /**
+     * Strip blocks that are not in the condition's module manifest.
+     * Acne must never receive a workout block; other conditions get appropriate blocks.
+     */
+    private function enforceManifest(array $planData, string $conditionType): array
+    {
+        $noMovement    = ['acne'];
+        $noSkincare    = ['pcos', 'weight', 'mens'];
+        $noCycleSync   = ['acne', 'weight', 'mens'];
+        $noFruitRitual = ['acne', 'weight', 'mens'];
+
+        if (in_array($conditionType, $noMovement)) {
+            unset($planData['workout'], $planData['movement'], $planData['exercise']);
+        }
+        if (in_array($conditionType, $noSkincare)) {
+            unset($planData['skincare_routine'], $planData['am_routine'], $planData['pm_routine']);
+        }
+        if (in_array($conditionType, $noCycleSync)) {
+            unset($planData['cycle_sync'], $planData['cycle_phase_guidance']);
+        }
+        if (in_array($conditionType, $noFruitRitual)) {
+            unset($planData['fruit_ritual']);
+        }
+
+        return $planData;
+    }
+
+    /**
+     * Build a condition-aware, region-aware daily meal plan prompt.
+     * Movement block is only requested when $includeMovement is true.
+     */
+    private function buildMealPlannerPrompt(
+        string $conditionType,
+        array  $vars,
+        string $country,
+        string $staplefoods,
+        string $sourcing,
+        string $units,
+        bool   $includeMovement,
+        bool   $includeSkincareRoutine,
+        bool   $includeFruitRitual,
+        bool   $includeHerbalTea,
+        array  $regionProfile
+    ): string {
+        $condLabel  = strtoupper($conditionType);
+        $weekLabel  = $vars['PROGRAM_WEEK'] ?? 'Week 1';
+        $date       = $vars['DATE'] ?? date('Y-m-d');
+        $allergies  = $vars['ALLERGIES'] ?? 'None';
+        $prefs      = $vars['PREFERENCES'] ?? 'None';
+
+        // Condition-specific clinical context line
+        $clinicalCtx = match ($conditionType) {
+            'pcos'   => "PCOS Type: {$vars['PCOS_TYPE']}. Cycle Phase: " . ($vars['CYCLE_PHASE'] ?? 'Follicular') . ". Prioritise blood-sugar stability and hormone-supporting nutrients.",
+            'acne'   => "Skin goal: anti-inflammatory, low-glycaemic, dairy-free meals. Avoid high-GI foods, dairy, and refined sugar. Prioritise omega-3 and zinc.",
+            'weight' => "Goal: sustainable calorie-controlled meals with protein-first structure. Each meal must have minimum 25g protein. Low glycaemic index throughout.",
+            'mens'   => "Goal: testosterone-supporting nutrition. Protein minimum 30g per meal. Include zinc-rich and omega-3-rich foods. Support recovery and strength.",
+            default  => "Goal: general health and hormonal balance.",
+        };
+
+        // Movement requirement line (manifest-gated)
+        $movementSection = '';
+        if ($includeMovement) {
+            $movementSection = match ($conditionType) {
+                'pcos'   => '4. MOVEMENT: Include a walking-based routine (NO intense HIIT). Step target minimum 6000/day. Time ranges required.',
+                'weight' => '4. MOVEMENT: Include 30-minute strength or cardio session appropriate for Week ' . ($vars['PROGRAM_WEEK'] ?? '1') . '. Progressive — not the same every day.',
+                'mens'   => '4. MOVEMENT: Include compound-movement strength session or conditioning. Note recovery priority.',
+                default  => '4. MOVEMENT: Include appropriate movement for this condition.',
+            };
+        } else {
+            // Acne: explicitly NO movement block
+            $movementSection = '4. MOVEMENT: DO NOT include any workout or exercise block. This condition does not use a movement module.';
+        }
+
+        $fruitSection   = $includeFruitRitual
+            ? "5. FRUIT RITUAL: Recommend ONE locally-available fruit for the day with hormonal benefit and 'why_it_works' field.\n"
+            : '';
+        $herbalSection  = $includeHerbalTea
+            ? "6. HERBAL TEA: Include morning and evening herbal tea recommendations available in {$country}.\n"
+            : '';
+        $skincareSection = $includeSkincareRoutine
+            ? "7. SKINCARE NOTE: Briefly note if any foods today specifically support skin clarity.\n"
+            : '';
+
+        // Build the JSON schema requirement based on manifest
+        $workoutSchema  = $includeMovement ? '"workout": { "name": "...", "description": "...", "intensity": "...", "duration": "...", "time_start": "...", "time_end": "...", "activities": [] },' : '';
+        $fruitSchema    = $includeFruitRitual ? '"fruit_ritual": { "name": "...", "portion": "...", "benefits": "...", "why_it_works": "...", "time_start": "...", "time_end": "..." },' : '';
+        $herbalSchema   = $includeHerbalTea
+            ? '"herbal_tea": { "morning": { "name": "...", "time_start": "...", "time_end": "...", "benefits": "...", "product_key": "..." }, "evening": { "name": "...", "time_start": "...", "time_end": "...", "benefits": "...", "product_key": "..." } },'
+            : '';
+
+        return "Generate a personalised daily {$condLabel} meal plan for this user.
+
+PROFILE:
+- Condition: {$condLabel}
+- {$clinicalCtx}
+- Allergies/Intolerances: {$allergies}
+- Dietary Preferences: {$prefs}
+- Program: {$weekLabel} | Date: {$date}
+
+LOCALISATION (MANDATORY):
+- Country: {$country}
+- All meals MUST use foods available and culturally familiar in {$country}.
+- Staple ingredients available: {$staplefoods}
+- Where to source: {$sourcing}
+- Units: {$units} system
+
+CRITICAL REQUIREMENTS:
+1. MEALS: All meals must be locally appropriate for {$country} — real dishes, not generic descriptions.
+2. TIME RANGES: Provide 'time_start' and 'time_end' for EVERY meal and activity.
+3. SHOPPING LIST: Derive from today's meals. Group by category. Note where to buy in {$country}.
+{$movementSection}
+{$fruitSection}{$herbalSection}{$skincareSection}
+IMPORTANT: Output ONLY valid JSON. No text before or after.
+
+Required JSON structure:
+{
+  \"meals\": {
+    \"breakfast\": { \"name\": \"...\", \"description\": \"...\", \"calories\": 0, \"time_start\": \"07:00\", \"time_end\": \"08:00\", \"ingredients\": [{\"item\": \"...\", \"quantity\": \"...\"}], \"instructions\": [\"Step 1\"] },
+    \"lunch\":     { \"name\": \"...\", \"description\": \"...\", \"calories\": 0, \"time_start\": \"12:30\", \"time_end\": \"14:00\", \"ingredients\": [], \"instructions\": [] },
+    \"dinner\":    { \"name\": \"...\", \"description\": \"...\", \"calories\": 0, \"time_start\": \"18:30\", \"time_end\": \"20:00\", \"ingredients\": [], \"instructions\": [] },
+    \"snack\":     { \"name\": \"...\", \"description\": \"...\", \"time_start\": \"15:30\", \"time_end\": \"16:30\" }
+  },
+  {$fruitSchema}
+  {$herbalSchema}
+  {$workoutSchema}
+  \"shopping_list\": [{ \"item\": \"...\", \"quantity\": \"...\", \"category\": \"Produce/Meat/Pantry\", \"where_to_buy\": \"...\" }],
+  \"hydration_goal\": \"2 litres (8 glasses)\",
+  \"daily_quote\": \"Motivational quote relevant to {$condLabel} journey\"
+}";
     }
 
     public function getShoppingList($userId, $startDate, $endDate)

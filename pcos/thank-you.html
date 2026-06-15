@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Welcome to Your PCOS Transformation Journey!</title>
     <meta name="description"
@@ -359,13 +360,13 @@
                         class="w-16 h-16 bg-forest-100 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl font-serif font-bold text-forest-800 shadow-sm group-hover:bg-forest-900 group-hover:text-sand transition-colors">
                         2
                     </div>
-                    <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">WhatsApp Expert Access</h3>
+                    <h3 class="text-xl font-serif font-bold text-forest-900 mb-3">Premium WhatsApp Welcome</h3>
                     <p class="text-gray-500 font-light text-sm mb-6 leading-relaxed">
-                        Direct 1-on-1 access to our PCOS specialists for questions, guidance, and daily motivation.
+                        Message our concierge team to set up your profile and get priority support from your dedicated specialist.
                     </p>
                     <button @click="contactWhatsApp()"
                         class="bg-forest-600 hover:bg-forest-700 text-sand px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-md active:scale-95">
-                        Consult an Expert →
+                        Message Concierge →
                     </button>
                 </div>
 
@@ -571,10 +572,7 @@
                 },
 
                 getGuarantee(plan) {
-                    if (plan && plan.includes('90')) {
-                        return '90-Day';
-                    }
-                    return '30-Day';
+                    return '90-Day';
                 },
 
                 // Load any existing credentials from localStorage

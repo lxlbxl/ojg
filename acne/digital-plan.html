@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acne Free Digital Routine - ₦5,000</title>
+    <title>Acne Free Digital Routine | OJG Herbal</title>
     <meta name="description" content="Expert Digital Skincare Routine to clear acne properly.">
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -205,13 +205,98 @@
                                 placeholder="e.g., 08012345678">
                         </div>
 
+                        <!-- Order Bump (CRO Audit P0.3a) -->
+                        <div data-exp="order-bump"
+                            class="bg-terracotta-500/10 border-2 border-terracotta-500/50 rounded-xl p-5 flex items-start gap-4 cursor-pointer hover:bg-terracotta-500/15 transition-colors"
+                            @click="bumpAdded = !bumpAdded">
+                            <input type="checkbox" x-model="bumpAdded" id="bump" name="bump"
+                                class="mt-1 w-5 h-5 accent-terracotta-500 cursor-pointer">
+                            <label for="bump" class="flex-1 cursor-pointer">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span
+                                        class="text-xs font-bold uppercase tracking-widest text-terracotta-500">Special
+                                        Offer</span>
+                                    <span
+                                        class="bg-terracotta-500 text-black text-[10px] font-bold px-2 py-0.5 rounded-full">RECOMMENDED</span>
+                                </div>
+                                <div class="text-white font-bold mb-1">Add 7-Day Clear-Skin Meal Plan</div>
+                                <div class="text-sm text-gray-400">Custom recipes and grocery list designed to reduce
+                                    inflammation and accelerate your results.</div>
+                                <div class="text-terracotta-500 font-bold mt-2">+ ₦<span
+                                        x-text="bumpPrice.toLocaleString()"></span></div>
+                            </label>
+                        </div>
+
                         <button type="submit" :disabled="isProcessing"
                             :class="isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'btn-grad'"
                             class="w-full font-bold text-xl py-4 rounded-full transition-all duration-300 shadow-lg">
-                            <span x-show="!isProcessing">Complete Purchase - ₦5,000 →</span>
+                            <span x-show="!isProcessing">Complete Purchase
+                                - ₦<span x-text="(5000 + (bumpAdded ? bumpPrice : 0)).toLocaleString()"></span>
+                                →</span>
                             <span x-show="isProcessing">Processing...</span>
                         </button>
                     </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Trust Strip (CRO Audit P0.3b) -->
+        <section data-exp="payment-trust" class="mb-12">
+            <div class="max-w-5xl mx-auto bg-sage-100/60 rounded-2xl p-6 md:p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="text-3xl">🔒</div>
+                        <div class="text-sm font-bold text-white">SSL Secure</div>
+                        <div class="text-xs text-gray-300">256-bit encryption</div>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="text-3xl">💳</div>
+                        <div class="text-sm font-bold text-white">All Cards</div>
+                        <div class="text-xs text-gray-300">Verve, Visa, Mastercard</div>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="text-3xl">⚡</div>
+                        <div class="text-sm font-bold text-white">Instant Access</div>
+                        <div class="text-xs text-gray-300">Via Flutterwave</div>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="text-3xl">🛡️</div>
+                        <div class="text-sm font-bold text-white">30-Day Refund</div>
+                        <div class="text-xs text-gray-300">No questions asked</div>
+                    </div>
+                </div>
+                <div class="text-center mt-6 text-xs text-gray-300">
+                    Questions? Email <a href="mailto:support@forestandsage.co"
+                        class="text-emerald-400 hover:underline">support@forestandsage.co</a>
+                </div>
+                <div class="text-center mt-2 text-xs text-gray-400">
+                    Join 5,000+ women who cleared their acne with our protocol.
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Guarantee (CRO Audit P0.3c) -->
+        <section data-exp="pricing-guarantee" class="mb-12">
+            <div class="max-w-3xl mx-auto bg-white/5 border border-white/10 rounded-2xl p-8 text-center">
+                <div class="text-5xl mb-4">🛡️</div>
+                <h3 class="text-3xl font-serif font-medium text-white mb-4">30-Day Money-Back Guarantee</h3>
+                <p class="text-gray-300 leading-relaxed mb-6">
+                    Try the guide for 30 full days. If you don’t see measurable improvement in your skin, email us for
+                    a <strong>full refund \u2014 no questions asked</strong>. The risk is entirely on us.
+                </p>
+                <div class="grid md:grid-cols-3 gap-4 text-left">
+                    <div class="flex items-start gap-2 text-sm text-gray-300">
+                        <span class="text-emerald-400 mt-0.5">✓</span>
+                        <span>Full refund within 30 days</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-sm text-gray-300">
+                        <span class="text-emerald-400 mt-0.5">✓</span>
+                        <span>No awkward questions</span>
+                    </div>
+                    <div class="flex items-start gap-2 text-sm text-gray-300">
+                        <span class="text-emerald-400 mt-0.5">✓</span>
+                        <span>Keep any bonus materials</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -226,8 +311,12 @@
                     email: '',
                     phone: ''
                 },
+                bumpAdded: true,
+                bumpPrice: 0,
 
                 init() {
+                    // Order-bump default: 20% of base ₦5,000 = ₦1,000
+                    this.bumpPrice = Math.round(5000 * 0.20);
                     this.prefillCustomerData();
                     this.trackPageView();
                 },
@@ -273,13 +362,21 @@
 
                         this.customerData.phone = window.FlutterwaveIntegration.formatNigerianPhone(this.customerData.phone);
 
+                        const baseAmount = 5000;
+                        const totalAmount = baseAmount + (this.bumpAdded ? this.bumpPrice : 0);
+
                         const paymentData = {
                             plan: 'digital',
-                            amount: 5000,
+                            amount: totalAmount,
                             title: 'Acne Free Digital Routine',
                             description: 'Expert Digital Skincare Routine',
                             customer: this.customerData,
-                            category: 'acne'
+                            category: 'acne',
+                            metadata: {
+                                order_bump_added: this.bumpAdded,
+                                order_bump_price: this.bumpAdded ? this.bumpPrice : 0,
+                                base_amount: baseAmount
+                            }
                         };
 
                         await window.FlutterwaveIntegration.processPayment(paymentData);

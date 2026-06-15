@@ -42,6 +42,7 @@ class FunnelDiscovery
     public function scanForFunnels()
     {
         $discoveredFunnels = [];
+        $structuralVariants = [];
 
         // Get all directories in root
         $items = scandir($this->rootPath);
@@ -55,15 +56,89 @@ class FunnelDiscovery
             $fullPath = $this->rootPath . '/' . $item;
 
             // Check if it's a directory and not excluded
-            if (is_dir($fullPath) && !in_array($item, $this->excludedDirs)) {
+            if (!is_dir($fullPath) || in_array($item, $this->excludedDirs)) {
+                continue;
+            }
+
+            // Structural variant? {funnel}__{slug}/ sibling directory
+            $variant = $this->parseStructuralVariant($item);
+            if ($variant !== null) {
                 if ($this->isFunnel($fullPath)) {
-                    $funnelData = $this->analyzeFunnel($item, $fullPath);
-                    $discoveredFunnels[] = $funnelData;
+                    $variantData = $this->analyzeStructuralVariant($item, $fullPath, $variant['base'], $variant['slug']);
+                    $structuralVariants[] = $variantData;
                 }
+                continue;
+            }
+
+            // Regular funnel
+            if ($this->isFunnel($fullPath)) {
+                $funnelData = $this->analyzeFunnel($item, $fullPath);
+                $discoveredFunnels[] = $funnelData;
             }
         }
 
+        // Attach structural variants to their base funnels
+        foreach ($structuralVariants as $variant) {
+            foreach ($discoveredFunnels as &$base) {
+                if ($base['id'] === $variant['base_funnel_id']) {
+                    if (!isset($base['structural_variants'])) {
+                        $base['structural_variants'] = [];
+                    }
+                    $base['structural_variants'][] = $variant;
+                    break;
+                }
+            }
+            unset($base);
+        }
+
         return $discoveredFunnels;
+    }
+
+    /**
+     * Parse a directory name for the {funnel}__{slug} structural-variant pattern.
+     * Returns ['base' => 'pcos', 'slug' => 'b'] or null.
+     */
+    public function parseStructuralVariant($dirName)
+    {
+        if (strpos($dirName, '__') === false) {
+            return null;
+        }
+        $parts = explode('__', $dirName, 2);
+        if (count($parts) !== 2) {
+            return null;
+        }
+        [$base, $slug] = $parts;
+        $base = trim($base);
+        $slug = trim($slug);
+        if ($base === '' || $slug === '') {
+            return null;
+        }
+        // Both must be URL-safe slugs
+        if (!preg_match('/^[a-z0-9_-]+$/', $base) || !preg_match('/^[a-z0-9_-]+$/', $slug)) {
+            return null;
+        }
+        return ['base' => $base, 'slug' => $slug];
+    }
+
+    /**
+     * Build metadata for a structural variant directory.
+     */
+    private function analyzeStructuralVariant($dirName, $path, $baseFunnelId, $slug)
+    {
+        $files = scandir($path);
+        $variantId = 'structural_' . $baseFunnelId . '_' . $slug;
+        return [
+            'id' => $variantId,
+            'directory' => $dirName,
+            'base_funnel_id' => $this->normalizeFunnelId($baseFunnelId),
+            'slug' => $slug,
+            'experiment_kind' => 'structural',
+            'has_assessment' => in_array('assessment.html', $files),
+            'has_results' => in_array('results.html', $files),
+            'has_thank_you' => in_array('thank-you.html', $files),
+            'has_sales' => in_array('sales.html', $files),
+            'discovered_at' => date('Y-m-d H:i:s'),
+        ];
     }
 
     /**

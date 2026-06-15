@@ -1,0 +1,35 @@
+{
+  "country": "Germany",
+  "country_code": "DE",
+  "climate_zone": "temperate",
+  "measurement_system": "metric",
+  "staple_foods": [
+    "whole-grain bread (Vollkornbrot, Roggebrot)", "potatoes", "cabbage (Weißkohl, Rotkohl, Sauerkraut)",
+    "lentils and legumes", "oats", "carrots and root vegetables", "apples and berries",
+    "dairy (quark, yoghurt, cheese)", "pork and chicken", "rye"
+  ],
+  "common_proteins": [
+    "pork", "chicken", "beef", "trout and salmon (widely available)", "eggs",
+    "quark and dairy", "legumes (lentils, chickpeas)", "tofu (widely available)"
+  ],
+  "common_cooking_fats": ["rapeseed oil (Rapsöl)", "sunflower oil", "butter", "olive oil"],
+  "locally_available_herbs": [
+    {"name": "Chamomile",      "local_name": "Kamille",          "use": "calming, anti-inflammatory, digestive, skin soothing"},
+    {"name": "Nettle",         "local_name": "Brennnessel",      "use": "mineral-rich, anti-inflammatory, hormonal support, kidney"},
+    {"name": "Valerian",       "local_name": "Baldrian",         "use": "sleep, anxiety reduction, stress"},
+    {"name": "Lemon Balm",     "local_name": "Melisse",          "use": "calming, sleep, thyroid support (mild), cortisol"},
+    {"name": "Yarrow",         "local_name": "Schafgarbe",       "use": "cycle support, anti-inflammatory, digestive"},
+    {"name": "Milk Thistle",   "local_name": "Mariendistel",     "use": "liver support, oestrogen detox (silymarin)"},
+    {"name": "Elderflower",    "local_name": "Holunderblüte",    "use": "immune, anti-inflammatory, antiviral"},
+    {"name": "St John's Wort", "local_name": "Johanniskraut",    "use": "mood — FLAG: interacts with contraceptives, antidepressants, blood thinners"},
+    {"name": "Sage",           "local_name": "Salbei",           "use": "hormonal balance, menopause support, antimicrobial"}
+  ],
+  "where_to_source": "Reformhaus (health food stores), DM and Rossmann drugstores (large herbal sections), weekly farmer markets (Wochenmarkt), REWE/Edeka/Lidl for basic herbs and teas, online (iHerb.de, Amazon.de for supplements)",
+  "typical_cost_band": "medium-high",
+  "dietary_norms": "No major religious food taboos for most. Vegetarian and vegan options widely available. Halal meat available in major cities. Pork is the most consumed meat historically. High-quality whole-grain bread culture. Bio (organic) certification widely trusted and common.",
+  "language_for_local_names": "German",
+  "herb_warnings": {
+    "st_johns_wort": "Interacts with: contraceptives (reduces efficacy significantly), antidepressants (serotonin syndrome), HIV medications, blood thinners, immunosuppressants. ALWAYS flag before recommending."
+  },
+  "reviewed": true
+}

@@ -13,7 +13,7 @@
             </div>
             <div>
                 <h1 class="font-serif text-xl text-sage-600 leading-tight">OJG Herbal</h1>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-sage-300">PCOS Protocol</p>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-sage-300"><?php echo htmlspecialchars($terms['condition_name'] . ' Protocol'); ?></p>
             </div>
         </div>
     </div>

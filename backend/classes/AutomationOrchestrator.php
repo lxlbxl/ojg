@@ -23,6 +23,52 @@ class AutomationOrchestrator
         require_once __DIR__ . '/ActivityLogger.php';
         $logger = new ActivityLogger();
 
+        // 0a. Re-verify transaction via Flutterwave's verify API
+        $txId = $orderData['transaction_id'] ?? $orderData['tx_ref'] ?? null;
+        $isVerified = false;
+        $verifiedAmount = floatval($orderData['amount'] ?? 0);
+        $verifiedCurrency = $orderData['currency'] ?? 'NGN';
+
+        if ($txId && strpos($txId, 'MAN_') !== 0) {
+            $flwData = $this->verifyFlutterwaveTransaction($txId);
+            if (!$flwData) {
+                error_log("Automation: Failed to verify Flutterwave transaction ID $txId");
+                return ['success' => false, 'error' => 'Transaction verification failed'];
+            }
+
+            if (($flwData['status'] ?? '') !== 'successful') {
+                error_log("Automation: Flutterwave transaction ID $txId is not successful: " . ($flwData['status'] ?? ''));
+                return ['success' => false, 'error' => 'Transaction not successful'];
+            }
+
+            $verifiedAmount = floatval($flwData['amount'] ?? 0);
+            $verifiedCurrency = $flwData['currency'] ?? 'NGN';
+            error_log("Automation: Verified transaction ID $txId with Flutterwave. Amount: $verifiedAmount $verifiedCurrency");
+            $isVerified = true;
+        }
+
+        // 0b. Validate currency + amount match expected plan price
+        $plans = Settings::getInstance()->get('payment_plans');
+        $productName = $orderData['product'] ?? "$type Plan";
+        $planKey = (stripos($productName, '90') !== false) ? '90-day' : '30-day';
+        
+        if ($plans && isset($plans[$type][$planKey]['price'])) {
+            $expectedPrice = floatval($plans[$type][$planKey]['price']);
+            $bumpPrice = ($verifiedCurrency === 'USD') ? 17.0 : 5000.0;
+            $expectedWithBump = $expectedPrice + $bumpPrice;
+
+            if (abs($verifiedAmount - $expectedPrice) > 0.01 && abs($verifiedAmount - $expectedWithBump) > 0.01) {
+                // Also check OTO price
+                $isOto = (stripos($productName, 'oto') !== false || ($orderData['is_oto'] ?? false));
+                $expectedOtoPrice = ($verifiedCurrency === 'USD') ? 10.0 : 10000.0;
+                
+                if (!$isOto || abs($verifiedAmount - $expectedOtoPrice) > 0.01) {
+                    error_log("Automation: Amount mismatch! Expected $expectedPrice or $expectedWithBump, got $verifiedAmount");
+                    return ['success' => false, 'error' => 'Price validation failed'];
+                }
+            }
+        }
+
         // 1. Check if user exists
         $email = $orderData['email'];
         $name = $orderData['name'];
@@ -182,13 +228,23 @@ class AutomationOrchestrator
         $expiry = date('Y-m-d H:i:s', strtotime('+24 hours'));
         $this->db->query("INSERT INTO auth_tokens (user_id, token, expires_at) VALUES (?, ?, ?)", [$userId, $token, $expiry]);
 
+        // 5b. Generate Secure Return Token for get-credentials.php authentication
+        $secretKey = Settings::getInstance()->get('flutterwave_webhook_secret', '')
+            ?: Settings::getInstance()->get('webhook_secret', '')
+            ?: 'ojg_fallback_secret_key_123';
+
+        $expiryTime = time() + 900; // 15-minute TTL
+        $signedToken = hash_hmac('sha256', $txRef . '_' . $userId . '_' . $expiryTime, $secretKey);
+
         return [
             'success' => true,
             'user_id' => $userId,
             'username' => $newCredentials['username'] ?? ($existingUser['username'] ?? $email), // Return username for frontend
             'auto_login_token' => $token,
             'redirect_url' => "/member/dashboard.php?autologin=$token",
-            'credentials' => $newCredentials
+            'credentials' => $newCredentials,
+            'signed_token' => $signedToken,
+            'signed_token_expiry' => $expiryTime
         ];
     }
 
@@ -252,5 +308,48 @@ class AutomationOrchestrator
         }
 
         error_log("Automation: Updated subscription for User $userId expiry: " . $subscriptionData['subscription_expiry']);
+    }
+
+    private function verifyFlutterwaveTransaction($transactionId)
+    {
+        $secretKey = Settings::getInstance()->get('flutterwave_secret_key', '');
+        if (empty($secretKey)) {
+            error_log("[Flutterwave Verification] Warning: flutterwave_secret_key not set. Skipping verification.");
+            return true; // Fall back to allow if not configured
+        }
+
+        $url = "https://api.flutterwave.com/v3/transactions/" . urlencode((string)$transactionId) . "/verify";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer " . $secretKey,
+            "Content-Type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+
+        $response = curl_exec($ch);
+        $err = curl_error($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($err) {
+            error_log("[Flutterwave Verification] cURL error: " . $err);
+            return false;
+        }
+
+        if ($httpCode !== 200) {
+            error_log("[Flutterwave Verification] HTTP error code: " . $httpCode);
+            return false;
+        }
+
+        $resData = json_decode($response, true);
+        if (!isset($resData['status']) || $resData['status'] !== 'success' || !isset($resData['data'])) {
+            error_log("[Flutterwave Verification] Response unsuccessful: " . $response);
+            return false;
+        }
+
+        return $resData['data'];
     }
 }

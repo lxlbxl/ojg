@@ -159,6 +159,12 @@ if (!isset($_SESSION['admin_id'])) {
                     <i data-lucide="users" class="w-5 h-5"></i>
                     <span class="font-medium">User Management</span>
                 </a>
+                <a href="#" onclick="switchView('experiments')"
+                    class="nav-link flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 group text-sage-400 hover:text-sage-600 hover:bg-sage-50"
+                    data-view="experiments">
+                    <i data-lucide="flask-conical" class="w-5 h-5"></i>
+                    <span class="font-medium">A/B Experiments</span>
+                </a>
                 <div class="pt-6 pb-2">
                     <p class="text-[10px] uppercase tracking-[0.2em] text-sage-300 font-bold px-4">System</p>
                 </div>
@@ -605,22 +611,148 @@ if (!isset($_SESSION['admin_id'])) {
                                 <tbody id="audit-list" class="divide-y divide-sage-50">
                                     <!-- Dynamic content -->
                                 </tbody>
-                                <!-- System Settings View -->
-                                <section id="settings" class="view-section animate-fade-in-up space-y-10">
-                                    <header>
-                                        <h1 class="text-4xl font-serif text-sage-500">Settings</h1>
-                                        <p class="text-sage-400">Manage global site configurations.</p>
-                                    </header>
-                                    <div class="bg-white rounded-[2rem] p-12 border border-sage-100 text-center py-20">
-                                        <div
-                                            class="w-20 h-20 bg-sage-50 rounded-3xl mx-auto flex items-center justify-center text-sage-400 mb-6">
-                                            <i data-lucide="settings" class="w-10 h-10"></i>
-                                        </div>
-                                        <h3 class="text-2xl font-serif text-sage-600">Global Configuration</h3>
-                                        <p class="text-sage-400 mt-2 max-w-sm mx-auto">Configure payment gateways, email
-                                            templates, and administrative access.</p>
-                                    </div>
-                                </section>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- A/B Experiments View -->
+                <section id="experiments" class="view-section animate-fade-in-up space-y-10">
+                    <header class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <h1 class="text-4xl font-serif text-sage-500">A/B Experiments</h1>
+                            <p class="text-sage-400">Thompson Sampling bandits running across all funnels. Decisions are
+                                made server-side from the <code class="font-mono text-xs">ojg_exp</code> cookie.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="openCreateExperimentModal()"
+                                class="px-5 py-3 rounded-2xl bg-sage-500 text-white font-medium hover:bg-sage-600 transition-colors flex items-center gap-2 text-sm">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                New Experiment
+                            </button>
+                            <button onclick="fetchData('experiments')"
+                                class="p-3 bg-white border border-sage-100 rounded-2xl text-sage-500 hover:bg-sage-50 transition-colors">
+                                <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </header>
+
+                    <!-- Summary stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6" id="experiments-summary">
+                        <div class="stat-card bg-white p-6 rounded-2rem border border-sage-100">
+                            <p class="text-sage-400 text-[10px] font-bold uppercase tracking-widest">Active</p>
+                            <h3 id="exp-stat-active" class="text-3xl font-serif mt-1 text-sage-600">0</h3>
+                        </div>
+                        <div class="stat-card bg-white p-6 rounded-2rem border border-sage-100">
+                            <p class="text-sage-400 text-[10px] font-bold uppercase tracking-widest">Decided</p>
+                            <h3 id="exp-stat-decided" class="text-3xl font-serif mt-1 text-sage-600">0</h3>
+                        </div>
+                        <div class="stat-card bg-white p-6 rounded-2rem border border-sage-100">
+                            <p class="text-sage-400 text-[10px] font-bold uppercase tracking-widest">Assignments</p>
+                            <h3 id="exp-stat-assignments" class="text-3xl font-serif mt-1 text-sage-600">0</h3>
+                        </div>
+                        <div class="stat-card bg-white p-6 rounded-2rem border border-sage-100">
+                            <p class="text-sage-400 text-[10px] font-bold uppercase tracking-widest">Conversions</p>
+                            <h3 id="exp-stat-conversions" class="text-3xl font-serif mt-1 text-sage-600">0</h3>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div
+                        class="bg-white rounded-3xl p-6 border border-sage-100 shadow-sm flex flex-wrap items-center gap-4">
+                        <select id="exp-filter-funnel" onchange="fetchData('experiments')"
+                            class="px-4 py-3 rounded-2xl bg-sage-50 border-none focus:ring-2 focus:ring-sage-500 text-sm font-medium text-sage-600">
+                            <option value="">All Funnels</option>
+                            <option value="pcos">PCOS</option>
+                            <option value="acne">Acne</option>
+                            <option value="weight">Weight</option>
+                            <option value="mens">Mens</option>
+                            <option value="egbon">Egbon</option>
+                        </select>
+                        <select id="exp-filter-status" onchange="fetchData('experiments')"
+                            class="px-4 py-3 rounded-2xl bg-sage-50 border-none focus:ring-2 focus:ring-sage-500 text-sm font-medium text-sage-600">
+                            <option value="">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="paused">Paused</option>
+                            <option value="concluded">Concluded</option>
+                        </select>
+                        <div class="flex-1"></div>
+                        <button onclick="fetchData('experiments')"
+                            class="p-3 bg-sage-500 text-white rounded-2xl hover:bg-sage-600 transition-colors">
+                            <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Experiments list -->
+                    <div class="bg-white rounded-[2.5rem] border border-sage-100 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-sage-50/50">
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400">
+                                            Experiment</th>
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400">
+                                            Funnel</th>
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400">
+                                            Variants</th>
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400">
+                                            Status</th>
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400">
+                                            Decision</th>
+                                        <th
+                                            class="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-sage-400 text-right">
+                                            Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="experiments-list" class="divide-y divide-sage-50">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- AI Insights panel -->
+                    <div class="bg-white rounded-[2.5rem] border border-sage-100 shadow-sm p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="font-serif text-2xl text-sage-500">AI Diagnostics</h3>
+                                <p class="text-sage-400 text-sm">Generated by the nightly cron job from
+                                    <code class="font-mono text-xs">backend/cron/ai_diagnostics.php</code>.
+                                </p>
+                            </div>
+                            <button onclick="fetchData('experiments_insights')"
+                                class="p-3 bg-sage-50 text-sage-500 rounded-2xl hover:bg-sage-100 transition-colors">
+                                <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        <div id="experiments-insights" class="space-y-3 text-sm text-sage-600">
+                            <p class="text-sage-400 italic">No insights yet. Run the AI diagnostics cron to populate.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- System Settings View -->
+                <section id="settings" class="view-section animate-fade-in-up space-y-10">
+                    <header>
+                        <h1 class="text-4xl font-serif text-sage-500">Settings</h1>
+                        <p class="text-sage-400">Manage global site configurations.</p>
+                    </header>
+                    <div class="bg-white rounded-[2rem] p-12 border border-sage-100 text-center py-20">
+                        <div
+                            class="w-20 h-20 bg-sage-50 rounded-3xl mx-auto flex items-center justify-center text-sage-400 mb-6">
+                            <i data-lucide="settings" class="w-10 h-10"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif text-sage-600">Global Configuration</h3>
+                        <p class="text-sage-400 mt-2 max-w-sm mx-auto">Configure payment gateways, email
+                            templates, and administrative access.</p>
+                    </div>
+                </section>
             </main>
         </div>
     </div>
@@ -671,7 +803,9 @@ if (!isset($_SESSION['admin_id'])) {
                 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 <span id="system-status">System Status: Online</span>
             </div>
-            <div>OJG Herbal Health Assessment Admin &copy; <?php echo date('Y'); ?></div>
+            <div>OJG Herbal Health Assessment Admin &copy;
+                <?php echo date('Y'); ?>
+            </div>
         </div>
     </footer>
     </div>
