@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FREE PCOS Assessment - Discover Your PCOS Type & Get Personalized Solutions</title>
+    <title>FREE PCOS Assessment - Discover Your PCOS Type &amp; Get Personalized Solutions | PCOS Care</title>
     <meta name="description"
         content="Take our FREE 2-minute PCOS assessment to discover your unique PCOS type and get personalized treatment recommendations that actually work.">
 
@@ -33,31 +33,26 @@
                         'forest': {
                             50: '#f2f8f5',
                             100: '#dcece3',
-                            500: '#16a34a', // Keeping for legacy reference if needed, but mainly use 800/900
+                            200: '#b3d4c2',
+                            500: '#16a34a',
                             800: '#166534',
-                            900: '#0f3922', // Deep luxury green
+                            900: '#0f3922',
                         },
                         'sage': {
+                            50: '#F4F7F4',
                             100: '#E6EBE6',
                             200: '#CDD6CD',
                             500: '#8DA38D',
                         },
                         'terracotta': {
-                            500: '#C77D63', // Warm accent
+                            50: '#FDF0EB',
+                            100: '#F8E8E3',
+                            500: '#C77D63',
                             600: '#A85D45',
+                            900: '#6B2E1E',
                         },
                         'cream': '#FDFCF8',
                         'sand': '#F4F1EA',
-                        // Map old primary to new forest for compatibility with scripts if they reference classes dynamically (unlikely but safe)
-                        primary: {
-                            50: '#f2f8f5',
-                            100: '#dcece3',
-                            500: '#166534',
-                            600: '#14532d',
-                            700: '#0f3922',
-                            800: '#0f3922',
-                            900: '#051f11'
-                        }
                     },
                     backgroundImage: {
                         'grain': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
@@ -70,13 +65,15 @@
             }
         }
     </script>
-
     <style>
         body {
             background-color: #FDFCF8;
             color: #0f3922;
         }
-
+        .leaf-pattern {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 Q70 20 50 50 Q30 20 50 0 Z" fill="rgba(141,163,141,0.05)"/></svg>');
+        }
+    
         .glass-panel {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(12px);
@@ -91,7 +88,6 @@
             opacity: 0.6;
         }
 
-        /* Smooth reveal animation classes */
         .reveal-up {
             opacity: 0;
             transform: translateY(30px);
@@ -104,19 +100,7 @@
                 transform: translateY(0);
             }
         }
-
-        /* Responsive width handling */
-        html,
-        body {
-            max-width: 100vw;
-            overflow-x: hidden;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-    </style>
-
+</style>
     <!-- Webhook Manager -->
     <script src="../js/webhook-manager.js"></script>
     <script src="../js/tracking.js"></script>
@@ -124,189 +108,169 @@
     <script src="/js/cookie-consent.js"></script>
 </head>
 
-<body class="antialiased relative overflow-x-hidden">
-
-    <div class="fixed inset-0 bg-grain pointer-events-none z-50 opacity-40 mix-blend-overlay"></div>
-    <div class="blob bg-sage-200 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
-    <div class="blob bg-terracotta-500 w-80 h-80 rounded-full top-20 right-0 translate-x-1/3 opacity-20"></div>
+<body class="antialiased relative overflow-x-hidden leaf-pattern">
 
     <!-- Header -->
-    <header class="fixed w-full top-0 z-40 glass-panel border-b border-sage-200/50">
-        <div class="max-w-6xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-forest-900 rounded-full flex items-center justify-center shadow-lg">
-                        <span class="text-sand font-serif italic text-xl">P</span>
-                    </div>
-                    <span class="text-lg font-serif font-bold tracking-tight text-forest-900">PCOS Solutions</span>
+    <header class="w-full relative z-40 bg-cream/90 backdrop-blur-md sticky top-0 border-b border-sage-100">
+        <div class="max-w-7xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center"><a href="/pcos/"><img src="../images/pcos/pcos-logo.png" alt="PCOS Care" class="h-10 md:h-12 w-auto"></a></div>
+            
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center gap-8 text-sm font-medium text-forest-900">
+                <a href="#problem" class="hover:text-terracotta-600 transition-colors">Symptoms</a>
+                <a href="#solution" class="hover:text-terracotta-600 transition-colors">Our Solution</a>
+                <a href="#results" class="hover:text-terracotta-600 transition-colors">Results</a>
+            </nav>
+            
+            <div class="hidden lg:flex items-center gap-6">
+                <div class="flex items-center gap-2 text-xs font-semibold text-sage-500">
+                    <svg class="w-4 h-4 text-forest-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    90-Day Guarantee
                 </div>
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 bg-forest-50 border border-forest-100 px-3 md:px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide text-forest-800 uppercase">
-                        <span class="md:hidden">Free</span>
-                        <span class="hidden md:inline">FREE Assessment</span>
-                    </span>
-                </div>
+                <a href="assessment.html" class="bg-forest-900 hover:bg-forest-800 text-sand text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-full transition-colors">
+                    Free Assessment
+                </a>
             </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="lg:hidden text-forest-900 p-2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="pt-24 pb-16 px-4 md:px-6">
+    <main>
         <!-- Hero Section -->
-        <section class="text-center mb-16 md:mb-24 max-w-4xl mx-auto">
-            <div class="reveal-up">
-                <div class="inline-block border-b border-terracotta-500/30 pb-1 mb-6">
-                    <span class="font-sans text-terracotta-600 font-medium tracking-widest text-xs uppercase">Transform
-                        Your Health</span>
-                </div>
-
-                <h1 class="text-4xl md:text-7xl font-serif font-medium leading-[1.1] text-forest-900 mb-6"
-                    data-exp="hero-headline">
-                    Discover Your <span class="italic text-terracotta-600">PCOS Type</span><br>
-                    Get Solutions That <span class="italic">Actually Work</span>
-                </h1>
-
-                <p class="text-xl text-gray-600 font-light leading-relaxed mb-10 max-w-2xl mx-auto"
-                    data-exp="hero-subhead">
-                    Take our FREE 2-minute assessment to uncover your unique PCOS type and receive
-                    personalized treatment recommendations from our certified PCOS specialists.
-                </p>
-
-                <div
-                    class="bg-white/80 backdrop-blur rounded-[2rem] shadow-soft p-6 md:p-10 mb-10 border border-white/50 relative overflow-hidden group hover:shadow-lg transition-all duration-500">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-sage-100 rounded-full -mr-32 -mt-32 opacity-50 z-0">
+        <section class="relative pt-12 md:pt-20 pb-16 md:pb-24 overflow-hidden">
+            <!-- Background Elements -->
+            <div class="absolute top-0 right-0 w-1/2 h-full bg-sage-50 rounded-l-[100px] hidden lg:block -z-10"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 md:px-6 relative z-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
+                <!-- Left Content -->
+                <div class="w-full lg:w-[55%] lg:pr-8">
+                    <div class="flex items-center gap-2 mb-6 bg-sage-50 w-max px-4 py-1.5 rounded-full border border-sage-100">
+                        <div class="flex text-[#F5C04A] text-sm">★★★★★</div>
+                        <span class="text-xs font-medium text-forest-800 uppercase tracking-wide">Trusted by 10,000+ Women</span>
                     </div>
 
-                    <div class="relative z-10 grid md:grid-cols-3 gap-8 mb-10">
-                        <div class="text-center">
-                            <div
-                                class="w-16 h-16 bg-forest-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm rotate-3 group-hover:rotate-6 transition-transform">
-                                📋
-                            </div>
-                            <h3 class="font-serif font-bold text-forest-900 mb-2">Quick Assessment</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed">Just 12 simple questions about your
-                                symptoms</p>
-                        </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-7xl font-serif leading-[1.1] text-forest-900 mb-6" data-exp="hero-headline">
+                        Personalized PCOS<br>Solutions That<br><span class="italic text-terracotta-600">Actually</span> Work
+                    </h1>
 
-                        <div class="text-center">
-                            <div
-                                class="w-16 h-16 bg-forest-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm -rotate-3 group-hover:-rotate-6 transition-transform">
-                                🎯
-                            </div>
-                            <h3 class="font-serif font-bold text-forest-900 mb-2">Personalized Results</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed">Discover your specific PCOS type &amp;
-                                triggers</p>
-                        </div>
+                    <p class="text-lg md:text-xl text-gray-600 font-light leading-relaxed mb-8 max-w-xl" data-exp="hero-subhead">
+                        Take our FREE 2-minute assessment to uncover your unique PCOS type and get a personalized plan tailored to your body, symptoms, and goals—so you can finally feel like yourself again.
+                    </p>
 
-                        <div class="text-center">
-                            <div
-                                class="w-16 h-16 bg-forest-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm rotate-3 group-hover:rotate-6 transition-transform">
-                                💚
-                            </div>
-                            <h3 class="font-serif font-bold text-forest-900 mb-2">Custom Solutions</h3>
-                            <p class="text-gray-500 text-sm leading-relaxed">Get targeted treatment recommendations</p>
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-10 text-sm font-semibold text-forest-900">
+                        <div class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-forest-800 text-white flex items-center justify-center text-[10px]">✓</div>
+                            Doctor-Curated
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-forest-800 text-white flex items-center justify-center text-[10px]">✓</div>
+                            Personalized for You
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-5 h-5 rounded-full bg-forest-800 text-white flex items-center justify-center text-[10px]">✓</div>
+                            No Generic Advice
                         </div>
                     </div>
 
-                    <a href="assessment.html" data-exp="hero-cta"
-                        class="inline-flex items-center justify-center gap-3 bg-forest-900 hover:bg-forest-800 text-sand font-medium text-lg px-10 py-5 rounded-full transition-all duration-300 shadow-lg hover:shadow-soft hover:-translate-y-1 relative z-10 w-full md:w-auto overflow-hidden">
-                        <span class="relative z-10">Start Your FREE Assessment</span>
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                            class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <a href="assessment.html" class="inline-flex items-center justify-center gap-3 bg-forest-900 hover:bg-forest-800 text-sand font-medium text-lg px-8 py-5 rounded-full transition-all duration-300 w-full sm:w-auto shadow-xl hover:-translate-y-1">
+                        Start My FREE Assessment
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
                     </a>
 
-                    <div class="flex flex-wrap justify-center gap-6 mt-8 text-xs font-bold tracking-wide text-forest-800/60 uppercase"
-                        data-exp="trust-strip">
-                        <span class="flex items-center gap-1.5">✅ Completely FREE</span>
-                        <span class="flex items-center gap-1.5">✅ No email to start</span>
-                        <span class="flex items-center gap-1.5">✅ Results in 2 mins</span>
-                        <span class="flex items-center gap-1.5">🛡️ 90-Day Guarantee</span>
+                    <div class="mt-8 flex items-center gap-4">
+                        <div class="flex -space-x-3">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=100&h=100&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop" alt="User" class="w-10 h-10 rounded-full border-2 border-white object-cover">
+                        </div>
+                        <p class="text-xs text-gray-600 max-w-[200px] leading-tight">Join 10,000+ women who've transformed their health</p>
+                    </div>
+                </div>
+
+                <!-- Right Content (Image) -->
+                <div class="w-full lg:w-[45%] relative mt-8 lg:mt-0">
+                    <div class="relative rounded-[2rem] overflow-hidden shadow-2xl h-[450px] md:h-[600px] w-full border border-sage-100">
+                        <img src="../images/acne/glowing-skin-confidence.png" alt="Smiling healthy woman" class="absolute inset-0 w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Floating Quote Card -->
+                    <div class="absolute -bottom-6 -left-6 md:bottom-12 md:-left-16 bg-white/95 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-sage-100 max-w-xs z-20">
+                        <div class="text-terracotta-500 text-4xl font-serif leading-none mb-2 absolute -top-4 -left-2 opacity-50">"</div>
+                        <p class="text-forest-900 font-serif italic text-lg leading-snug mb-4 relative z-10">
+                            'I finally understand my body and have a plan that works for me.'
+                        </p>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-sage-200 flex items-center justify-center text-forest-800 font-bold text-xs">S</div>
+                            <div>
+                                <p class="text-sm font-bold text-forest-800">Sarah, 28</p>
+                                <p class="text-xs text-gray-500">Lost 18 lbs, regular cycles</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-
         <!-- Problem Section -->
-        <section class="mb-24 max-w-5xl mx-auto">
-            <h2 class="text-3xl md:text-5xl font-serif text-center text-forest-900 mb-12">
-                Struggling With PCOS Symptoms<br> <span class="italic text-gray-400">That Won't Go Away?</span>
-            </h2>
+        <section id="problem" class="mb-24 max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-terracotta-600 font-semibold tracking-wider text-sm uppercase mb-4 block">The Struggle is Real</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-forest-900">
+                    Struggling With PCOS Symptoms<br> <span class="italic text-gray-400">That Won't Go Away?</span>
+                </h2>
+            </div>
 
-            <div class="grid md:grid-cols-2 gap-6 md:gap-8">
-                <div
-                    class="bg-terracotta-50/50 border border-terracotta-100 rounded-3xl p-8 hover:border-terracotta-200 transition-colors">
-                    <h3 class="font-serif font-bold text-terracotta-900 mb-6 text-xl">You're Not Alone If You're
-                        Experiencing:</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Irregular or missing periods that disrupt your
-                                life</span>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <div class="bg-terracotta-50/80 border border-terracotta-100 rounded-[2.5rem] p-8 md:p-12 hover:shadow-glow transition-all duration-300 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white rounded-full opacity-50 blur-2xl -mr-10 -mt-10"></div>
+                    <h3 class="font-serif font-bold text-terracotta-900 mb-8 text-2xl relative z-10">You're Not Alone If You're Experiencing:</h3>
+                    <ul class="space-y-5 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <span class="w-6 h-6 rounded-full bg-terracotta-200 flex items-center justify-center text-terracotta-700 text-xs shrink-0 mt-1">•</span>
+                            <span class="text-gray-800 font-medium leading-relaxed">Irregular or missing periods that disrupt your life</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Stubborn weight gain that won't budge despite
-                                dieting</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-6 h-6 rounded-full bg-terracotta-200 flex items-center justify-center text-terracotta-700 text-xs shrink-0 mt-1">•</span>
+                            <span class="text-gray-800 font-medium leading-relaxed">Stubborn weight gain that won't budge despite dieting</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Unwanted hair growth on face, chest, or
-                                back</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-6 h-6 rounded-full bg-terracotta-200 flex items-center justify-center text-terracotta-700 text-xs shrink-0 mt-1">•</span>
+                            <span class="text-gray-800 font-medium leading-relaxed">Unwanted hair growth on face, chest, or back</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Hair thinning or male-pattern baldness</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-6 h-6 rounded-full bg-terracotta-200 flex items-center justify-center text-terracotta-700 text-xs shrink-0 mt-1">•</span>
+                            <span class="text-gray-800 font-medium leading-relaxed">Persistent acne that adult treatments can't fix</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Persistent acne that adult treatments can't
-                                fix</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-terracotta-100 flex items-center justify-center text-terracotta-600 text-xs shrink-0 mt-0.5">•</span>
-                            <span class="text-gray-700 leading-relaxed">Constant fatigue and mood swings</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-6 h-6 rounded-full bg-terracotta-200 flex items-center justify-center text-terracotta-700 text-xs shrink-0 mt-1">•</span>
+                            <span class="text-gray-800 font-medium leading-relaxed">Constant fatigue and mood swings</span>
                         </li>
                     </ul>
                 </div>
 
-                <div class="bg-white border border-gray-100 rounded-3xl p-8 shadow-sm">
-                    <h3 class="font-serif font-bold text-forest-900 mb-6 text-xl">The Problem With Generic PCOS Advice:
-                    </h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs shrink-0 mt-0.5">✗</span>
-                            <span class="text-gray-600 leading-relaxed">One-size-fits-all approaches that ignore your
-                                unique type</span>
+                <div class="bg-white border border-sage-100 rounded-[2.5rem] p-8 md:p-12 shadow-soft hover:shadow-lg transition-all duration-300 relative overflow-hidden">
+                    <h3 class="font-serif font-bold text-forest-900 mb-8 text-2xl relative z-10">The Problem With Generic Advice:</h3>
+                    <ul class="space-y-6 relative z-10">
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 text-sm shrink-0 mt-0.5 border border-gray-100">✗</span>
+                            <span class="text-gray-600 leading-relaxed">One-size-fits-all approaches that ignore your unique PCOS type</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs shrink-0 mt-0.5">✗</span>
-                            <span class="text-gray-600 leading-relaxed">Conflicting information that leaves you
-                                confused</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 text-sm shrink-0 mt-0.5 border border-gray-100">✗</span>
+                            <span class="text-gray-600 leading-relaxed">Conflicting information from Google that leaves you confused</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs shrink-0 mt-0.5">✗</span>
-                            <span class="text-gray-600 leading-relaxed">Expensive treatments that don't address root
-                                causes</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 text-sm shrink-0 mt-0.5 border border-gray-100">✗</span>
+                            <span class="text-gray-600 leading-relaxed">Expensive treatments that don't address root causes</span>
                         </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 text-xs shrink-0 mt-0.5">✗</span>
-                            <span class="text-gray-600 leading-relaxed">Doctors who only prescribe birth control as a
-                                "solution"</span>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 text-sm shrink-0 mt-0.5 border border-gray-100">✗</span>
+                            <span class="text-gray-600 leading-relaxed">Doctors who only prescribe birth control as a "solution"</span>
                         </li>
                     </ul>
                 </div>
@@ -314,206 +278,203 @@
         </section>
 
         <!-- Solution Preview -->
-        <section class="mb-24">
-            <div class="max-w-4xl mx-auto text-center relative">
+        <section id="solution" class="mb-24 px-4">
+            <div class="max-w-5xl mx-auto text-center relative">
                 <!-- Decorative background -->
-                <div
-                    class="absolute inset-0 bg-gradient-to-r from-forest-900 to-forest-800 rounded-[3rem] -rotate-1 opacity-90">
+                <div class="absolute inset-0 bg-forest-900 rounded-[3rem] -rotate-1 opacity-100 shadow-xl overflow-hidden">
+                    <div class="absolute inset-0 bg-grain opacity-20"></div>
+                    <div class="absolute top-0 right-0 w-96 h-96 bg-forest-800 rounded-full blur-3xl opacity-50 translate-x-1/3 -translate-y-1/3"></div>
                 </div>
 
                 <div class="relative z-10 p-8 md:p-16 rounded-[3rem] text-white">
-                    <h2 class="text-3xl md:text-5xl font-serif mb-8 text-sand">
+                    <h2 class="text-3xl md:text-5xl font-serif mb-8 text-sand leading-tight">
                         What If You Could Finally<br>Understand Your PCOS?
                     </h2>
 
-                    <div class="bg-white/10 backdrop-blur border border-white/20 rounded-2xl p-8 text-left mb-10">
-                        <h3
-                            class="text-xl font-bold mb-6 text-sand tracking-wide uppercase text-center border-b border-white/10 pb-4">
-                            Our Assessment Reveals:</h3>
-                        <div class="grid md:grid-cols-2 gap-8">
-                            <div>
-                                <h4 class="font-serif text-lg font-bold mb-2 text-terracotta-500">🔍 Your Specific PCOS
-                                    Type</h4>
-                                <p class="text-gray-300 font-light text-sm leading-relaxed">Insulin-resistant,
-                                    inflammatory, adrenal, or post-pill PCOS.</p>
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-[2rem] p-8 md:p-10 text-left mb-10 shadow-2xl">
+                        <h3 class="text-sm font-bold mb-8 text-sand tracking-widest uppercase text-center border-b border-white/10 pb-6 opacity-80">
+                            Our Assessment Reveals</h3>
+                        <div class="grid md:grid-cols-2 gap-x-12 gap-y-8">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-terracotta-500/20 flex items-center justify-center text-terracotta-500 shrink-0">🔍</div>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold mb-2 text-sand">Your Specific Type</h4>
+                                    <p class="text-forest-100 font-light text-sm leading-relaxed">Insulin-resistant, inflammatory, adrenal, or post-pill PCOS.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-serif text-lg font-bold mb-2 text-terracotta-500">🎯 Your Primary
-                                    Triggers</h4>
-                                <p class="text-gray-300 font-light text-sm leading-relaxed">Diet, stress, lifestyle, or
-                                    hormonal imbalances.</p>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-terracotta-500/20 flex items-center justify-center text-terracotta-500 shrink-0">🎯</div>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold mb-2 text-sand">Your Primary Triggers</h4>
+                                    <p class="text-forest-100 font-light text-sm leading-relaxed">Diet, stress, lifestyle, or hormonal imbalances affecting you.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-serif text-lg font-bold mb-2 text-terracotta-500">📋 Personalized Action
-                                    Plan</h4>
-                                <p class="text-gray-300 font-light text-sm leading-relaxed">Specific steps tailored to
-                                    your PCOS type.</p>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-terracotta-500/20 flex items-center justify-center text-terracotta-500 shrink-0">📋</div>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold mb-2 text-sand">Personalized Plan</h4>
+                                    <p class="text-forest-100 font-light text-sm leading-relaxed">Specific actionable steps tailored strictly to your PCOS type.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="font-serif text-lg font-bold mb-2 text-terracotta-500">💊 Targeted
-                                    Supplements</h4>
-                                <p class="text-gray-300 font-light text-sm leading-relaxed">Evidence-based
-                                    recommendations for your symptoms.</p>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-terracotta-500/20 flex items-center justify-center text-terracotta-500 shrink-0">💊</div>
+                                <div>
+                                    <h4 class="font-serif text-xl font-bold mb-2 text-sand">Targeted Supplements</h4>
+                                    <p class="text-forest-100 font-light text-sm leading-relaxed">Evidence-based herbal & supplement recommendations.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <a href="assessment.html"
-                        class="inline-block bg-sand text-forest-900 font-bold text-lg px-10 py-4 rounded-full transition-all duration-300 transform hover:scale-105 shadow-glow hover:shadow-lg">
-                        Get Your Personalized PCOS Plan →
+                        class="inline-flex items-center gap-3 bg-sand text-forest-900 font-bold text-lg px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-glow hover:shadow-lg">
+                        Get Your Personalized PCOS Plan
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </a>
 
-                    <!-- Guarantee Badge (CRO Audit P0.3c) -->
-                    <div data-exp="hero-guarantee"
-                        class="mt-6 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2.5 rounded-full text-white text-sm font-medium">
+                    <!-- Guarantee Badge -->
+                    <div class="mt-8 inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 px-6 py-3 rounded-full text-white text-sm font-medium">
                         <span class="text-xl">🛡️</span>
-                        <span>90-Day Money-Back Guarantee · No Questions Asked</span>
+                        <span class="opacity-90">90-Day Money-Back Guarantee · No Questions Asked</span>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Stats Bar -->
-        <section class="mb-16 max-w-5xl mx-auto px-4">
-            <div class="grid grid-cols-3 gap-4 md:gap-8">
-                <div class="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <p class="text-3xl md:text-4xl font-serif font-bold text-forest-900">500+</p>
-                    <p class="text-xs md:text-sm text-gray-500 mt-1 font-medium uppercase tracking-wide">Women
-                        Transformed</p>
+        <section class="mb-20 max-w-5xl mx-auto px-4">
+            <div class="grid grid-cols-3 gap-6 md:gap-8">
+                <div class="text-center bg-white rounded-3xl p-8 shadow-soft border border-sage-100 hover:-translate-y-1 transition-transform">
+                    <p class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-2">500+</p>
+                    <p class="text-xs md:text-sm text-gray-500 font-semibold uppercase tracking-widest">Women<br>Transformed</p>
                 </div>
-                <div class="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <p class="text-3xl md:text-4xl font-serif font-bold text-terracotta-600">4</p>
-                    <p class="text-xs md:text-sm text-gray-500 mt-1 font-medium uppercase tracking-wide">PCOS Types
-                        Covered</p>
+                <div class="text-center bg-white rounded-3xl p-8 shadow-soft border border-sage-100 hover:-translate-y-1 transition-transform">
+                    <p class="text-4xl md:text-5xl font-serif font-bold text-terracotta-600 mb-2">4</p>
+                    <p class="text-xs md:text-sm text-gray-500 font-semibold uppercase tracking-widest">PCOS Types<br>Covered</p>
                 </div>
-                <div class="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <p class="text-3xl md:text-4xl font-serif font-bold text-forest-900">90%</p>
-                    <p class="text-xs md:text-sm text-gray-500 mt-1 font-medium uppercase tracking-wide">See Results in
-                        30 Days</p>
+                <div class="text-center bg-white rounded-3xl p-8 shadow-soft border border-sage-100 hover:-translate-y-1 transition-transform">
+                    <p class="text-4xl md:text-5xl font-serif font-bold text-forest-900 mb-2">90%</p>
+                    <p class="text-xs md:text-sm text-gray-500 font-semibold uppercase tracking-widest">See Results<br>in 30 Days</p>
                 </div>
             </div>
         </section>
 
         <!-- Social Proof -->
-        <section class="mb-24 max-w-6xl mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-serif text-center text-forest-900 mb-4 md:mb-6">
-                Real Women. <span class="italic text-terracotta-600">Real Results.</span>
-            </h2>
-            <p class="text-center text-gray-500 mb-8 md:mb-12 text-sm">Verified transformations from women just like you
-                across Nigeria</p>
+        <section id="results" class="mb-24 max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-terracotta-600 font-semibold tracking-wider text-sm uppercase mb-4 block">Success Stories</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-forest-900">
+                    Real Women. <span class="italic text-terracotta-600">Real Results.</span>
+                </h2>
+                <p class="text-gray-500 mt-4 text-lg font-light">Verified transformations from women across Nigeria</p>
+            </div>
 
-            <div class="grid md:grid-cols-3 gap-6">
+            <div class="grid md:grid-cols-3 gap-8">
                 <!-- Testimonial 1 -->
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-soft transition-shadow">
-                    <div class="flex items-center gap-4 mb-4">
+                <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-sage-100 hover:shadow-lg transition-shadow relative">
+                    <div class="absolute top-6 right-6 text-terracotta-100 text-6xl font-serif leading-none opacity-50">"</div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
                         <img src="../images/pcos/testimonial_sarah.png" alt="Sarah testimonial"
-                            class="w-12 h-12 rounded-full object-cover grayscale opacity-80">
+                            class="w-14 h-14 rounded-full object-cover border-2 border-sage-100">
                         <div>
-                            <h4 class="font-serif font-bold text-gray-900">Sarah M.</h4>
-                            <p class="text-xs text-gray-400">Lagos | Insulin-Resistant PCOS</p>
-                            <div class="flex text-terracotta-500 text-xs gap-0.5">★★★★★</div>
+                            <h4 class="font-serif font-bold text-forest-900 text-lg">Sarah M.</h4>
+                            <p class="text-xs text-terracotta-600 font-medium uppercase tracking-wide">Insulin-Resistant</p>
+                            <div class="flex text-[#F5C04A] text-xs gap-0.5 mt-1">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600 font-light italic leading-relaxed mb-4">
+                    <p class="text-gray-600 font-light italic leading-relaxed mb-6 relative z-10 text-lg">
                         "Finally got my period back after 8 months! The personalized plan made all the difference. I
                         tried everything before — this was the first thing that actually worked."
                     </p>
-                    <div class="flex items-center gap-2 text-xs text-forest-600 font-bold">
-                        <span class="bg-forest-50 px-2 py-1 rounded">Period returned</span>
-                        <span class="bg-forest-50 px-2 py-1 rounded">-7kg</span>
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-forest-800 font-bold">
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">Period returned</span>
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">-7kg</span>
                     </div>
-                    <p class="text-[10px] text-gray-300 mt-3 uppercase tracking-wider">Verified Purchase</p>
                 </div>
 
                 <!-- Testimonial 2 -->
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-soft transition-shadow">
-                    <div class="flex items-center gap-4 mb-4">
+                <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-sage-100 hover:shadow-lg transition-shadow relative">
+                    <div class="absolute top-6 right-6 text-terracotta-100 text-6xl font-serif leading-none opacity-50">"</div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
                         <img src="../images/pcos/testimonial_funmi.png" alt="Funmi testimonial"
-                            class="w-12 h-12 rounded-full object-cover grayscale opacity-80">
+                            class="w-14 h-14 rounded-full object-cover border-2 border-sage-100">
                         <div>
-                            <h4 class="font-serif font-bold text-gray-900">Funmi A.</h4>
-                            <p class="text-xs text-gray-400">Abuja | Inflammatory PCOS</p>
-                            <div class="flex text-terracotta-500 text-xs gap-0.5">★★★★★</div>
+                            <h4 class="font-serif font-bold text-forest-900 text-lg">Funmi A.</h4>
+                            <p class="text-xs text-terracotta-600 font-medium uppercase tracking-wide">Inflammatory PCOS</p>
+                            <div class="flex text-[#F5C04A] text-xs gap-0.5 mt-1">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600 font-light italic leading-relaxed mb-4">
+                    <p class="text-gray-600 font-light italic leading-relaxed mb-6 relative z-10 text-lg">
                         "Lost 15kg in 3 months! My insulin resistance is finally under control. The Nigerian meals were
                         so easy to follow — no expensive imported foods needed."
                     </p>
-                    <div class="flex items-center gap-2 text-xs text-forest-600 font-bold">
-                        <span class="bg-forest-50 px-2 py-1 rounded">-15kg</span>
-                        <span class="bg-forest-50 px-2 py-1 rounded">A1C normalized</span>
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-forest-800 font-bold">
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">-15kg</span>
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">A1C normalized</span>
                     </div>
-                    <p class="text-[10px] text-gray-300 mt-3 uppercase tracking-wider">Verified Purchase</p>
                 </div>
 
                 <!-- Testimonial 3 -->
-                <div
-                    class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-soft transition-shadow">
-                    <div class="flex items-center gap-4 mb-4">
+                <div class="bg-white rounded-[2rem] p-8 shadow-soft border border-sage-100 hover:shadow-lg transition-shadow relative">
+                    <div class="absolute top-6 right-6 text-terracotta-100 text-6xl font-serif leading-none opacity-50">"</div>
+                    <div class="flex items-center gap-4 mb-6 relative z-10">
                         <img src="../images/pcos/testimonial_kemi.png" alt="Kemi testimonial"
-                            class="w-12 h-12 rounded-full object-cover grayscale opacity-80">
+                            class="w-14 h-14 rounded-full object-cover border-2 border-sage-100">
                         <div>
-                            <h4 class="font-serif font-bold text-gray-900">Kemi O.</h4>
-                            <p class="text-xs text-gray-400">Port Harcourt | Adrenal PCOS</p>
-                            <div class="flex text-terracotta-500 text-xs gap-0.5">★★★★★</div>
+                            <h4 class="font-serif font-bold text-forest-900 text-lg">Kemi O.</h4>
+                            <p class="text-xs text-terracotta-600 font-medium uppercase tracking-wide">Adrenal PCOS</p>
+                            <div class="flex text-[#F5C04A] text-xs gap-0.5 mt-1">★★★★★</div>
                         </div>
                     </div>
-                    <p class="text-gray-600 font-light italic leading-relaxed mb-4">
+                    <p class="text-gray-600 font-light italic leading-relaxed mb-6 relative z-10 text-lg">
                         "My acne cleared up completely and my energy is through the roof! I was sleeping better by week
                         2. The herbal teas changed my life."
                     </p>
-                    <div class="flex items-center gap-2 text-xs text-forest-600 font-bold">
-                        <span class="bg-forest-50 px-2 py-1 rounded">Clear skin</span>
-                        <span class="bg-forest-50 px-2 py-1 rounded">Energy 3x</span>
+                    <div class="flex flex-wrap items-center gap-2 text-xs text-forest-800 font-bold">
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">Clear skin</span>
+                        <span class="bg-sage-100 px-3 py-1.5 rounded-full">Energy 3x</span>
                     </div>
-                    <p class="text-[10px] text-gray-300 mt-3 uppercase tracking-wider">Verified Purchase</p>
                 </div>
             </div>
 
             <!-- Live activity indicator -->
-            <div class="mt-8 text-center">
-                <div
-                    class="inline-flex items-center gap-2 bg-forest-50 px-4 py-2 rounded-full text-xs font-medium text-forest-800 border border-forest-100">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span id="live-counter">12 women</span> took the assessment in the last hour
+            <div class="mt-12 text-center">
+                <div class="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full text-sm font-semibold text-forest-900 border border-sage-200 shadow-sm">
+                    <span class="relative flex h-3 w-3">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    <span id="live-counter">12 women</span> recently took the assessment
                 </div>
             </div>
         </section>
 
         <!-- Final CTA -->
-        <section class="text-center pb-12">
-            <div
-                class="max-w-3xl mx-auto bg-sage-100 rounded-[2.5rem] p-8 md:p-12 text-forest-900 overflow-hidden relative">
-                <div
-                    class="absolute top-0 right-0 w-40 h-40 bg-white rounded-full translate-x-1/2 -translate-y-1/2 opacity-50 blur-xl">
-                </div>
-                <div
-                    class="absolute bottom-0 left-0 w-40 h-40 bg-terracotta-200 rounded-full -translate-x-1/2 translate-y-1/2 opacity-30 blur-xl">
-                </div>
+        <section class="text-center pb-16 px-4">
+            <div class="max-w-4xl mx-auto bg-sage-50 rounded-[3rem] p-10 md:p-16 text-forest-900 overflow-hidden relative border border-sage-100">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full translate-x-1/3 -translate-y-1/3 opacity-60 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-terracotta-100 rounded-full -translate-x-1/3 translate-y-1/3 opacity-40 blur-3xl"></div>
 
-                <h2 class="text-3xl font-serif font-bold mb-4 relative z-10">Ready to Take Control?</h2>
-                <p class="text-lg text-gray-600 mb-8 font-light relative z-10">
-                    Your personalized PCOS assessment is just 2 minutes away.
+                <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6 relative z-10 text-forest-900">Ready to Take Control?</h2>
+                <p class="text-xl text-gray-600 mb-10 font-light relative z-10 max-w-xl mx-auto">
+                    Your personalized PCOS assessment is just 2 minutes away. Stop guessing and start healing.
                 </p>
 
                 <a href="assessment.html"
-                    class="inline-block bg-forest-900 hover:bg-forest-800 text-sand font-bold text-lg px-12 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl relative z-10">
-                    Start Your FREE Assessment Now →
+                    class="inline-flex items-center justify-center gap-3 bg-forest-900 hover:bg-forest-800 text-sand font-bold text-lg px-12 py-5 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl relative z-10">
+                    Start Your FREE Assessment Now
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </a>
 
-                <div
-                    class="flex justify-center items-center gap-6 text-xs font-bold tracking-widest text-forest-800/60 uppercase mt-8 relative z-10">
-                    <span class="flex items-center">
-                        <span class="text-forest-600 mr-2">✓</span> 100% Free
+                <div class="flex justify-center items-center gap-8 text-xs font-bold tracking-widest text-forest-800/60 uppercase mt-10 relative z-10">
+                    <span class="flex items-center gap-2">
+                        <span class="text-forest-600">✓</span> 100% Free
                     </span>
-                    <span class="flex items-center">
-                        <span class="text-forest-600 mr-2">✓</span> No Spam
+                    <span class="flex items-center gap-2">
+                        <span class="text-forest-600">✓</span> No Spam
                     </span>
-                    <span class="flex items-center">
-                        <span class="text-forest-600 mr-2">✓</span> Instant Results
+                    <span class="flex items-center gap-2">
+                        <span class="text-forest-600">✓</span> Instant Results
                     </span>
                 </div>
             </div>
@@ -524,17 +485,15 @@
     <footer class="bg-forest-900 text-sand py-12 relative overflow-hidden">
         <div class="absolute inset-0 bg-grain opacity-5 pointer-events-none"></div>
         <div class="max-w-6xl mx-auto px-6 text-center relative z-10">
-            <div class="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <span class="text-sand font-serif italic text-2xl">P</span>
-            </div>
-            <p class="text-forest-200/60 text-sm mb-4">
-                © <span id="footer-year"></span> PCOS Solutions. Helping women reclaim their health naturally.
+            <div class="mx-auto mb-6 flex justify-center"><img src="../images/pcos/pcos-logo.png" alt="PCOS Care" class="h-14 w-auto brightness-0 invert opacity-80"></div>
+            <p class="text-sand/60 text-sm mb-4">
+                © <span id="footer-year"></span> PCOS Care. Helping women reclaim their health naturally.
             </p>
-            <p class="text-xs text-forest-200/40 max-w-xl mx-auto font-light">
+            <p class="text-xs text-sand/40 max-w-xl mx-auto font-light">
                 This assessment is for educational purposes only and does not replace professional medical advice.
             </p>
         </div>
-        <p class="mt-2"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
+        <p class="mt-2 text-sand/50 text-xs text-center"><a href="/privacy-policy.html" class="hover:underline">Privacy Policy</a> | <a
                 href="/backend/admin/" class="hover:underline">Admin</a></p>
     </footer>
 
