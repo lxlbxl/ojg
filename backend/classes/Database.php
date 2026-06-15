@@ -52,6 +52,8 @@ class Database
 
             if ($dbType === 'mysql') {
                 $this->connectMySQL();
+            } elseif ($dbType === 'pgsql') {
+                $this->connectPostgres();
             } else {
                 $this->connectSQLite();
             }
@@ -91,6 +93,13 @@ class Database
         $this->connection = new PDO($dsn, DB_USER, DB_PASS);
     }
 
+    private function connectPostgres()
+    {
+        $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
+        $this->connection = new PDO($dsn, DB_USER, DB_PASS);
+        $this->connection->exec("SET NAMES 'UTF8'");
+    }
+
     private function connectSQLite()
     {
         // Check if PDO SQLite is available
@@ -116,6 +125,13 @@ class Database
         // Check if admin_users table exists
         if ($this->isMySQL()) {
             $stmt = $this->connection->query("SHOW TABLES LIKE 'admin_users'");
+        } elseif ($this->isPostgres()) {
+            $stmt = $this->connection->query("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'admin_users')");
+            $row = $stmt->fetch(PDO::FETCH_NUM);
+            if ($row && !$row[0]) {
+                $this->initializeSchema();
+            }
+            return;
         } else {
             $stmt = $this->connection->query("SELECT name FROM sqlite_master WHERE type='table' AND name='admin_users'");
         }
@@ -129,7 +145,9 @@ class Database
 
     private function initializeSchema()
     {
-        $schemaFile = APP_ROOT . '/database/schema.sql';
+        $schemaFile = $this->isPostgres()
+            ? APP_ROOT . '/database/schema_postgres.sql'
+            : APP_ROOT . '/database/schema.sql';
 
         if (file_exists($schemaFile)) {
             $schema = file_get_contents($schemaFile);
@@ -140,32 +158,69 @@ class Database
                 $schema = str_replace('datetime(\'now\')', 'NOW()', $schema);
             }
 
+            // For PostgreSQL, use the dedicated schema file (no adjustments needed)
+            // For SQLite, execute the statements split by semicolon
+
             // Split schema into individual statements
-            $statements = array_filter(
-                array_map('trim', explode(';', $schema)),
-                function ($stmt) {
-                    return !empty($stmt) && !preg_match('/^\s*--/', $stmt);
-                }
-            );
+            $statements = $this->splitSchemaStatements($schema);
 
             foreach ($statements as $statement) {
                 if (!empty(trim($statement))) {
                     try {
                         $this->connection->exec($statement);
                     } catch (PDOException $e) {
-                        // Ignore "table already exists" errors
+                        // Ignore "table already exists" errors and PostgreSQL "already exists" errors
+                        $msg = $e->getMessage();
                         if (
-                            strpos($e->getMessage(), 'already exists') === false &&
-                            strpos($e->getMessage(), '1050') === false
-                        ) { // MySQL error 1050
+                            strpos($msg, 'already exists') === false &&
+                            strpos($msg, '1050') === false &&
+                            strpos($msg, '42P07') === false &&
+                            strpos($msg, '42P16') === false &&
+                            strpos($msg, '42710') === false &&
+                            strpos($msg, 'duplicate key') === false &&
+                            strpos($msg, 'unique constraint') === false
+                        ) {
                             if (DEBUG_MODE) {
-                                error_log("Schema execution error: " . $e->getMessage());
+                                error_log("Schema execution error: " . $msg);
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private function splitSchemaStatements($schema)
+    {
+        // For PostgreSQL, split on semicolons but respect DO$$...$$ blocks
+        if (strpos($schema, '$$') !== false) {
+            // Return schema as single block for PostgreSQL DO blocks and functions
+            $statements = [];
+            $parts = preg_split('/(?<=;)\s*(?=\S)/', $schema);
+            $current = '';
+            foreach ($parts as $part) {
+                $current .= $part;
+                if (substr_count($current, '$$') === 0 || (substr_count($current, '$$') % 2) === 0) {
+                    if (trim($current) !== '' && !preg_match('/^\s*--/', trim($current))) {
+                        $statements[] = trim($current);
+                    }
+                    $current = '';
+                } else {
+                    $current .= "\n";
+                }
+            }
+            if (trim($current) !== '') {
+                $statements[] = trim($current);
+            }
+            return $statements;
+        }
+
+        return array_filter(
+            array_map('trim', explode(';', $schema)),
+            function ($stmt) {
+                return !empty($stmt) && !preg_match('/^\s*--/', $stmt);
+            }
+        );
     }
 
     private function initializeMemberSchema()
@@ -236,6 +291,7 @@ class Database
 
             // Create security and rate limiting tables if they don't exist
             $isMySQL = $this->isMySQL();
+            $isPostgres = $this->isPostgres();
             if ($isMySQL) {
                 $this->connection->exec("CREATE TABLE IF NOT EXISTS consumed_tokens (
                     token VARCHAR(64) PRIMARY KEY,
@@ -254,6 +310,9 @@ class Database
                     tokens DECIMAL(10, 4) NOT NULL,
                     last_updated INT NOT NULL
                 )");
+            } elseif ($isPostgres) {
+                // PostgreSQL tables created by schema_postgres.sql
+                // No additional setup needed here
             } else {
                 $this->connection->exec("CREATE TABLE IF NOT EXISTS consumed_tokens (
                     token TEXT PRIMARY KEY,
@@ -346,7 +405,7 @@ class Database
 
     /**
      * Defensive helper: add a column to a table only if it doesn't already exist.
-     * Works for both MySQL and SQLite.
+     * Works for MySQL, PostgreSQL, and SQLite.
      */
     private function addColumnIfMissing($table, $column, $definition)
     {
@@ -361,6 +420,13 @@ class Database
                 $stmt->execute([$dbName, $table, $column]);
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 $exists = ((int) ($row['c'] ?? 0)) > 0;
+            } elseif ($this->isPostgres()) {
+                $stmt = $this->connection->prepare(
+                    "SELECT EXISTS (SELECT FROM information_schema.columns 
+                     WHERE table_schema = 'public' AND table_name = ? AND column_name = ?)"
+                );
+                $stmt->execute([$table, $column]);
+                $exists = (bool) $stmt->fetchColumn();
             } else {
                 $cols = $this->fetchAll("PRAGMA table_info($table)");
                 foreach ($cols as $c) {
@@ -399,6 +465,12 @@ class Database
         // Get existing columns
         if ($this->isMySQL()) {
             $stmt = $this->connection->prepare("DESCRIBE sales");
+            $stmt->execute();
+            $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        } elseif ($this->isPostgres()) {
+            $stmt = $this->connection->prepare(
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'sales'"
+            );
             $stmt->execute();
             $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
         } else {
@@ -441,6 +513,12 @@ class Database
             $stmt = $this->connection->prepare("DESCRIBE users");
             $stmt->execute();
             $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        } elseif ($this->isPostgres()) {
+            $stmt = $this->connection->prepare(
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'users'"
+            );
+            $stmt->execute();
+            $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
         } else {
             $cols = $this->fetchAll("PRAGMA table_info(users)");
             $cols = array_map(function ($c) {
@@ -476,6 +554,12 @@ class Database
     {
         if ($this->isMySQL()) {
             $stmt = $this->connection->prepare("DESCRIBE funnel_tracking");
+            $stmt->execute();
+            $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        } elseif ($this->isPostgres()) {
+            $stmt = $this->connection->prepare(
+                "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'funnel_tracking'"
+            );
             $stmt->execute();
             $cols = $stmt->fetchAll(PDO::FETCH_COLUMN);
         } else {
@@ -532,6 +616,11 @@ class Database
     private function isMySQL()
     {
         return $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql';
+    }
+
+    private function isPostgres()
+    {
+        return $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql';
     }
 
     public function getConnection()
@@ -1070,22 +1159,29 @@ class Database
             if ($this->useFileStorage) {
                 $assessments = $this->getAssessments();
                 foreach ($assessments as $assessment) {
-                    // Filter by type if provided
                     if ($type && ($assessment['assessment_type'] ?? 'general') !== $type) {
                         continue;
                     }
-
                     $date = substr($assessment['created_at'], 0, 10);
                     if (isset($dates[$date])) {
                         $dates[$date]++;
                     }
                 }
             } else {
-                $where = "created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)";
-                $params = [$days];
+                $isMySQL = $this->isMySQL();
+                $isPostgres = $this->isPostgres();
 
-                if (!$this->isMySQL()) {
+                if ($isPostgres) {
+                    $where = "created_at >= NOW() - INTERVAL '$days days'";
+                } elseif ($isMySQL) {
+                    $where = "created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)";
+                } else {
                     $where = "created_at >= date('now', '-' || ? || ' days')";
+                }
+
+                $params = [];
+                if (!$isPostgres) {
+                    $params = [$days];
                 }
 
                 if ($type) {
@@ -1093,9 +1189,13 @@ class Database
                     $params[] = $type;
                 }
 
-                $sql = $this->isMySQL() ?
-                    "SELECT DATE(created_at) as date, COUNT(*) as count FROM assessments WHERE $where GROUP BY DATE(created_at)" :
-                    "SELECT date(created_at) as date, COUNT(*) as count FROM assessments WHERE $where GROUP BY date(created_at)";
+                if ($isPostgres) {
+                    $sql = "SELECT DATE(created_at) as date, COUNT(*) as count FROM assessments WHERE $where GROUP BY DATE(created_at)";
+                } elseif ($isMySQL) {
+                    $sql = "SELECT DATE(created_at) as date, COUNT(*) as count FROM assessments WHERE $where GROUP BY DATE(created_at)";
+                } else {
+                    $sql = "SELECT date(created_at) as date, COUNT(*) as count FROM assessments WHERE $where GROUP BY date(created_at)";
+                }
 
                 $stmt = $this->connection->prepare($sql);
                 $stmt->execute($params);
@@ -1125,27 +1225,32 @@ class Database
             if ($this->useFileStorage) {
                 $sales = $this->getSales();
                 foreach ($sales as $sale) {
-                    // Filter by completed status
                     if (($sale['payment_status'] ?? 'pending') !== 'completed') {
                         continue;
                     }
-
-                    // Filter by type if provided
                     if ($type && ($sale['product_type'] ?? 'general') !== $type) {
                         continue;
                     }
-
                     $date = substr($sale['created_at'], 0, 10);
                     if (isset($dates[$date])) {
                         $dates[$date]++;
                     }
                 }
             } else {
-                $where = "created_at >= DATE_SUB(NOW(), INTERVAL ? DAY) AND payment_status = 'completed'";
-                $params = [$days];
+                $isMySQL = $this->isMySQL();
+                $isPostgres = $this->isPostgres();
 
-                if (!$this->isMySQL()) {
+                if ($isPostgres) {
+                    $where = "created_at >= NOW() - INTERVAL '$days days' AND payment_status = 'completed'";
+                } elseif ($isMySQL) {
+                    $where = "created_at >= DATE_SUB(NOW(), INTERVAL ? DAY) AND payment_status = 'completed'";
+                } else {
                     $where = "created_at >= date('now', '-' || ? || ' days') AND payment_status = 'completed'";
+                }
+
+                $params = [];
+                if (!$isPostgres) {
+                    $params = [$days];
                 }
 
                 if ($type) {
@@ -1153,9 +1258,13 @@ class Database
                     $params[] = $type;
                 }
 
-                $sql = $this->isMySQL() ?
-                    "SELECT DATE(created_at) as date, COUNT(*) as count FROM sales WHERE $where GROUP BY DATE(created_at)" :
-                    "SELECT date(created_at) as date, COUNT(*) as count FROM sales WHERE $where GROUP BY date(created_at)";
+                if ($isPostgres) {
+                    $sql = "SELECT DATE(created_at) as date, COUNT(*) as count FROM sales WHERE $where GROUP BY DATE(created_at)";
+                } elseif ($isMySQL) {
+                    $sql = "SELECT DATE(created_at) as date, COUNT(*) as count FROM sales WHERE $where GROUP BY DATE(created_at)";
+                } else {
+                    $sql = "SELECT date(created_at) as date, COUNT(*) as count FROM sales WHERE $where GROUP BY date(created_at)";
+                }
 
                 $stmt = $this->connection->prepare($sql);
                 $stmt->execute($params);

@@ -17,13 +17,16 @@ function log_debug($message)
 function getDBConnection()
 {
     if (defined('DB_TYPE') && DB_TYPE === 'mysql') {
-        // MySQL connection
         $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";
         $pdo = new PDO($dsn, DB_USER, DB_PASS);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
+    } elseif (defined('DB_TYPE') && DB_TYPE === 'pgsql') {
+        $dsn = "pgsql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME;
+        $pdo = new PDO($dsn, DB_USER, DB_PASS);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $pdo;
     } else {
-        // SQLite connection
         $pdo = new PDO('sqlite:' . DB_PATH);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
@@ -98,6 +101,7 @@ if ($_POST) {
         } catch (Exception $e) {
             $error = 'Database connection error';
             log_debug("Error: " . $e->getMessage());
+        }
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once '../config/config.php';
+require_once __DIR__ . '/../config/config.php';
 
 // Log the logout activity if user is logged in
 if (isset($_SESSION['admin_id'])) {
