@@ -510,13 +510,16 @@
                     planName: '',
                     amount: '',
                     transactionId: '',
+                    numericTransactionId: '',
                     date: '',
                     email: '',
                     guarantee: '',
                     name: '',
                     phone: ''
                 },
-                newCredentials: null,
+                newCredentials: { email: null, password: null, username: null, auto_login_token: null },
+                signedToken: null,
+                signedTokenExpiry: null,
                 otoPurchased: false,
                 isProcessingOTO: false,
                 userCreationTriggered: false,
@@ -545,6 +548,7 @@
                         planName: urlParams.get('plan') || storedOrder.plan || storedOrder.planName || '90-Day PCOS Plan',
                         amount: urlParams.get('amount') || storedOrder.amount || '45,000',
                         transactionId: urlParams.get('tx_ref') || urlParams.get('transaction_id') || storedOrder.transactionId || storedOrder.tx_ref || '',
+                        numericTransactionId: urlParams.get('transaction_id') || storedOrder.numericTransactionId || '',
                         date: urlParams.get('date') || storedOrder.date || new Date().toLocaleDateString('en-NG', {
                             year: 'numeric', month: 'long', day: 'numeric'
                         }),
@@ -606,7 +610,7 @@
                             email: this.orderDetails.email,
                             name: this.orderDetails.name,
                             phone: this.orderDetails.phone,
-                            transaction_id: this.orderDetails.transactionId,
+                            transaction_id: this.orderDetails.numericTransactionId || this.orderDetails.transactionId,
                             tx_ref: this.orderDetails.transactionId,
                             amount: parseInt(String(this.orderDetails.amount).replace(/[₦,]/g, '')) || 0,
                             currency: 'NGN',
@@ -640,6 +644,10 @@
                             if (result.auto_login_token) {
                                 localStorage.setItem('ojg_auto_login', result.auto_login_token);
                             }
+                            if (result.signed_token) {
+                                this.signedToken = result.signed_token;
+                                this.signedTokenExpiry = result.signed_token_expiry;
+                            }
                             console.log('User account created successfully!');
                         } else if (result.success) {
                             // User created but credentials not in response (existing user)
@@ -669,7 +677,11 @@
                     const checkEndpoint = async () => {
                         try {
                             console.log(`Checking account status (Attempt ${attempts + 1}/${maxAttempts})...`);
-                            const response = await fetch(`../backend/api/get-credentials.php?tx_ref=${encodeURIComponent(txRef)}&email=${encodeURIComponent(this.orderDetails.email)}`);
+                            let credUrl = `../backend/api/get-credentials.php?tx_ref=${encodeURIComponent(txRef)}&email=${encodeURIComponent(this.orderDetails.email)}`;
+                            if (this.signedToken) {
+                                credUrl += `&token=${encodeURIComponent(this.signedToken)}&expiry=${encodeURIComponent(this.signedTokenExpiry)}`;
+                            }
+                            const response = await fetch(credUrl);
                             const data = await response.json();
 
                             if (data.success) {

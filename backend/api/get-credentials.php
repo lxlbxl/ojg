@@ -3,15 +3,15 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 
-require_once '../admin/auth.php';
 require_once '../classes/Database.php';
 require_once '../classes/Settings.php';
 
 $db = Database::getInstance();
 
 $tx_ref = $_GET['tx_ref'] ?? $_POST['tx_ref'] ?? '';
-$token = $_GET['token'] ?? $_POST['token'] ?? '';
+$token  = $_GET['token']  ?? $_POST['token']  ?? '';
 $expiry = intval($_GET['expiry'] ?? $_POST['expiry'] ?? 0);
+$email  = strtolower(trim($_GET['email'] ?? $_POST['email'] ?? ''));
 
 if (empty($tx_ref)) {
     http_response_code(400);
@@ -19,30 +19,40 @@ if (empty($tx_ref)) {
     exit;
 }
 
-if (empty($token) || empty($expiry)) {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'error' => 'Authentication token required']);
-    exit;
-}
+$useTokenAuth = !empty($token) && !empty($expiry);
 
-// 1. Check token expiry (15-min TTL)
-if (time() > $expiry) {
+if ($useTokenAuth) {
+    if (time() > $expiry) {
+        http_response_code(403);
+        echo json_encode(['success' => false, 'error' => 'Authentication token expired']);
+        exit;
+    }
+} elseif (empty($email)) {
     http_response_code(403);
-    echo json_encode(['success' => false, 'error' => 'Authentication token expired']);
+    echo json_encode(['success' => false, 'error' => 'Authentication required']);
     exit;
 }
 
 try {
-    // 2. Check if token has already been consumed
-    $alreadyConsumed = $db->fetch("SELECT token FROM consumed_tokens WHERE token = ?", [$token]);
-    if ($alreadyConsumed) {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'Authentication token already used']);
-        exit;
+    if ($useTokenAuth) {
+        // Check if token has already been consumed (graceful if table missing)
+        try {
+            $alreadyConsumed = $db->fetch("SELECT token FROM consumed_tokens WHERE token = ?", [$token]);
+            if ($alreadyConsumed) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'error' => 'Authentication token already used']);
+                exit;
+            }
+        } catch (\Throwable $e) {
+            error_log("consumed_tokens check skipped: " . $e->getMessage());
+        }
     }
 
-    // 3. Find the sale by transaction ref to get user_id
-    $sale = $db->fetch("SELECT user_id, email, payment_status, created_at FROM sales WHERE tx_ref = ? OR transaction_id = ?", [$tx_ref, $tx_ref]);
+    // Find the sale by transaction ref
+    $sale = $db->fetch(
+        "SELECT user_id, email, payment_status FROM sales WHERE tx_ref = ? OR transaction_id = ?",
+        [$tx_ref, $tx_ref]
+    );
 
     if (!$sale) {
         http_response_code(404);
@@ -52,26 +62,40 @@ try {
 
     $userId = $sale['user_id'];
 
-    // 4. Verify HMAC token signature
-    $secretKey = Settings::getInstance()->get('flutterwave_webhook_secret', '')
-        ?: Settings::getInstance()->get('webhook_secret', '')
-        ?: 'ojg_fallback_secret_key_123';
+    if ($useTokenAuth) {
+        $secretKey = Settings::getInstance()->get('flutterwave_webhook_secret', '')
+            ?: Settings::getInstance()->get('webhook_secret', '')
+            ?: 'ojg_fallback_secret_key_123';
 
-    $expectedSignature = hash_hmac('sha256', $tx_ref . '_' . $userId . '_' . $expiry, $secretKey);
-    if (!hash_equals($expectedSignature, $token)) {
-        http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'Invalid authentication token']);
-        exit;
+        $expectedSignature = hash_hmac('sha256', $tx_ref . '_' . $userId . '_' . $expiry, $secretKey);
+        if (!hash_equals($expectedSignature, $token)) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'error' => 'Invalid authentication token']);
+            exit;
+        }
+
+        try {
+            $db->insert('consumed_tokens', [
+                'token'       => $token,
+                'consumed_at' => date('Y-m-d H:i:s')
+            ]);
+        } catch (\Throwable $e) {
+            error_log("consumed_tokens insert skipped: " . $e->getMessage());
+        }
+    } else {
+        // Email fallback — verify email matches the sale record
+        if ($email !== strtolower(trim($sale['email']))) {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'error' => 'Email does not match transaction']);
+            exit;
+        }
     }
 
-    // 5. Mark token as consumed
-    $db->insert('consumed_tokens', [
-        'token' => $token,
-        'consumed_at' => date('Y-m-d H:i:s')
-    ]);
-
-    // 6. Fetch User Details (Explicitly strip password_hash from SELECT)
-    $user = $db->fetch("SELECT id, email, username, first_name, name, type, status FROM users WHERE id = ?", [$userId]);
+    // Fetch user details
+    $user = $db->fetch(
+        "SELECT id, email, username, first_name, name, type, status FROM users WHERE id = ?",
+        [$userId]
+    );
 
     if (!$user) {
         http_response_code(404);
@@ -79,8 +103,8 @@ try {
         exit;
     }
 
-    // 7. Generate Auto-Login Token
-    $authToken = bin2hex(random_bytes(16));
+    // Generate auto-login token
+    $authToken  = bin2hex(random_bytes(16));
     $authExpiry = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
     $db->query(
@@ -88,18 +112,17 @@ try {
         [$userId, $authToken, $authExpiry]
     );
 
-    // 8. Return Data
     echo json_encode([
-        'success' => true,
-        'username' => $user['username'] ?? $user['email'], // Fallback to email if no username
+        'success'          => true,
+        'username'         => $user['username'] ?? $user['email'],
         'auto_login_token' => $authToken,
-        'email' => $user['email'],
-        'name' => $user['name'] ?? $user['first_name'],
-        'message' => 'Account ready'
+        'email'            => $user['email'],
+        'name'             => $user['name'] ?? $user['first_name'],
+        'message'          => 'Account ready'
     ]);
 
-} catch (Exception $e) {
+} catch (\Throwable $e) {
     error_log("Credential Fetch Error: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'error' => 'Server error']);
+    echo json_encode(['success' => false, 'error' => 'Server error: ' . $e->getMessage()]);
 }

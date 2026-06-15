@@ -121,7 +121,7 @@ try {
     }
 
     echo json_encode($result);
-} catch (Exception $e) {
+} catch (\Throwable $e) {
     error_log("Webhook Error: " . $e->getMessage());
     http_response_code(500);
     echo json_encode(['success' => false, 'error' => $e->getMessage()]);
