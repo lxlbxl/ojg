@@ -1502,7 +1502,7 @@
 
             try {
                 const res = await fetch('/member/api/member_actions.php', { method: 'POST', body: formData, credentials: 'include' });
-                const data = await response.json();
+                const data = await res.json();
 
                 if (data.success) {
                     showNotification('✓ Activity marked as done!', 'success');
