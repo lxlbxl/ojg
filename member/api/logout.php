@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json');
-$allowedOrigins = ['http://localhost:5173', 'http://localhost:8080'];
-if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+$allowedOrigins = ['https://ojg.ng', 'https://www.ojg.ng', 'http://localhost:5173', 'http://localhost:8080'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
 }
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');

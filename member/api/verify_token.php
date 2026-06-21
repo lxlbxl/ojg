@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json');
-$allowedOrigins = ['http://localhost:5173', 'http://localhost:8080'];
-if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+$allowedOrigins = ['https://ojg.ng', 'https://www.ojg.ng', 'http://localhost:5173', 'http://localhost:8080'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
 }
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -13,7 +14,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS')
 require_once '../../backend/config/config.php';
 require_once '../../backend/classes/Database.php';
 require_once '../../backend/classes/MemberAuth.php';
-require_once '../../backend/classes/MealPlanner.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -53,14 +53,6 @@ if ($tokenRow) {
 
         // Consume token
         $db->query("DELETE FROM auth_tokens WHERE token = ?", [$token]);
-
-        // Proactive generation
-        try {
-            $planner = new MealPlanner();
-            $planner->ensurePlansExist($userId, 3);
-        } catch (Exception $e) {
-            // Ignore gen errors
-        }
 
         echo json_encode(['success' => true]);
         exit;

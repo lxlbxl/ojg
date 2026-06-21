@@ -1,8 +1,9 @@
 <?php
 header('Content-Type: application/json');
-$allowedOrigins = ['http://localhost:5173', 'http://localhost:8080'];
-if (in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-    header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+$allowedOrigins = ['https://ojg.ng', 'https://www.ojg.ng', 'http://localhost:5173', 'http://localhost:8080'];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins)) {
+    header('Access-Control-Allow-Origin: ' . $origin);
 }
 header('Access-Control-Allow-Credentials: true');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -25,25 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $result = $auth->login($email, $password);
     if ($result['success']) {
-        // Init session
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        // Proactive generation
-        try {
-            require_once '../../backend/classes/MealPlanner.php';
-            $planner = new MealPlanner();
-            $user = $auth->getCurrentUser();
-            if ($user) {
-                // Ensure 3 days of plans exist
-                $planner->ensurePlansExist($user['user_id'] ?? $user['id'], 3);
-            }
-        } catch (Exception $e) {
-            // Log but don't fail login
-            error_log("Proactive gen failed: " . $e->getMessage());
-        }
-
         // Log Activity
         try {
             $logger = new ActivityLogger();
