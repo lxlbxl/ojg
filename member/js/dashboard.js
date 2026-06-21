@@ -82,6 +82,7 @@ async function fetchData() {
 
             if (isProfileIncomplete) {
                 console.log("Profile incomplete, showing modal", { pcosType, allergies, prefs });
+                initOnboardingModal(p.pcos_type || '');
                 const onboardingModal = document.getElementById('onboardingModal');
                 if (onboardingModal) {
                     onboardingModal.classList.remove('hidden');
@@ -1005,6 +1006,25 @@ function processRenewal(tier, amount, pubKey) {
 // Onboarding / Missing Data Logic
 let boardingStep = 1;
 const totalSteps = 3;
+
+const VALID_PCOS_TYPES = ['insulin resistant', 'adrenal', 'inflammatory', 'post-pill'];
+
+function initOnboardingModal(knownPcosType) {
+    const section = document.getElementById('pcosTypeSection');
+    const radios = document.querySelectorAll('input[name="pcos_type"]');
+    const normalized = (knownPcosType || '').toLowerCase().trim();
+    const hasValidType = VALID_PCOS_TYPES.includes(normalized);
+
+    if (hasValidType && section) {
+        section.classList.add('hidden');
+        radios.forEach(r => r.removeAttribute('required'));
+        radios.forEach(r => { if (r.value.toLowerCase() === normalized) r.checked = true; });
+    } else if (section) {
+        section.classList.remove('hidden');
+        const first = document.querySelector('input[name="pcos_type"]');
+        if (first) first.setAttribute('required', '');
+    }
+}
 
 // Pre-fill PCOS type from localStorage if available (from assessment results)
 function prefillPCOSTypeFromStorage() {
