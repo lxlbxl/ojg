@@ -8,11 +8,30 @@ require_once '../../backend/classes/MemberAuth.php';
 require_once '../../backend/classes/MealPlanner.php';
 require_once '../../backend/classes/ActivityLogger.php';
 
-// Self-healing: ensure member_profiles has all required columns (PostgreSQL migration guard)
+// Self-healing: ensure required tables and columns exist (PostgreSQL migration guard)
 try {
     $__db = Database::getInstance();
     $__conn = $__db->getConnection();
     if ($__conn->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
+
+        // Ensure activity_logs table exists
+        $__conn->exec("CREATE TABLE IF NOT EXISTS activity_logs (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+            plan_date DATE NOT NULL,
+            activity_type VARCHAR(50) NOT NULL,
+            activity_name VARCHAR(255),
+            scheduled_start TIME NOT NULL DEFAULT '00:00',
+            scheduled_end TIME NOT NULL DEFAULT '23:59',
+            completed_at TIMESTAMP,
+            status VARCHAR(20) DEFAULT 'pending',
+            notes TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+        $__conn->exec("CREATE INDEX IF NOT EXISTS idx_activity_logs_user_date ON activity_logs(user_id, plan_date)");
+
+        // Ensure member_profiles has all required columns
         $__cols = [
             'age'                  => 'INTEGER',
             'weight'               => 'DECIMAL(6,2)',
@@ -31,8 +50,7 @@ try {
         }
     }
 } catch (Exception $__e) {
-    // Non-fatal: log but continue — columns may already exist or table not yet created
-    error_log("member_profiles schema guard: " . $__e->getMessage());
+    error_log("member_actions schema guard: " . $__e->getMessage());
 }
 
 // Prepare strict JSON response
