@@ -90,7 +90,7 @@ if (!isset($_SESSION['admin_id'])) {
             color: white;
         }
 
-        .view-section {
+.view-section {
             display: none;
         }
 
@@ -124,6 +124,7 @@ if (!isset($_SESSION['admin_id'])) {
 
 <body class="min-h-screen">
     <div id="app" class="hidden">
+
         <!-- Sidebar - Desktop -->
         <aside
             class="hidden md:flex flex-col fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-sage-100 p-8 z-50">
@@ -754,6 +755,7 @@ if (!isset($_SESSION['admin_id'])) {
                             templates, and administrative access.</p>
                     </div>
                 </section>
+
             </main>
         </div>
     </div>

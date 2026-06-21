@@ -344,13 +344,29 @@
                             </button>
                         </div>
 
+                        <!-- Daily Progress Strip -->
+                        <div id="dailyProgressStrip" class="hidden mb-6 flex items-center gap-4 p-4 bg-gradient-to-r from-sage-50 to-green-50 rounded-2xl border border-green-100">
+                            <div class="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[10px] font-bold text-sage-400 uppercase tracking-widest">Today's Progress</span>
+                                    <span id="progressLabel" class="text-[10px] font-bold text-green-600">0 / 7 Done</span>
+                                </div>
+                                <div class="h-1.5 bg-white/70 rounded-full overflow-hidden">
+                                    <div id="progressBar" class="h-full bg-gradient-to-r from-sage-400 to-green-500 rounded-full transition-all duration-700" style="width:0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="mealPreviewGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Content generated via JS -->
                         </div>
                     </div>
 
                     <!-- Movement Suggestion -->
-                    <div
+                    <div id="movementCard"
                         class="bg-sage-600 rounded-[3rem] p-8 md:p-12 text-white shadow-2xl shadow-sage-600/20 relative overflow-hidden">
                         <div class="relative z-10">
                             <div class="flex items-center justify-between mb-8">
@@ -420,7 +436,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="herbalTeaGrid">
                                 <!-- Morning Tea -->
-                                <div class="bg-white rounded-[2rem] p-6 border border-sage-100 shadow-sm">
+                                <div id="morningTeaCard" class="bg-white rounded-[2rem] p-6 border border-sage-100 shadow-sm relative overflow-hidden">
                                     <div class="flex justify-between items-start mb-4">
                                         <span
                                             class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Morning
@@ -447,7 +463,7 @@
                                 </div>
 
                                 <!-- Evening Tea -->
-                                <div class="bg-white rounded-[2rem] p-6 border border-sage-100 shadow-sm">
+                                <div id="eveningTeaCard" class="bg-white rounded-[2rem] p-6 border border-sage-100 shadow-sm relative overflow-hidden">
                                     <div class="flex justify-between items-start mb-4">
                                         <span
                                             class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Evening

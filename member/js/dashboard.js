@@ -441,7 +441,7 @@ function renderDashboard() {
     const supplementList = document.getElementById('supplementList');
     if (supplementList) {
         supplementList.innerHTML = `
-            <div class="bg-gradient-to-br from-terracotta-50 to-orange-50/50 rounded-2xl p-5 border border-terracotta-100/50 relative overflow-hidden group">
+            <div id="fruitCard" class="bg-gradient-to-br from-terracotta-50 to-orange-50/50 rounded-2xl p-5 border border-terracotta-100/50 relative overflow-hidden group">
                 <div class="absolute top-0 right-0 p-4 opacity-10 text-4xl transform translate-x-2 -translate-y-2">🍎</div>
                 
                 <div class="relative z-10">
@@ -526,7 +526,7 @@ function renderDashboard() {
             const pulse = !mealName ? 'animate-pulse' : '';
             const timeRange = meal?.time_start && meal?.time_end ? `${meal.time_start} - ${meal.time_end}` : '';
             return `
-            <div class="flex items-center gap-6 p-6 rounded-3xl bg-sage-50/50 border border-sage-50 group hover:border-sage-200 transition-all cursor-pointer" onclick="markActivityDone('meal_${m}')">
+            <div id="mealCard_${m}" class="flex items-center gap-6 p-6 rounded-3xl bg-sage-50/50 border border-sage-50 group hover:border-sage-200 transition-all cursor-pointer relative" onclick="markActivityDone('meal_${m}')">
                 <div class="w-20 h-20 rounded-2xl bg-sage-100 flex items-center justify-center text-3xl transition-transform group-hover:scale-110">
                     ${m === 'breakfast' ? '🥣' : (m === 'lunch' ? '🥗' : '🍲')}
                 </div>
@@ -538,7 +538,7 @@ function renderDashboard() {
                     <h4 class="text-xl font-medium">${display}</h4>
                 </div>
                 <button class="p-3 rounded-xl bg-sage-100 hover:bg-sage-500 hover:text-white text-sage-400 transition-all opacity-0 group-hover:opacity-100" title="Mark as Done">
-                    <i data-lucide="check" class="w-4 h-4"></i>
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
                 </button>
             </div>
         `}).join('');
@@ -548,6 +548,9 @@ function renderDashboard() {
     updateActivityButtonStates();
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Re-apply today's done states after re-render
+    loadActivityStates();
 }
 
 function renderNourish() {
@@ -698,11 +701,11 @@ async function markActivityDone(activityType, event) {
 
         if (data.success) {
             showNotification('✓ Activity marked as done!', 'success');
-            updateButtonState(activityType, 'completed');
+            applyCardDoneState(activityType, 'completed', new Date().toISOString());
         } else {
             if (data.status === 'missed') {
                 showNotification('⏰ Time window has passed - activity marked as missed', 'warning');
-                updateButtonState(activityType, 'missed');
+                applyCardDoneState(activityType, 'missed', null);
             } else if (data.status === 'completed') {
                 showNotification('Already marked as done!', 'info');
             } else {
@@ -715,26 +718,132 @@ async function markActivityDone(activityType, event) {
     }
 }
 
-function updateButtonState(activityType, status) {
-    let btnId = '';
-    if (activityType === 'movement') btnId = 'movementDoneBtn';
-    else if (activityType === 'herbal_tea_morning') btnId = 'morningTeaDoneBtn';
-    else if (activityType === 'herbal_tea_evening') btnId = 'eveningTeaDoneBtn';
-    else if (activityType === 'fruit_ritual') btnId = 'fruitDoneBtn';
+// Tracks which activity types are completed today
+const completedActivityTypes = new Set();
 
-    const btn = document.getElementById(btnId);
+function applyCardDoneState(activityType, status, completedAt) {
+    const timeStr = completedAt
+        ? new Date(completedAt).toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit' })
+        : '';
+
+    if (status === 'completed') completedActivityTypes.add(activityType);
+
+    // --- Update small done button ---
+    const btnMap = {
+        movement: 'movementDoneBtn',
+        herbal_tea_morning: 'morningTeaDoneBtn',
+        herbal_tea_evening: 'eveningTeaDoneBtn',
+        fruit_ritual: 'fruitDoneBtn'
+    };
+    const btn = document.getElementById(btnMap[activityType] || '');
     if (btn) {
         if (status === 'completed') {
             btn.disabled = true;
-            btn.innerHTML = '<i data-lucide="check-circle" class="w-4 h-4"></i>';
-            btn.classList.add('bg-terracotta-500', 'text-white');
-            btn.classList.remove('bg-white', 'text-terracotta-400', 'hover:bg-terracotta-500', 'hover:text-white');
+            btn.innerHTML = `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${activityType === 'movement' ? ' <span>Done!</span>' : ''}`;
+            btn.className = btn.className.replace(/bg-\S+/g, '').replace(/text-\S+/g, '').replace(/hover:\S+/g, '').trim();
+            btn.classList.add('bg-green-500', 'text-white', 'disabled:opacity-100');
         } else if (status === 'missed') {
             btn.disabled = true;
-            btn.innerHTML = '<i data-lucide="x-circle" class="w-4 h-4"></i>';
-            btn.classList.add('bg-red-500/20', 'text-red-400');
+            btn.innerHTML = `<svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+            btn.classList.add('bg-red-100', 'text-red-400');
         }
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+
+    // --- Update meal card (dynamically rendered) ---
+    if (activityType.startsWith('meal_')) {
+        const mealName = activityType.replace('meal_', '');
+        const card = document.getElementById(`mealCard_${mealName}`);
+        if (card) {
+            card.querySelectorAll('.done-stamp').forEach(el => el.remove());
+            if (status === 'completed') {
+                card.classList.remove('bg-sage-50/50', 'border-sage-50', 'hover:border-sage-200', 'cursor-pointer');
+                card.classList.add('bg-green-50', 'border-green-200');
+                card.removeAttribute('onclick');
+                const title = card.querySelector('h4');
+                if (title) title.classList.add('line-through', 'opacity-60');
+                const emoji = card.querySelector('.text-3xl');
+                if (emoji) emoji.textContent = '✅';
+                const stamp = document.createElement('div');
+                stamp.className = 'done-stamp absolute top-3 right-12 flex items-center gap-1 bg-green-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full pointer-events-none';
+                stamp.innerHTML = `<svg class="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>${timeStr ? ' ' + timeStr : ' Done'}`;
+                card.appendChild(stamp);
+            } else if (status === 'missed') {
+                card.classList.add('opacity-50');
+                card.removeAttribute('onclick');
+            }
+        }
+        updateDailyProgress();
+        return;
+    }
+
+    // --- Update non-meal activity cards (static HTML) ---
+    const cardMap = {
+        fruit_ritual: 'fruitCard',
+        movement: 'movementCard',
+        herbal_tea_morning: 'morningTeaCard',
+        herbal_tea_evening: 'eveningTeaCard'
+    };
+    const card = document.getElementById(cardMap[activityType] || '');
+    if (card) {
+        card.querySelectorAll('.done-stamp').forEach(el => el.remove());
+        if (status === 'completed') {
+            card.classList.add('ring-2', 'ring-green-300', 'ring-offset-1');
+            const stamp = document.createElement('div');
+            stamp.className = 'done-stamp absolute top-3 right-3 z-20 flex items-center gap-1 bg-green-500 text-white text-[9px] font-bold px-2.5 py-1 rounded-full shadow-sm pointer-events-none';
+            stamp.innerHTML = `<svg class="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>${timeStr ? ' Done · ' + timeStr : ' Done'}`;
+            card.appendChild(stamp);
+        } else if (status === 'missed') {
+            card.classList.add('ring-2', 'ring-red-200', 'opacity-70');
+            const stamp = document.createElement('div');
+            stamp.className = 'done-stamp absolute top-3 right-3 z-20 flex items-center gap-1 bg-red-400 text-white text-[9px] font-bold px-2.5 py-1 rounded-full shadow-sm pointer-events-none';
+            stamp.innerHTML = `<svg class="w-2.5 h-2.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg> Missed`;
+            card.appendChild(stamp);
+        }
+    }
+    updateDailyProgress();
+}
+
+// Backward-compat shim (called by disableButton-adjacent logic)
+function updateButtonState(activityType, status) {
+    applyCardDoneState(activityType, status, null);
+}
+
+function updateDailyProgress() {
+    const strip = document.getElementById('dailyProgressStrip');
+    if (!strip) return;
+    const count = completedActivityTypes.size;
+    const total = 7; // 3 meals + fruit + movement + 2 teas
+    const pct = Math.min(100, Math.round((count / total) * 100));
+    strip.classList.remove('hidden');
+    const label = document.getElementById('progressLabel');
+    if (label) label.textContent = count >= total ? '🎉 All Done!' : `${count} / ${total} Done`;
+    const bar = document.getElementById('progressBar');
+    if (bar) bar.style.width = pct + '%';
+    if (count >= total) {
+        strip.classList.add('border-green-400');
+        strip.classList.remove('border-green-100');
+    }
+}
+
+async function loadActivityStates() {
+    try {
+        const today = new Date().toISOString().split('T')[0];
+        const fd = new FormData();
+        fd.append('action', 'get_activity_logs');
+        fd.append('start_date', today);
+        fd.append('end_date', today);
+        const res = await fetch('/member/api/member_actions.php', { method: 'POST', body: fd, credentials: 'include' });
+        const data = await res.json();
+        if (!data.success || !data.logs?.length) return;
+        completedActivityTypes.clear();
+        data.logs.forEach(log => {
+            if (log.status !== 'pending') {
+                applyCardDoneState(log.activity_type, log.status, log.completed_at);
+            }
+        });
+        updateDailyProgress();
+    } catch (e) {
+        console.error('loadActivityStates:', e);
     }
 }
 

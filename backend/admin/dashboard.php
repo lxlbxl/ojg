@@ -165,7 +165,7 @@ include 'includes/header.php';
                                     'ZAR' => 'R',
                                     'CAD' => 'CA$',
                                     'AUD' => 'A$',
-                                    default => $cur . ' '
+                                    default => "$cur "
                                 };
                                 $formatted = $symbol . number_format($sum, (strtoupper($cur) === 'NGN' || strtoupper($cur) === 'KES' || strtoupper($cur) === 'TZS' || strtoupper($cur) === 'UGX' || strtoupper($cur) === 'RWF' || strtoupper($cur) === 'XAF' || strtoupper($cur) === 'XOF' || strtoupper($cur) === 'SLL') ? 0 : 2);
                                 $revParts[] = $formatted;
@@ -283,14 +283,14 @@ include 'includes/header.php';
 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-12">
     <?php
     $actions = [
-        ['manage-users.php', 'users', 'Users', 'bg-[#E3E8E1]', 'text-[#2C3E35]'],
-        ['reports.php', 'chart-bar', 'Reports', 'bg-[#FDF1E8]', 'text-[#D97757]'],
-        ['settings.php', 'cog', 'Settings', 'bg-[#F2F4F1]', 'text-[#6B7C70]'],
-        ['export.php', 'download', 'Export', 'bg-[#E0F2F1]', 'text-[#009688]'],
-        ['webhooks.php', 'link', 'Webhooks', 'bg-[#FFEBEE]', 'text-[#E57373]'],
-        ['pricing.php', 'tag', 'Pricing', 'bg-[#FFF3E0]', 'text-[#F57C00]'],
-        ['assessments.php', 'clipboard-list', 'Results', 'bg-[#E8EAF6]', 'text-[#3F51B5]'],
-        ['sales.php', 'shopping-cart', 'Sales', 'bg-[#F3E5F5]', 'text-[#9C27B0]']
+        ['manage-users.php',  'users',         'Members',       'bg-[#E3E8E1]', 'text-[#2C3E35]'],
+        ['member-pulse.php',  'trophy',         'Member Pulse',  'bg-[#FFF8E1]', 'text-[#F9A825]'],
+        ['experiments.php',   'flask',          'A/B Tests',     'bg-[#E8EAF6]', 'text-[#3F51B5]'],
+        ['funnel-tracking.php','filter',        'Funnels',       'bg-[#E0F2F1]', 'text-[#009688]'],
+        ['reports.php',       'chart-bar',      'Reports',       'bg-[#FDF1E8]', 'text-[#D97757]'],
+        ['pricing.php',       'tag',            'Pricing',       'bg-[#FFF3E0]', 'text-[#F57C00]'],
+        ['webhooks.php',      'link',           'Webhooks',      'bg-[#FFEBEE]', 'text-[#E57373]'],
+        ['settings.php',      'cog',            'Settings',      'bg-[#F2F4F1]', 'text-[#6B7C70]'],
     ];
     foreach ($actions as $action): ?>
         <a href="<?php echo $action[0]; ?>"

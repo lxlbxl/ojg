@@ -115,6 +115,84 @@ function switchView(viewId) {
         fetchData('experiments_insights');
         fetchData('experiments_summary');
     }
+    if (viewId === 'leaderboard') fetchLeaderboard();
+}
+
+async function fetchLeaderboard() {
+    const list = document.getElementById('leaderboard-list');
+    if (list) list.innerHTML = `<tr><td colspan="9" class="py-16 text-center text-sage-400"><div class="inline-block w-6 h-6 border-2 border-sage-300 border-t-sage-500 rounded-full animate-spin mr-2"></div>Loading...</td></tr>`;
+    try {
+        const res = await fetch('api/member_leaderboard.php');
+        if (res.status === 401) { window.location.href = 'login.php'; return; }
+        const data = await res.json();
+        if (data.success) renderLeaderboard(data);
+        else if (list) list.innerHTML = `<tr><td colspan="9" class="py-10 text-center text-red-400">${data.error || 'Failed to load'}</td></tr>`;
+    } catch (e) {
+        console.error('Leaderboard fetch error:', e);
+        if (list) list.innerHTML = `<tr><td colspan="9" class="py-10 text-center text-red-400">Connection error</td></tr>`;
+    }
+}
+
+function renderLeaderboard(data) {
+    const { leaderboard, summary } = data;
+
+    // Update summary stat cards
+    if (summary) {
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        set('lb-active', summary.active_members ?? '—');
+        set('lb-completed', (summary.total_completed ?? '—').toLocaleString?.() ?? summary.total_completed);
+        set('lb-missed', (summary.total_missed ?? '—').toLocaleString?.() ?? summary.total_missed);
+        set('lb-compliance', summary.overall_compliance != null ? summary.overall_compliance + '%' : '—');
+    }
+
+    const list = document.getElementById('leaderboard-list');
+    if (!list) return;
+
+    if (!leaderboard || !leaderboard.length) {
+        list.innerHTML = `<tr><td colspan="9" class="py-16 text-center text-sage-400">No member activity data yet.</td></tr>`;
+        return;
+    }
+
+    const medals = ['🥇', '🥈', '🥉'];
+
+    list.innerHTML = leaderboard.map((m, i) => {
+        const rank = i + 1;
+        const medal = medals[i] || `<span class="text-sage-400 font-bold">${rank}</span>`;
+        const name = `${m.first_name || ''} ${m.last_name || ''}`.trim() || m.email;
+        const type = m.pcos_type || 'General';
+        const rate = parseFloat(m.compliance_rate || 0);
+        const rateColor = rate >= 80 ? 'text-green-600' : rate >= 50 ? 'text-amber-500' : 'text-red-400';
+        const barWidth = Math.min(100, rate);
+        const barColor = rate >= 80 ? 'bg-green-500' : rate >= 50 ? 'bg-amber-400' : 'bg-red-400';
+        const statusBadge = m.subscription_status === 'active'
+            ? '<span class="px-2 py-0.5 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase">Active</span>'
+            : '<span class="px-2 py-0.5 bg-red-50 text-red-400 text-[10px] font-bold rounded-full uppercase">Expired</span>';
+        const lastActive = m.last_active_date
+            ? new Date(m.last_active_date).toLocaleDateString('en', { month: 'short', day: 'numeric' })
+            : '<span class="text-sage-300">Never</span>';
+
+        return `<tr class="hover:bg-sage-50/40 transition-colors">
+            <td class="px-6 py-4 text-center text-base">${i < 3 ? medal : `<span class="text-sage-400 text-sm font-bold">${rank}</span>`}</td>
+            <td class="px-6 py-4">
+                <div class="font-medium text-sage-700">${name}</div>
+                <div class="text-xs text-sage-400 truncate max-w-[180px]">${m.email}</div>
+            </td>
+            <td class="px-6 py-4 text-xs text-sage-500">${type}</td>
+            <td class="px-6 py-4">
+                <div class="flex flex-col items-center gap-1">
+                    <span class="text-sm font-bold ${rateColor}">${rate}%</span>
+                    <div class="w-20 h-1.5 bg-sage-100 rounded-full overflow-hidden">
+                        <div class="${barColor} h-full rounded-full transition-all" style="width:${barWidth}%"></div>
+                    </div>
+                </div>
+            </td>
+            <td class="px-6 py-4 text-center font-bold text-green-600">${m.completed || 0}</td>
+            <td class="px-6 py-4 text-center text-red-400">${m.missed || 0}</td>
+            <td class="px-6 py-4 text-center text-sage-500">${m.days_active || 0}</td>
+            <td class="px-6 py-4 text-sage-500 text-sm">${lastActive}</td>
+            <td class="px-6 py-4">${statusBadge}</td>
+        </tr>`;
+    }).join('');
 }
 
 async function viewDetails(id) {
