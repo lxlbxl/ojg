@@ -356,6 +356,10 @@
                 init() {
                     this.prefillCustomerData();
                     this.trackPageView();
+                    // Meta Pixel ViewContent
+                    if (window.OJGTracking) {
+                        window.OJGTracking.trackViewContent('PCOS Digital Protocol', 5000, 'NGN');
+                    }
                 },
 
                 prefillCustomerData() {
@@ -386,6 +390,10 @@
                     const el = document.getElementById('order-section');
                     if (el) {
                         el.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    // Meta Pixel InitiateCheckout
+                    if (window.OJGTracking) {
+                        window.OJGTracking.trackInitiateCheckout('PCOS Digital Protocol', 5000, 'NGN');
                     }
                 },
 
