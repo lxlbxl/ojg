@@ -23,14 +23,19 @@ async function initialize() {
         }
 
         await fetchData();
-        
+
         const loader = document.getElementById('loader');
         if (loader) loader.classList.add('hidden');
 
-        if (userData && userData.user.subscription_status === 'expired') {
+        // Don't show the expiry overlay if the onboarding modal is already visible —
+        // let the user complete onboarding first, then show expiry state.
+        const onboardingModal = document.getElementById('onboardingModal');
+        const onboardingVisible = onboardingModal && !onboardingModal.classList.contains('hidden');
+
+        if (!onboardingVisible && userData && userData.user.subscription_status === 'expired') {
             const expiryOverlay = document.getElementById('expiryOverlay');
             if (expiryOverlay) expiryOverlay.classList.remove('hidden');
-        } else {
+        } else if (!onboardingVisible) {
             const app = document.getElementById('app');
             if (app) app.classList.remove('hidden');
             updateGreeting();
