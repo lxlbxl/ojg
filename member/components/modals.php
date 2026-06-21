@@ -128,7 +128,7 @@
                         style="width: 33%"></div>
                 </div>
 
-                <form onsubmit="saveOnboarding(event)" class="flex flex-col h-full">
+                <form onsubmit="saveOnboarding(event)" novalidate class="flex flex-col h-full">
                     <!-- Header -->
                     <div class="px-10 pt-12 pb-6">
                         <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-sage-300 block mb-2">Step
@@ -201,7 +201,7 @@
 
                         <!-- Step 2: Hormonal/Condition Profile -->
                         <div class="boarding-step hidden space-y-8 animate-fade-in-up" data-step="2">
-                            <div class="space-y-4">
+                            <div id="pcosTypeSection" class="space-y-4">
                                 <label class="block text-xs font-bold text-sage-400 uppercase tracking-widest"><?php echo htmlspecialchars($terms['type_name']); ?></label>
                                 <div class="grid grid-cols-1 gap-4">
                                     <?php 
