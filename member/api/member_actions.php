@@ -8,6 +8,33 @@ require_once '../../backend/classes/MemberAuth.php';
 require_once '../../backend/classes/MealPlanner.php';
 require_once '../../backend/classes/ActivityLogger.php';
 
+// Self-healing: ensure member_profiles has all required columns (PostgreSQL migration guard)
+try {
+    $__db = Database::getInstance();
+    $__conn = $__db->getConnection();
+    if ($__conn->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql') {
+        $__cols = [
+            'age'                  => 'INTEGER',
+            'weight'               => 'DECIMAL(6,2)',
+            'height'               => 'DECIMAL(6,2)',
+            'bmi'                  => 'DECIMAL(5,2)',
+            'allergies'            => 'TEXT',
+            'dietary_preferences'  => 'TEXT',
+            'cycle_length'         => 'INTEGER DEFAULT 28',
+            'last_period_date'     => 'DATE',
+        ];
+        foreach ($__cols as $__col => $__type) {
+            $__stmt = $__conn->query("SELECT column_name FROM information_schema.columns WHERE table_name='member_profiles' AND column_name='$__col'");
+            if (!$__stmt->fetch()) {
+                $__conn->exec("ALTER TABLE member_profiles ADD COLUMN $__col $__type");
+            }
+        }
+    }
+} catch (Exception $__e) {
+    // Non-fatal: log but continue — columns may already exist or table not yet created
+    error_log("member_profiles schema guard: " . $__e->getMessage());
+}
+
 // Prepare strict JSON response
 header('Content-Type: application/json');
 $allowedOrigins = ['https://ojg.ng', 'https://www.ojg.ng', 'http://localhost:5173', 'http://localhost:8080', 'http://localhost:3210'];
