@@ -393,6 +393,7 @@ CREATE TABLE IF NOT EXISTS daily_plans (
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     plan_date DATE NOT NULL,
     plan_data TEXT,
+    trigger_type VARCHAR(20) DEFAULT 'auto',
     is_completed BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(user_id, plan_date)

@@ -11,6 +11,9 @@ try {
     if ($driver === 'mysql') {
         $stmt = $conn->query("SHOW COLUMNS FROM daily_plans LIKE 'trigger_type'");
         $hasTrigger = ($stmt->fetch() !== false);
+    } elseif ($driver === 'pgsql') {
+        $stmt = $conn->query("SELECT column_name FROM information_schema.columns WHERE table_name='daily_plans' AND column_name='trigger_type'");
+        $hasTrigger = ($stmt->fetch() !== false);
     } else {
         $cols = $db->fetchAll("PRAGMA table_info(daily_plans)");
         foreach ($cols as $c)
