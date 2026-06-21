@@ -172,6 +172,7 @@ class WebhookManager {
             phone: assessmentData.contactInfo?.phone || '',
             assessment_data: assessmentData.answers || assessmentData,
             assessment_type: funnel,
+            pcos_type: assessmentData.pcosType?.primary || assessmentData.pcosType || '',
             url: window.location.href
         };
 

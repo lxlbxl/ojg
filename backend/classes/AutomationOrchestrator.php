@@ -283,10 +283,30 @@ class AutomationOrchestrator
             'subscription_expiry' => date('Y-m-d', strtotime("+$durationDays days"))
         ];
 
+        // Resolve pcos_type: use purchase data if explicit, else look up from assessment history
+        $resolvedPcosType = $data['pcos_type'] ?? null;
+        if (empty($resolvedPcosType) && $type === 'pcos') {
+            $validSubtypes = ['Insulin Resistant', 'Adrenal', 'Inflammatory', 'Post-Pill'];
+            $latestAssessment = $this->db->fetch(
+                "SELECT assessment_data FROM assessments WHERE user_id = ? AND assessment_type = 'pcos' ORDER BY created_at DESC LIMIT 1",
+                [$userId]
+            );
+            if ($latestAssessment) {
+                $aData = json_decode($latestAssessment['assessment_data'], true);
+                $candidate = $aData['pcosType']['primary'] ?? '';
+                if (in_array($candidate, $validSubtypes)) {
+                    $resolvedPcosType = $candidate;
+                }
+            }
+            if (empty($resolvedPcosType)) {
+                $resolvedPcosType = 'General';
+            }
+        }
+
         // Default values
         $profileData = [
             'user_id' => $userId,
-            'pcos_type' => $data['pcos_type'] ?? ($type === 'pcos' ? 'General' : null),
+            'pcos_type' => $resolvedPcosType,
             'cycle_length' => $data['cycle_length'] ?? 28,
             'last_period_date' => $data['last_period_date'] ?? date('Y-m-d'),
             'allergies' => is_array($data['allergies'] ?? 'None') ? json_encode($data['allergies']) : ($data['allergies'] ?? 'None'),

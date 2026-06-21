@@ -175,6 +175,16 @@ function handleAssessment($data, $db)
     $assessmentId = uniqid('assess_');
     $assessmentData = is_string($data['assessment_data']) ? $data['assessment_data'] : json_encode($data['assessment_data']);
 
+    // Extract pcos_type: prefer explicit top-level field, fall back to embedded pcosType in assessment_data
+    $validPcosTypes = ['Insulin Resistant', 'Adrenal', 'Inflammatory', 'Post-Pill'];
+    $pcosType = sanitizeInput($data['pcos_type'] ?? '');
+    if (!in_array($pcosType, $validPcosTypes) && isset($assessmentDataParsed['pcosType']['primary'])) {
+        $pcosType = sanitizeInput($assessmentDataParsed['pcosType']['primary']);
+    }
+    if (!in_array($pcosType, $validPcosTypes)) {
+        $pcosType = '';
+    }
+
     $db->insert('assessments', [
         'id' => $assessmentId,
         'user_id' => $userId,
@@ -189,13 +199,26 @@ function handleAssessment($data, $db)
         'updated_at' => date('Y-m-d H:i:s')
     ]);
 
+    // If a valid PCOS subtype was determined, persist it immediately to member_profiles
+    // so the onboarding modal can skip the type-selection step for paying members.
+    if ($pcosType && $assessmentType === 'pcos') {
+        $profile = $db->fetch("SELECT id FROM member_profiles WHERE user_id = :uid", [':uid' => $userId]);
+        if ($profile) {
+            $db->update('member_profiles', [
+                'pcos_type' => $pcosType,
+                'updated_at' => date('Y-m-d H:i:s')
+            ], "user_id = :uid", [':uid' => $userId]);
+        }
+    }
+
     return [
         'success' => true,
         'message' => 'Assessment saved successfully',
         'data' => [
             'assessment_id' => $assessmentId,
             'email' => $email,
-            'type' => $assessmentType
+            'type' => $assessmentType,
+            'pcos_type' => $pcosType ?: null
         ]
     ];
 }
