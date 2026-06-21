@@ -106,7 +106,7 @@ async function loadExperiments() {
     container.innerHTML = `<div class="text-center py-16 text-[#6B7C70]"><div class="inline-block w-8 h-8 border-2 border-[#E3E8E1] border-t-[#2C3E35] rounded-full animate-spin mb-4"></div><p>Loading…</p></div>`;
 
     try {
-        let url = `api/admin_data.php?action=experiments&sub=list`;
+        let url = `api/experiments_data.php?sub=list`;
         if (funnel) url += `&funnel=${funnel}`;
         if (status) url += `&status=${status}`;
         const res = await fetch(url);
@@ -228,7 +228,7 @@ async function saveExperiment(e) {
         description: document.getElementById('expDesc').value,
     });
     try {
-        const res = await fetch('api/admin_data.php?action=experiments', { method: 'POST', body });
+        const res = await fetch('api/experiments_data.php', { method: 'POST', body });
         const data = await res.json();
         if (data.success) { closeExpModal(); loadExperiments(); }
         else alert(data.error || 'Failed to save');
@@ -238,7 +238,7 @@ async function saveExperiment(e) {
 async function stopExp(id) {
     if (!confirm('Stop this experiment?')) return;
     try {
-        const res = await fetch('api/admin_data.php?action=experiments', {
+        const res = await fetch('api/experiments_data.php', {
             method: 'POST',
             body: new URLSearchParams({ sub: 'stop', id })
         });
